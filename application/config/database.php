@@ -76,10 +76,11 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'username' => 'postgres',
+	'password' => 'admin',
 	'database' => 'LaetronazBlog',
-	'dbdriver' => 'mysqli',
+	'dbdriver' => 'postgre',
+	'port'   => 5432, # Add 
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
