@@ -5,13 +5,16 @@
     <?php echo $post['body']; ?>
 </div>
 
+<?php if($this->session->userdata('user_id') == $post['user_id']) : ?>
+    <hr>
+    <div class="row">
+        <a class="btn btn-secondary" href="edit/<?php echo $post['slug']; ?>">Edit</a>
+        <?php echo form_open('posts/delete/'.$post['id']); ?>
+            <input type="submit" value="delete" class="btn btn-danger">
+        </form>
+    </div>  
+<?php endif; ?>
 <hr>
-<a class="btn btn-default pull-left" href="edit/<?php echo $post['slug']; ?>">Edit</a>
-<?php echo form_open('posts/delete/'.$post['id']); ?>
-    <input type="submit" value="delete" class="btn btn-danger">
-</form>
-<hr>
-
 <h3> Comments </h3>
 <?php if($comments) : ?>
     <?php foreach($comments as $comment) : ?>
