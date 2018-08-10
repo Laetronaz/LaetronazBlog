@@ -14,3 +14,10 @@
     </div>
     
 <?php endforeach; ?>
+<div class = "row">
+    <div class="offset-md-6">
+        <ul class="pagination">
+            <?php echo $this->pagination->create_links(); ?>
+        </ul>
+    </div>
+</div>

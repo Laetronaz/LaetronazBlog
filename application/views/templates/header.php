@@ -28,10 +28,12 @@
       </li>
     </ul>
 
-    <form class="form-inline my-2 my-lg-0">
+    <!--
+      <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="text" placeholder="Search">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
     </form>
+    -->
     <ul class="nav navbar-nav navbar-right">
       <?php if(!$this->session->userdata('logged_in')) : ?>
         <li class="nav-item">
@@ -88,6 +90,10 @@
 
   <?php if($this->session->flashdata('login_failed')) : ?>
     <?php echo '<p class ="alert alert-danger">'.$this->session->flashdata('login_failed').'</p>' ?>
+  <?php endif; ?>
+
+  <?php if($this->session->flashdata('category_deleted')) : ?>
+    <?php echo '<p class ="alert alert-success">'.$this->session->flashdata('category_deleted').'</p>' ?>
   <?php endif; ?>
 
    
