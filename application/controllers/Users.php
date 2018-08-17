@@ -3,7 +3,15 @@
 
         //register user
         public function register(){
+            // Check login
+            if($this->session->userdata('user_type') != 'Admin' ){
+                $this->session->set_flashdata('unautorized_access', 'Only admininstrators have access to this page');
+                redirect('users/login');
+            }
+
+
             $data['title'] = 'Sign Up';
+            $data['types'] = $this->user_model->get_users_type();
 
             $this->form_validation->set_rules('name', 'Name', 'required');
             $this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]', array(
@@ -28,7 +36,7 @@
                 $this->user_model->register($enc_password);
 
                 // Set message
-                $this->session->set_flashdata('user_registered', 'You are now registered and con log in');
+                $this->session->set_flashdata('user_registered', 'You are now registered and can log in');
             
                 redirect('posts');
             }
@@ -50,16 +58,29 @@
             else{
                 // Get Username
                 $username = $this->input->post('username');
-
+                $password = $this->input->post('password');
                 // Login user
-                 $user_id = $this->user_model->login($username, $this->input->post('password'));
+
+                $user_datas = $this->user_model->login($username);
+                $user_id = $user_datas['id'];
+                $hashed_password = $user_datas['password'];
+                $user_type = $user_datas['user_type'];
+            
+
+
 
                  if(!($user_id === FALSE)){
-                       // Create session
+                    //Verify the password currently : CRYPT_BLOWFISH
+                    if(!password_verify($password, $hashed_password)){
+                        $this->login_failed();
+                    }
+
+                    // Create session
                     $user_data = array(
                         'user_id' => $user_id,
                         'username' => $username,
-                        'logged_in' => true
+                        'logged_in' => true,
+                        'user_type' => $user_type
                     );
 
                     $this->session->set_userdata($user_data);
@@ -69,9 +90,7 @@
                      redirect('posts');
                 }
                 else{
-                    // Set message
-                    $this->session->set_flashdata('login_failed', 'Login is invalid'.$hashed_password);
-                    redirect('users/login');
+                    login_failed();
                 }    
             }
         }
@@ -81,9 +100,17 @@
             $this->session->unset_userdata('logged_in');
             $this->session->unset_userdata('user_id');
             $this->session->unset_userdata('username');
+            $this->session->unset_userdata('user_type');
 
             // Set message
             $this->session->set_flashdata('user_loggedout', 'You are now logged out');
+            redirect('users/login');
+        }
+
+
+        private function login_failed(){
+             // Set message
+            $this->session->set_flashdata('login_failed', 'The username or password you have entered is invalid.'.$hashed_password);
             redirect('users/login');
         }
     }

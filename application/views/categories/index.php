@@ -2,7 +2,7 @@
 <ul class="list-group">
 <?php foreach($categories as $category) : ?>
     <li class="list-group-item">
-        <?php if($this->session->userdata('user_id') == $category['user_id']) : ?>
+        <?php if($this->session->userdata('user_id') == $category['user_id'] || $this->session->userdata('user_type') == 'Admin') : ?>
             <form class="form-inline" action="categories/delete/<?php echo $category['id']; ?>" method="POST">
                 <div class="form-group col-sm-10 ">
                     <a href="<?php echo site_url('/categories/posts/'.$category['id']); ?>"><?php echo $category['name'];?></a>

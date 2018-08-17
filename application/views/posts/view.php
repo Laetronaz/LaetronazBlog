@@ -12,33 +12,18 @@
 		<input type="submit" value="Delete" class="btn btn-danger">
 	</form>
 <?php endif; ?>
-<hr>
-<h3> Comments </h3>
-<?php if($comments) : ?>
-    <?php foreach($comments as $comment) : ?>
-    <div class="well">
-        <h5><?php echo $comment['body']; ?> [by <?php echo $comment['name']; ?>] at <?php echo $comment['created_at']; ?></h5>
-    </div>
-    <?php endforeach; ?>
-<?php else : ?>
-    <p>No comments to display</p>
-<?php endif; ?>
-<hr>
-<h3>Add Comment</h3>
-<?php echo validation_errors(); ?>
-<?php echo form_open('comments/create/'.$post['id']); ?>
-    <div class="form-group">
-        <label>Name</label>
-        <input type="text" name="name" class="form-control">
-    </div>
-    <div class="form-group">
-        <label>Email</label>
-        <input type="text" name="email" class="form-control">
-    </div>
-    <div class="form-group">
-        <label>Body</label>
-        <textarea name="body" class="form-control"></textarea>
-    </div>
-    <input type="hidden" name="slug" value="<?php echo $post['slug']; ?>">
-    <button class="btn btn-primary" type="submit">Submit</button>
-</form>
+<div id="disqus_thread"></div>
+
+<script>
+    var disqus_config = function () {
+        this.page.url = '<?php echo current_url(); ?>'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = '<?php echo $post['slug']; ?>'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://laetronazblog.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
