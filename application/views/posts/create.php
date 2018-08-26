@@ -25,3 +25,4 @@
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
+<script>CKEDITOR.replace('editor1');</script>

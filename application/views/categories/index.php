@@ -4,7 +4,7 @@
     <li class="list-group-item">
         <?php if($this->session->userdata('user_id') == $category['user_id'] || $this->session->userdata('user_type') == 'Admin') : ?>
             <form class="form-inline" action="categories/delete/<?php echo $category['id']; ?>" method="POST">
-                <div class="form-group col-sm-10 ">
+                <div class="form-group col-sm-8 ">
                     <a href="<?php echo site_url('/categories/posts/'.$category['id']); ?>"><?php echo $category['name'];?></a>
                 </div>
                 <div class="form-group col-sm-2 ">
@@ -12,7 +12,7 @@
                 </div>
             </form>
         <?php else : ?>
-            <div class="form-group col-sm-10 ">
+            <div class="form-group col-sm-8 ">
                 <a href="<?php echo site_url('/categories/posts/'.$category['id']); ?>"><?php echo $category['name'];?></a>
             </div>
         <?php endif; ?>
