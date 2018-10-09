@@ -48,14 +48,6 @@
           <a class="nav-link" href="<?php echo base_url(); ?>posts/create">Create Post</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url(); ?>categories/create">Create Category</a>
-        </li>
-        <?php if($this->session->userdata('user_type') == 'Admin') : ?>
-          <li class="nav-item">
-              <a class="nav-link" href="<?php echo base_url(); ?>users/register">Register</a>
-          </li>
-        <?php endif; ?>
-        <li class="nav-item">
             <a class="nav-link" href="<?php echo base_url(); ?>users/logout">Logout</a>
         </li>
       <?php endif; ?>  
@@ -75,7 +67,7 @@
                 <li class="nav-item">
                   <a class="nav-link" href="#usersubmenu" data-toggle="collapse" data-target="#usersubmenu">Manage Users</a>
                   <div id="usersubmenu" class="sidebar-submenu collapse" >
-                    <a href="#" class="list-group-item list-group-item-action border border-white">
+                    <a href="<?php echo base_url(); ?>users/register" class="list-group-item list-group-item-action border border-white">
                         <span class="menu-collapsed">Create New User</span>
                     </a>
                     <a href="#" class="list-group-item list-group-item-action border border-white">
@@ -89,13 +81,13 @@
                 <li class="nav-item">
                   <a class="nav-link" href="#categorysubmenu" data-toggle="collapse" data-target="#categorysubmenu">Manage Categories</a>
                   <div id="categorysubmenu" class="sidebar-submenu collapse">
-                    <a href="#" class="list-group-item list-group-item-action border border-white">
+                    <a href="<?php echo base_url(); ?>categories/create" class="list-group-item list-group-item-action border border-white">
                         <span class="menu-collapsed">Create New Category</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action border border-white">
+                    <a href="<?php echo base_url(); ?>subcategories/create" class="list-group-item list-group-item-action border border-white">
                         <span class="menu-collapsed">Create New Sub-Category</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action border border-white">
+                    <a href="<?php echo base_url(); ?>categories" class="list-group-item list-group-item-action border border-white">
                         <span class="menu-collapsed">Index Categories</span>
                     </a>
                   </div>

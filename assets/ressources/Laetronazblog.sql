@@ -8,7 +8,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE users_type (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -18,7 +18,7 @@ CREATE TABLE users_type (
 --
 
 CREATE TABLE users (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `zipcode` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -36,22 +36,39 @@ CREATE TABLE users (
 --
 
 CREATE TABLE categories (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `category_icon` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT FK_CategoryUser FOREIGN KEY (user_id)
+  CONSTRAINT FK_SubCategoryUser FOREIGN KEY (user_id)
   REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Table structure for table `Subcategories`
+--
 
+CREATE TABLE subcategories (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `subcategory_icon` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  CONSTRAINT FK_CategoryUser FOREIGN KEY (user_id)
+  REFERENCES users(id),
+  CONSTRAINT FK_SubCategoryCategory FOREIGN KEY (category_id)
+  REFERENCES categories(id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 --
 -- Table structure for table `posts`
 --
 
 CREATE TABLE posts (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,

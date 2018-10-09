@@ -4,10 +4,11 @@
             $this->load->database();
         }
 
-        public function create_category(){
+        public function create_category($category_image){
             $data = array(
                 'name' => $this->input->post('name'),
-                'user_id' => $this->session->userdata('user_id')
+                'user_id' => $this->session->userdata('user_id'),
+                'category_image' => $category_image
             );
             return $this->db->insert('categories', $data);
         }
