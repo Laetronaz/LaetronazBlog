@@ -99,8 +99,8 @@
             if(!$this->session->userdata('logged_in')){
                 redirect('users/login');
             }
-
-            $this->post_model->delete_post($id);
+            $post = $this->post_model->get_post($id);
+            $this->post_model->toogle_post($id, $post['active']);
 
             // Set message
             $this->session->set_flashdata('post_deleted', 'Your post has been deleted.');
@@ -122,6 +122,7 @@
             $data['post'] = $this->post_model->get_posts($slug);
 
             $data['categories'] = $this->post_model->get_categories();
+            $data['subcategories'] = $this->subcategory_model->get_subcategories();
 
             if(empty($data['post'])){
                 show_404();

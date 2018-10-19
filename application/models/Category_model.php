@@ -20,16 +20,26 @@
         }
 
         public function get_category($id){
-            $query = $this->db->get_where('categories', array(
-                'id' => $id
-            ));
-            return $query->row();
+            $query = $this->db->get_where('categories', array('id'=> $id));
+            return $query->row_array();
         }
 
-        public function delete_category($id){
+        public function update_category($category_image){
 
+            $data = array(
+                'name' => $this->input->post('name'),
+                'category_icon' => $category_image
+            );
+            $this->db->where('id', $this->input->post('id'));
+            return $this->db->update('categories', $data);
+        }
+
+        public function toogle_category($id, $active){
+            $active = ($active == 1 ? 0 : 1);
+            $data = array(
+                 'active' => $active 
+            );       
             $this->db->where('id', $id);
-            $this->db->delete('categories');
-            return TRUE;
+            return $this->db->update('categories', $data);
         }
     }

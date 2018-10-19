@@ -41,6 +41,7 @@ CREATE TABLE categories (
   `name` varchar(255) NOT NULL,
   `category_icon` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `active` boolean NOT NULL DEFAULT 'TRUE',
   PRIMARY KEY (`id`),
   CONSTRAINT FK_SubCategoryUser FOREIGN KEY (user_id)
   REFERENCES users(id)
@@ -57,6 +58,7 @@ CREATE TABLE subcategories (
   `name` varchar(255) NOT NULL,
   `subcategory_icon` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `active` boolean NOT NULL DEFAULT 'TRUE',
   PRIMARY KEY (`id`),
   CONSTRAINT FK_CategoryUser FOREIGN KEY (user_id)
   REFERENCES users(id),
@@ -70,12 +72,14 @@ CREATE TABLE subcategories (
 CREATE TABLE posts (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_id` int(11) NOT NULL,
+  `subcategory_id` int(11),
   `user_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
   `body` text NOT NULL,
   `post_image` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `active` boolean NOT NULL DEFAULT 'TRUE',
   PRIMARY KEY (`id`),
   CONSTRAINT FK_PostCategory FOREIGN KEY (category_id)
   REFERENCES categories(id),

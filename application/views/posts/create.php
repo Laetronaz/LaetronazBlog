@@ -18,9 +18,15 @@
         <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
       <?php endforeach; ?>
     </select>
+    <label>Sub Category</label>
+    <select name="subcategory_id" class="form-control">
+      <?php foreach($subcategories as $subcategory): ?>
+        <option value="<?php echo $subcategory['id']; ?>"><?php echo $subcategory['name']; ?></option>
+      <?php endforeach; ?>
+    </select>
   </div>
   <div class="form-group">
-    <label>Upload Image</label>
+    <label>Upload Image</label><br>
     <input type="file" name="userfile" size="20">
   </div>
   <button type="submit" class="btn btn-default">Submit</button>

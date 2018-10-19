@@ -8,7 +8,7 @@
             $query = $this->db->get_where('subcategories', array(
                 'id' => $id
             ));
-            return $query->row();
+            return $query->row_array();
         }
 
         public function create_subcategory($subcategory_image){
@@ -33,5 +33,25 @@
                 'category_id' => $category_id
             ));
             return $query->result_array();
+        }
+
+        public function update_subcategory($subcategory_image){
+            
+            $data = array(
+                'name' => $this->input->post('name'),
+                'category_id' => $this->input->post('category_id'),
+                'subcategory_icon' => $subcategory_image
+            );
+            $this->db->where('id', $this->input->post('id'));
+            return $this->db->update('subcategories', $data);
+        }
+
+        public function toogle_subcategory($id, $active){
+            $active = ($active == 1 ? 0 : 1);
+            $data = array(
+                 'active' => $active 
+            );       
+            $this->db->where('id', $id);
+            return $this->db->update('subcategories', $data);
         }
     }
