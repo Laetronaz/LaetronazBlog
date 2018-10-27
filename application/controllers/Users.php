@@ -5,7 +5,8 @@
         public function register(){
             // Check login
             if($this->session->userdata('user_type') != 'Admin' ){
-                $this->session->set_flashdata('unautorized_access', 'Only admininstrators have access to this page');
+                $message = $this->message_model->get_unauthorized_access();
+                $this->session->set_flashdata($message['name'], $message);
                 redirect('users/login');
             }
 
@@ -36,7 +37,8 @@
                 $this->user_model->register($enc_password);
 
                 // Set message
-                $this->session->set_flashdata('user_registered', 'You are now registered and can log in');
+                $message = $this->message_model->get_message('user_registered');
+                $this->session->set_flashdata($message['name'], $message);
             
                 redirect('posts');
             }
@@ -86,8 +88,9 @@
                     $this->session->set_userdata($user_data);
 
                     // Set message
-                     $this->session->set_flashdata('user_loggedin', 'You are now logged in');
-                     redirect('posts');
+                    $message = $this->message_model->get_message('user_loggedin');
+                    $this->session->set_flashdata($message['name'], $message);
+                    redirect('posts');
                 }
                 else{
                     login_failed();
@@ -103,14 +106,16 @@
             $this->session->unset_userdata('user_type');
 
             // Set message
-            $this->session->set_flashdata('user_loggedout', 'You are now logged out');
+            $message = $this->message_model->get_message('user_loggedout');
+            $this->session->set_flashdata($message['name'], $message);
             redirect('users/login');
         }
 
 
         private function login_failed(){
              // Set message
-            $this->session->set_flashdata('login_failed', 'The username or password you have entered is invalid.'.$hashed_password);
+             $message = $this->message_model->get_message('login_failed');
+            $this->session->set_flashdata($message['name'], $message);
             redirect('users/login');
         }
     }

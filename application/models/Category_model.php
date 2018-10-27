@@ -8,7 +8,7 @@
             $data = array(
                 'name' => $this->input->post('name'),
                 'user_id' => $this->session->userdata('user_id'),
-                'category_image' => $category_image
+                'category_icon' => $category_image
             );
             return $this->db->insert('categories', $data);
         }

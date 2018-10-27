@@ -88,7 +88,8 @@
                 $this->post_model->create_post($post_image);
 
                 // Set message
-                $this->session->set_flashdata('post_created', 'Your post has been created.');
+                $message = $this->message_model->get_message('post_created');
+                $this->session->set_flashdata($message['name'], $message);
 
                 redirect('posts');
             }
@@ -103,7 +104,13 @@
             $this->post_model->toogle_post($id, $post['active']);
 
             // Set message
-            $this->session->set_flashdata('post_deleted', 'Your post has been deleted.');
+            if($post['active'] == TRUE){
+                $message = $this->message_model->get_message('post_disabled');
+            }
+            else{
+                $message = $this->message_model->get_message('post_enabled');
+            }
+            $this->session->set_flashdata($message['name'], $message);
 
             redirect('posts');
         }
@@ -122,7 +129,6 @@
             $data['post'] = $this->post_model->get_posts($slug);
 
             $data['categories'] = $this->post_model->get_categories();
-            $data['subcategories'] = $this->subcategory_model->get_subcategories();
 
             if(empty($data['post'])){
                 show_404();
@@ -144,7 +150,8 @@
             $this->post_model->update_post();
 
              // Set message
-             $this->session->set_flashdata('post_updated', 'Your post has been updated.');
+             $message = $this->message_model->get_message('post_updated');
+             $this->session->set_flashdata($message['name'], $message);
 
             redirect('posts');
         }

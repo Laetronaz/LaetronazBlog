@@ -115,14 +115,8 @@
     <div class="col-md-10">
         <div class="container">
           <?php foreach ($this->session->get_flash_keys() as $flashkey) : ?>
-            <?php $error_keys = array('login_failed', 'unautorized_access', 'user_loggedout'); ?>
-              <!-- DANGER Flash messages -->
-              <?php if(in_array($flashkey,$error_keys)) : ?>
-                <?php echo '<p class ="alert alert-danger">'.$this->session->flashdata($flashkey).'</p>' ?>
-              <!-- SUCCESS Flash messages -->
-              <?php else : ?>
-                <?php echo '<p class ="alert alert-success">'.$this->session->flashdata($flashkey).'</p>' ?>
-              <?php endif; ?>
+              <!--Flash messages -->
+              <p class="alert <?php echo $this->session->flashdata($flashkey)['type']?>"><?php echo $this->session->flashdata($flashkey)['value']?></p>
             <?php endforeach; ?>
                 
 
