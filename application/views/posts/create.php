@@ -13,13 +13,13 @@
   </div>
   <div class = "form-group">
     <label>Category</label>
-    <select name="category_id" class="form-control">
+    <select name="category_id" class="form-control form-control-sm">
       <?php foreach($categories as $category): ?>
         <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
       <?php endforeach; ?>
     </select>
     <label>Sub Category</label>
-    <select name="subcategory_id" class="form-control">
+    <select name="subcategory_id" class="form-control form-control-sm">
       <?php foreach($subcategories as $subcategory): ?>
         <option value="<?php echo $subcategory['id']; ?>"><?php echo $subcategory['name']; ?></option>
       <?php endforeach; ?>
