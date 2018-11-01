@@ -1,5 +1,29 @@
 <?php
     class Posts extends CI_Controller{
+        // "Constant" definitions
+        //IMAGES CONST
+        private const IMAGE_PATH = './assets/images/posts';
+        private const DEFAULT_IMAGE = 'noimage.jpg';
+
+        //TITLES CONST
+        private const INDEX_TITLE = '';
+        private const VIEW_TITLE = '';
+        private const CREATE_TITLE = '';
+        private const DELETE_TITLE = '';
+        private const EDIT_TITLE = '';
+        private const UPDATE_TITLE = '';
+
+        //REDIRECT PATH CONST should be stored in custom class
+        private const LOGIN;
+        private const POSTS;
+        private const HEADER;
+        private const FOOTER;
+
+        //MESSAGES CONST
+        
+
+
+
         public function index($offset = 0){
             //Pagination Config
             $config['base_url'] = base_url().'posts/index/';
@@ -67,22 +91,14 @@
                 $this->load->view('templates/footer');    
             }
             else{
+
                 //Upload Image
-                $config['upload_path'] = './assets/images/posts';
-                $config['allowed_types'] = 'gif|jpg|png';
-                $config['max_size'] = '2048';
-                $config['max_width'] = '2000';
-                $config['max_height'] = '2000';
-
-                $this->load->library('upload', $config);
-
-                if(!$this->upload->do_upload()){
-                    $errors = array('error' => $this->upload->display_errors());
-                    $post_image = 'noimage.jpg';
-                }
-                else{
-                    $data = array('upload_data' => $this->upload->data());
-                    $post_image = $_FILES['userfile']['name'];
+                $config = $this->fileupload_model->get_image_config('./assets/images/posts',$this->input->post('title'));
+                $post_image = $this->fileupload_model->upload_image($config);
+                
+                //Only need on the creation
+                if(is_null($post_image)){
+                    $post_image = "noimage.jpg";
                 }
 
                 $this->post_model->create_post($post_image);
@@ -127,7 +143,6 @@
             }
 
             $data['post'] = $this->post_model->get_posts($slug);
-
             $data['categories'] = $this->post_model->get_categories();
 
             if(empty($data['post'])){
@@ -147,7 +162,16 @@
                 redirect('users/login');
             }
 
-            $this->post_model->update_post();
+            //Upload Image
+            $config = $this->fileupload_model->get_image_config('./assets/images/posts',$this->input->post('title'));
+            $post_image = $this->fileupload_model->upload_image($config);
+            $old_post = $this->post_model->get_post($this->input->post('id'));
+            $old_image = $old_post['post_image'];
+            if($post_image != $old_image){
+
+            }
+
+            $this->post_model->update_post($post_image);
 
              // Set message
              $message = $this->message_model->get_message('post_updated');

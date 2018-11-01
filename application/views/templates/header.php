@@ -31,12 +31,6 @@
       <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url(); ?>about">About</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>posts">Blog</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>categories">Categories</a>
-      </li>
     </ul>
 
     <ul class="nav navbar-nav navbar-right">
@@ -86,11 +80,8 @@
                     <a href="<?php echo base_url(); ?>categories/create" class="list-group-item list-group-item-action border border-white">
                         <span class="menu-collapsed">Create New Category</span>
                     </a>
-                    <a href="<?php echo base_url(); ?>subcategories/create" class="list-group-item list-group-item-action border border-white">
-                        <span class="menu-collapsed">Create New Sub-Category</span>
-                    </a>
                     <a href="<?php echo base_url(); ?>categories" class="list-group-item list-group-item-action border border-white">
-                        <span class="menu-collapsed">Index Categories</span>
+                        <span class="menu-collapsed">List Categories</span>
                     </a>
                   </div>
                 </li>

@@ -55,7 +55,6 @@ CREATE TABLE categories (
 CREATE TABLE posts (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_id` int(11) NOT NULL,
-  `subcategory_id` int(11),
   `user_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,

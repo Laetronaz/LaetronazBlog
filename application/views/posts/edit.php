@@ -2,7 +2,7 @@
 
 <?php echo validation_errors(); ?>
 
-<?php echo form_open('posts/update'); ?> 
+<?php echo form_open_multipart('posts/update'); ?> 
     <input type="hidden" name="id" value= "<?php echo $post['id']; ?>">
   <div class="form-group">
     <label>Title</label>
@@ -20,7 +20,19 @@
       <?php endforeach; ?>
     </select>
   </div>
+
+  <div class="form-group">
+    <label>Image Upload</label>
+    <input class="form-control" type="file" name="userfile" size="20">
+  </div>
+
+  <div class="form-group">
+        <label>Image Preview</label><br>
+        <img id="preview" src="<?php echo base_url(); ?>\assets\images\posts\<?php echo $post['post_image']; ?>" alt="your image" height="200" width="200" />
+    </div>
   
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
 <script>CKEDITOR.replace('editor1');</script>
+<!-- Image Preview File -->
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/ImageViewer.js"></script>

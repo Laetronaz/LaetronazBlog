@@ -1,5 +1,7 @@
 <?php
     class Post_model extends CI_Model{
+        
+
         public function __construct(){
             $this->load->database();
         }
@@ -41,18 +43,6 @@
             return $this->db->insert('posts', $data);
         }
 
-        public function delete_post($id){
-            $image_file_name = $this->db->select('post_image')->get_where('posts', array('id' => $id))->row()->post_image;
-            $cwd = getcwd(); // save current working directory
-            $image_file_path= $cwd."\\assets\\images\\posts\\";
-            chdir($image_file_path);
-            unlink($image_file_name);
-            chdir($cwd); //Restore previous working directory
-            $this->db->where('id', $id);
-            $this->db->delete('posts');
-            return TRUE;
-        }
-
         public function toogle_post($id, $active){
             $active = ($active == 1 ? 0 : 1);
             $data = array(
@@ -62,15 +52,27 @@
             return $this->db->update('posts', $data);
         }
 
-        public function update_post(){
+        public function update_post($post_image){
             $slug = url_title($this->input->post('title'));
-
-            $data = array(
-                'title' => $this->input->post('title'),
-                'slug' => $slug,
-                'body' => $this->input->post('body'),
-                'category_id' => $this->input->post('category_id'),
-            );
+            $data = array();
+            if(!is_null($post_image)){
+                $data = array(
+                    'title' => $this->input->post('title'),
+                    'slug' => $slug,
+                    'body' => $this->input->post('body'),
+                    'category_id' => $this->input->post('category_id'),
+                    'post_image' => $post_image
+                );
+            }
+            else{
+                $data = array(
+                    'title' => $this->input->post('title'),
+                    'slug' => $slug,
+                    'body' => $this->input->post('body'),
+                    'category_id' => $this->input->post('category_id')
+                );
+            }
+            
             $this->db->where('id', $this->input->post('id'));
             return $this->db->update('posts', $data);
         }
@@ -87,4 +89,6 @@
             $query = $this->db->get_where('posts', array('category_id'=> $category_id));
             return $query->result_array();
         }
+
+    
     }

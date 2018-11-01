@@ -25,11 +25,19 @@
         }
 
         public function update_category($category_image){
-
-            $data = array(
-                'name' => $this->input->post('name'),
-                'category_icon' => $category_image
-            );
+            $data = array();
+            if(!is_null($category_image)){
+                $data = array(
+                    'name' => $this->input->post('name'),
+                    'category_icon' => $category_image
+                );
+            }
+            else{
+                $data = array(
+                    'name' => $this->input->post('name')
+                );
+            }
+            
             $this->db->where('id', $this->input->post('id'));
             return $this->db->update('categories', $data);
         }
