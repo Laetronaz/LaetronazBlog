@@ -6,18 +6,11 @@
         private const DEFAULT_IMAGE = 'noimage.jpg';
 
         //TITLES CONST
-        private const INDEX_TITLE = '';
-        private const VIEW_TITLE = '';
-        private const CREATE_TITLE = '';
-        private const DELETE_TITLE = '';
-        private const EDIT_TITLE = '';
-        private const UPDATE_TITLE = '';
+        private const INDEX_TITLE = 'Latest Posts';
+        private const CREATE_TITLE = 'Create Post';
+        private const EDIT_TITLE = 'Edit Post';
 
-        //REDIRECT PATH CONST should be stored in custom class
-        private const LOGIN;
-        private const POSTS;
-        private const HEADER;
-        private const FOOTER;
+        
 
         //MESSAGES CONST
         
@@ -26,7 +19,7 @@
 
         public function index($offset = 0){
             //Pagination Config
-            $config['base_url'] = base_url().'posts/index/';
+            $config['base_url'] = base_url().$this->const_model::POSTS_INDEX;
             $config['total_rows'] = $this->db->count_all('posts');
             $config['per_page'] = 10;
             $config['uri_segment'] = 3;
@@ -48,13 +41,13 @@
             //Init Pagination
             $this->pagination->initialize($config);
 
-            $data['title'] = 'Latest Posts';
+            $data['title'] = $this::INDEX_TITLE;
 
             $data['posts'] = $this->post_model->get_posts(FALSE, $config['per_page'], $offset);
 
-            $this->load->view('templates/header');
-            $this->load->view('posts/index', $data);
-            $this->load->view('templates/footer');
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::POSTS_INDEX, $data);
+            $this->load->view($this->const_model::FOOTER);
         }
 
         public function view($slug = NULL){
@@ -67,18 +60,18 @@
 
             $data['title'] = $data['post']['title'];
 
-            $this->load->view('templates/header');
-            $this->load->view('posts/view', $data);
-            $this->load->view('templates/footer');
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::POSTS_VIEW, $data);
+            $this->load->view($this->const_model::FOOTER);
         }
 
         public function create(){
             // Check login
             if(!$this->session->userdata('logged_in')){
-                redirect('users/login');
+                redirect($this->const_model::USERS_LOGIN);
             }
 
-            $data['title'] = 'Create Post';
+            $data['title'] = $this::CREATE_TITLE;
 
             $data['categories'] = $this->post_model->get_categories();
 
@@ -86,19 +79,19 @@
             $this->form_validation->set_rules('body', 'Body', 'required');
 
             if ($this->form_validation->run() === FALSE) {
-                $this->load->view('templates/header');
-                $this->load->view('posts/create', $data);
-                $this->load->view('templates/footer');    
+                $this->load->view($this->const_model::HEADER);
+                $this->load->view($this->const_model::POSTS_CREATE, $data);
+                $this->load->view($this->const_model::FOOTER);  
             }
             else{
 
                 //Upload Image
-                $config = $this->fileupload_model->get_image_config('./assets/images/posts',$this->input->post('title'));
+                $config = $this->fileupload_model->get_image_config($this::IMAGE_PATH,$this->input->post('title'));
                 $post_image = $this->fileupload_model->upload_image($config);
                 
                 //Only need on the creation
                 if(is_null($post_image)){
-                    $post_image = "noimage.jpg";
+                    $post_image = $this::DEFAULT_IMAGE;
                 }
 
                 $this->post_model->create_post($post_image);
@@ -107,14 +100,14 @@
                 $message = $this->message_model->get_message('post_created');
                 $this->session->set_flashdata($message['name'], $message);
 
-                redirect('posts');
+                redirect($this->const_model::POSTS);
             }
         }
 
         public function delete($id){
             // Check login
             if(!$this->session->userdata('logged_in')){
-                redirect('users/login');
+                redirect($this->const_model::USERS_LOGIN);
             }
             $post = $this->post_model->get_post($id);
             $this->post_model->toogle_post($id, $post['active']);
@@ -128,18 +121,18 @@
             }
             $this->session->set_flashdata($message['name'], $message);
 
-            redirect('posts');
+            redirect($this->const_model::POSTS);
         }
 
         public function edit($slug){
             // Check login
             if(!$this->session->userdata('logged_in')){
-                redirect('users/login');
+                redirect($this->const_model::USERS_LOGIN);
             }
 
             // Check user
             if($this->session->userdata('user_id') != $this->post_model->get_posts($slug)['user_id']){
-                redirect('posts');
+                redirect($this->const_model::POSTS);
             }
 
             $data['post'] = $this->post_model->get_posts($slug);
@@ -149,17 +142,17 @@
                 show_404();
             }
 
-            $data['title'] = 'Edit Post';
+            $data['title'] = $this::EDIT_TITLE;
 
-            $this->load->view('templates/header');
-            $this->load->view('posts/edit', $data);
-            $this->load->view('templates/footer');
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::POSTS_EDIT, $data);
+            $this->load->view($this->const_model::FOOTER);
         }
 
         public function update(){
             // Check login
             if(!$this->session->userdata('logged_in')){
-                redirect('users/login');
+                redirect($this->const_model::USERS_LOGIN);
             }
 
             //Upload Image
@@ -177,7 +170,7 @@
              $message = $this->message_model->get_message('post_updated');
              $this->session->set_flashdata($message['name'], $message);
 
-            redirect('posts');
+            redirect($this->const_model::POSTS);
         }
 
     }
