@@ -1,52 +1,46 @@
 <?php
     class FileUpload_model extends CI_Model{
-        public function upload_image($config){
+        //ERROR FILTERING CONST
+        private const ERROR_FILTER = 'You did not select a file to upload.';
+        //You did not select a file to upload.
+        //You did not select a file to upload.
+        
+        public function upload_image($image_path){
+            $config = $this->get_image_config($image_path,$_FILES['userfile']['name']);
             $this->load->library('upload', $config);
-
             if(!$this->upload->do_upload()){
-                $errors = array('error' => $this->upload->display_errors());
-                $image = NULL;
-                //TODO: FILE UPLOAD ERROR GESTION
+                $this->session->set_flashdata('error', array(
+                    'type' => 'alert-danger',
+                    'value' => $this->upload->display_errors('','')
+                ));
+                redirect($_SERVER['HTTP_REFERER']);
             }
             else{
                 $data = array('upload_data' => $this->upload->data());
-                $path = $_FILES['userfile']['name'];
-                $image = preg_replace("/\s+/", "_", $config['file_name'].".".pathinfo($path, PATHINFO_EXTENSION));
+                $image = $data['upload_data']['file_name'];
             }
             return $image;
         }
 
-        public function clean_unlinked_uploaded_image(){
-
-        }
-        //TODO: ADAPT function to others path
-        public function delete_post($id){
-            $image_file_name = $this->db->select('post_image')->get_where('posts', array('id' => $id))->row()->post_image;
-            $cwd = getcwd(); // save current working directory
-            $image_file_path= $cwd."\\assets\\images\\posts\\";
-            chdir($image_file_path);
-            unlink($image_file_name);
-            chdir($cwd); //Restore previous working directory
-            $this->db->where('id', $id);
-            $this->db->delete('posts');
-            return TRUE;
+        public function clean_unlinked_uploaded_image($filepath){
+            $this->load->helper('directory');
+            $map = directory_map($filepath);
+            $saved_images = '';
+            vdebug($map);
         }
 
-        public function rename_uploaded_image($old_image, $image){
-            rename ($old_image, $image);
-        }
-
-        public function get_image_config($upload_path, $file_name){
+        private function get_image_config($upload_path){
             $config['upload_path'] = $upload_path;
             $config['allowed_types'] = 'gif|jpg|png';
-            $config['file_name'] = $file_name;
-            $config['max_size'] = '100';
+            $config['file_name'] = $this->create_file_name();
+            $config['max_size'] = '2048';
             $config['overwrite'] =  TRUE;
             $config['remove_spaces'] = TRUE;
             return $config;
         }
 
-        public function file_error_management($errors){
-
-        }
+        private function create_file_name(){ 
+            $file_name = date('Tmd').'_'.md5( $_FILES['userfile']['name']. microtime());
+            return $file_name;
+        }        
     }

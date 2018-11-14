@@ -8,7 +8,6 @@
         //TITES CONST
         private const INDEX_TITLE = 'Search by Categories';
         private const CREATE_TITLE = 'Create Category';
-        private const EDIT_TITLE = 'Edit Category';
 
         public function create(){
              // Check login
@@ -26,22 +25,14 @@
                 $this->load->view($this->const_model::FOOTER);
             } 
             else{
-                
-                //Upload Image
-                $config = $this->fileupload_model->get_image_config($this::IMAGE_PATH,$this->input->post('name'));
-                $category_image = $this->fileupload_model->upload_image($config);
-                
-                //Only need on the creation
-                if(is_null($category_image)){
-                    $category_image = $this::DEFAULT_IMAGE;
-                }
+                $category_image = $this::DEFAULT_IMAGE;
                 $this->category_model->create_category($category_image);
 
-                 // Set message
-                 $message = $this->message_model->get_message('category_created');
-                 $this->session->set_flashdata($message['name'], $message);
-
-                redirect($this->const_model::CATEGORIES);
+                // Set message
+                $message = $this->message_model->get_message('category_created');
+                $this->session->set_flashdata($message['name'], $message);
+                $category = $this->category_model->get_category_by_name($this->input->post('name'));
+                redirect($this->const_model::CATEGORIES_EDIT.'/'.$category['id']);
             }
         }
 
@@ -73,7 +64,7 @@
             $category = $this->category_model->get_category($id);
             $this->category_model->toogle_category($id, $category['active']);
             $posts = $this->post_model->get_posts_by_category($id);
-            
+
             foreach($posts as $post){
                 $this->post_model->toogle_post($post['id'], $category['active']);
             }
@@ -103,7 +94,7 @@
                 show_404();
             }
 
-            $data['title'] = $this::EDIT_TITLE;
+            $data['title'] = $data['category']['name'];
 
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::CATEGORIES_EDIT, $data);
@@ -118,18 +109,23 @@
                 $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::USERS_LOGIN);
             }
-
-
-            //Upload Image
-            $config = $this->fileupload_model->get_image_config($this::IMAGE_PATH,$this->input->post('name'));
-            $category_image = $this->fileupload_model->upload_image($config);
-
-            $this->category_model->update_category($category_image);
+            $this->category_model->update_category();
 
              // Set message
              $message = $this->message_model->get_message('category_updated');
              $this->session->set_flashdata($message['name'], $message);
-
+            
             redirect($this->const_model::CATEGORIES);
+        }
+
+        public function update_image(){
+            //Upload Image
+            $category_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+            $this->category_model->update_category_icon($category_image);
+            // Set message
+            $message = $this->message_model->get_message('category_updated');
+            $this->session->set_flashdata($message['name'], $message);
+
+            redirect($this->const_model::CATEGORIES_EDIT.'/'.$this->input->post('id'));
         }
     }

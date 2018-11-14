@@ -85,22 +85,14 @@
             }
             else{
 
-                //Upload Image
-                $config = $this->fileupload_model->get_image_config($this::IMAGE_PATH,$this->input->post('title'));
-                $post_image = $this->fileupload_model->upload_image($config);
-                
-                //Only need on the creation
-                if(is_null($post_image)){
-                    $post_image = $this::DEFAULT_IMAGE;
-                }
-
+                $post_image = $this::DEFAULT_IMAGE;
                 $this->post_model->create_post($post_image);
 
                 // Set message
                 $message = $this->message_model->get_message('post_created');
                 $this->session->set_flashdata($message['name'], $message);
 
-                redirect($this->const_model::POSTS);
+                redirect($this->const_model::POSTS_EDIT.'/'.url_title($this->input->post('title')));
             }
         }
 
@@ -142,7 +134,7 @@
                 show_404();
             }
 
-            $data['title'] = $this::EDIT_TITLE;
+            $data['title'] = $data['post']['title'];
 
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::POSTS_EDIT, $data);
@@ -154,17 +146,7 @@
             if(!$this->session->userdata('logged_in')){
                 redirect($this->const_model::USERS_LOGIN);
             }
-
-            //Upload Image
-            $config = $this->fileupload_model->get_image_config('./assets/images/posts',$this->input->post('title'));
-            $post_image = $this->fileupload_model->upload_image($config);
-            $old_post = $this->post_model->get_post($this->input->post('id'));
-            $old_image = $old_post['post_image'];
-            if($post_image != $old_image){
-
-            }
-
-            $this->post_model->update_post($post_image);
+            $this->post_model->update_post();
 
              // Set message
              $message = $this->message_model->get_message('post_updated');
@@ -173,4 +155,15 @@
             redirect($this->const_model::POSTS);
         }
 
+        public function update_image(){
+            //Upload Image
+            $post_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+            $this->post_model->update_post_image($post_image);
+            // Set message
+            $message = $this->message_model->get_message('post_updated');
+            $this->session->set_flashdata($message['name'], $message);
+            
+            $post = $this->post_model->get_post($this->input->post('id'));
+            redirect($this->const_model::POSTS_EDIT.'/'.$post['slug']);
+        }
     }

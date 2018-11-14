@@ -10,8 +10,6 @@
             if($limit){
                 $this->db->limit($limit, $offset);
             }
-
-
             if($slug === FALSE){
                 $this->db->order_by('posts.id', 'DESC');
                 $this->db->join('categories', 'categories.id = posts.category_id');
@@ -25,6 +23,13 @@
 
         public function get_post($id){
             $query = $this->db->get_where('posts', array('id'=> $id));
+            return $query->row_array();
+        }
+
+
+
+        public function get_post_by_slug($slug){
+            $query = $this->db->get_where('posts', array('slug'=> $slug));
             return $query->row_array();
         }
 
@@ -52,27 +57,22 @@
             return $this->db->update('posts', $data);
         }
 
-        public function update_post($post_image){
+        public function update_post(){
             $slug = url_title($this->input->post('title'));
-            $data = array();
-            if(!is_null($post_image)){
-                $data = array(
-                    'title' => $this->input->post('title'),
-                    'slug' => $slug,
-                    'body' => $this->input->post('body'),
-                    'category_id' => $this->input->post('category_id'),
-                    'post_image' => $post_image
-                );
-            }
-            else{
-                $data = array(
-                    'title' => $this->input->post('title'),
-                    'slug' => $slug,
-                    'body' => $this->input->post('body'),
-                    'category_id' => $this->input->post('category_id')
-                );
-            }
-            
+            $data = array(
+                'title' => $this->input->post('title'),
+                'slug' => $slug,
+                'body' => $this->input->post('body'),
+                'category_id' => $this->input->post('category_id')
+            );
+            $this->db->where('id', $this->input->post('id'));
+            return $this->db->update('posts', $data);
+        }
+
+        public function update_post_image($post_image){
+            $data = array(
+                'post_image' => $post_image
+            );
             $this->db->where('id', $this->input->post('id'));
             return $this->db->update('posts', $data);
         }
