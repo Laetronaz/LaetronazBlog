@@ -1,8 +1,25 @@
 <?php
     class Posts extends CI_Controller{
+        // "Constant" definitions
+        //IMAGES CONST
+        private const IMAGE_PATH = './assets/images/posts';
+        public const DEFAULT_IMAGE = 'noimage.jpg';
+
+        //TITLES CONST
+        private const INDEX_TITLE = 'Latest Posts';
+        private const CREATE_TITLE = 'Create Post';
+        private const EDIT_TITLE = 'Edit Post';
+
+        
+
+        //MESSAGES CONST
+        
+
+
+
         public function index($offset = 0){
             //Pagination Config
-            $config['base_url'] = base_url().'posts/index/';
+            $config['base_url'] = base_url().$this->const_model::POSTS_INDEX;
             $config['total_rows'] = $this->db->count_all('posts');
             $config['per_page'] = 10;
             $config['uri_segment'] = 3;
@@ -24,13 +41,13 @@
             //Init Pagination
             $this->pagination->initialize($config);
 
-            $data['title'] = 'Latest Posts';
+            $data['title'] = $this::INDEX_TITLE;
 
             $data['posts'] = $this->post_model->get_posts(FALSE, $config['per_page'], $offset);
 
-            $this->load->view('templates/header');
-            $this->load->view('posts/index', $data);
-            $this->load->view('templates/footer');
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::POSTS_INDEX, $data);
+            $this->load->view($this->const_model::FOOTER);
         }
 
         public function view($slug = NULL){
@@ -43,18 +60,18 @@
 
             $data['title'] = $data['post']['title'];
 
-            $this->load->view('templates/header');
-            $this->load->view('posts/view', $data);
-            $this->load->view('templates/footer');
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::POSTS_VIEW, $data);
+            $this->load->view($this->const_model::FOOTER);
         }
 
         public function create(){
             // Check login
             if(!$this->session->userdata('logged_in')){
-                redirect('users/login');
+                redirect($this->const_model::USERS_LOGIN);
             }
 
-            $data['title'] = 'Create Post';
+            $data['title'] = $this::CREATE_TITLE;
 
             $data['categories'] = $this->post_model->get_categories();
 
@@ -62,91 +79,108 @@
             $this->form_validation->set_rules('body', 'Body', 'required');
 
             if ($this->form_validation->run() === FALSE) {
-                $this->load->view('templates/header');
-                $this->load->view('posts/create', $data);
-                $this->load->view('templates/footer');    
+                $this->load->view($this->const_model::HEADER);
+                $this->load->view($this->const_model::POSTS_CREATE, $data);
+                $this->load->view($this->const_model::FOOTER);  
             }
             else{
-                //Upload Image
-                $config['upload_path'] = './assets/images/posts';
-                $config['allowed_types'] = 'gif|jpg|png';
-                $config['max_size'] = '2048';
-                $config['max_width'] = '2000';
-                $config['max_height'] = '2000';
 
-                $this->load->library('upload', $config);
-
-                if(!$this->upload->do_upload()){
-                    $errors = array('error' => $this->upload->display_errors());
-                    $post_image = 'noimage.jpg';
-                }
-                else{
-                    $data = array('upload_data' => $this->upload->data());
-                    $post_image = $_FILES['userfile']['name'];
-                }
-
+                $post_image = $this::DEFAULT_IMAGE;
                 $this->post_model->create_post($post_image);
 
                 // Set message
-                $this->session->set_flashdata('post_created', 'Your post has been created.');
+                $message = $this->message_model->get_message('post_created');
+                $this->session->set_flashdata($message['name'], $message);
 
-                redirect('posts');
+                redirect($this->const_model::POSTS_EDIT.'/'.url_title($this->input->post('title')));
             }
         }
 
         public function delete($id){
             // Check login
             if(!$this->session->userdata('logged_in')){
-                redirect('users/login');
+                redirect($this->const_model::USERS_LOGIN);
             }
             $post = $this->post_model->get_post($id);
             $this->post_model->toogle_post($id, $post['active']);
 
             // Set message
-            $this->session->set_flashdata('post_deleted', 'Your post has been deleted.');
+            if($post['active'] == TRUE){
+                $message = $this->message_model->get_message('post_disabled');
+            }
+            else{
+                $message = $this->message_model->get_message('post_enabled');
+            }
+            $this->session->set_flashdata($message['name'], $message);
 
-            redirect('posts');
+            redirect($this->const_model::POSTS);
         }
 
         public function edit($slug){
             // Check login
             if(!$this->session->userdata('logged_in')){
-                redirect('users/login');
+                redirect($this->const_model::USERS_LOGIN);
             }
 
             // Check user
             if($this->session->userdata('user_id') != $this->post_model->get_posts($slug)['user_id']){
-                redirect('posts');
+                redirect($this->const_model::POSTS);
             }
 
             $data['post'] = $this->post_model->get_posts($slug);
-
             $data['categories'] = $this->post_model->get_categories();
-            $data['subcategories'] = $this->subcategory_model->get_subcategories();
 
             if(empty($data['post'])){
                 show_404();
             }
 
-            $data['title'] = 'Edit Post';
+            $data['title'] = $data['post']['title'];
 
-            $this->load->view('templates/header');
-            $this->load->view('posts/edit', $data);
-            $this->load->view('templates/footer');
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::POSTS_EDIT, $data);
+            $this->load->view($this->const_model::FOOTER);
         }
 
         public function update(){
             // Check login
             if(!$this->session->userdata('logged_in')){
-                redirect('users/login');
+                redirect($this->const_model::USERS_LOGIN);
             }
-
             $this->post_model->update_post();
 
              // Set message
-             $this->session->set_flashdata('post_updated', 'Your post has been updated.');
+             $message = $this->message_model->get_message('post_updated');
+             $this->session->set_flashdata($message['name'], $message);
 
-            redirect('posts');
+            redirect($this->const_model::POSTS);
         }
 
+        public function update_image(){
+            // Check login
+            if(!$this->session->userdata('logged_in')){
+                redirect($this->const_model::USERS_LOGIN);
+            }
+            //Upload Image
+            $post_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+            $this->post_model->update_post_image($post_image);
+            // Set message
+            $message = $this->message_model->get_message('post_updated');
+            $this->session->set_flashdata($message['name'], $message);
+            
+            $this->clean_images();
+            
+            $post = $this->post_model->get_post($this->input->post('id'));
+            redirect($this->const_model::POSTS_EDIT.'/'.$post['slug']);
+        }
+
+        //Remove all images that aren't linked to a post
+        private function clean_images(){
+            //SETUP the list
+            $image_list = array();           
+            foreach($this->post_model->get_all_images() as $key => $value){
+                array_push($image_list, $value['post_image']);
+            }
+            $image_list[count($image_list)] = $this::DEFAULT_IMAGE;
+            $this->fileupload_model->clean_unlinked_images($this::IMAGE_PATH,array_values($image_list));
+        }
     }

@@ -8,7 +8,7 @@
             $data = array(
                 'name' => $this->input->post('name'),
                 'user_id' => $this->session->userdata('user_id'),
-                'category_image' => $category_image
+                'category_icon' => $category_image
             );
             return $this->db->insert('categories', $data);
         }
@@ -24,10 +24,22 @@
             return $query->row_array();
         }
 
-        public function update_category($category_image){
+        public function get_category_by_name($name){
+            $query = $this->db->get_where('categories', array('name'=> $name));
+            return $query->row_array();
+        }
 
+        public function update_category(){
             $data = array(
-                'name' => $this->input->post('name'),
+                'name' => $this->input->post('name')
+            );
+            
+            $this->db->where('id', $this->input->post('id'));
+            return $this->db->update('categories', $data);
+        }
+
+        public function update_category_icon($category_image){
+            $data = array(
                 'category_icon' => $category_image
             );
             $this->db->where('id', $this->input->post('id'));
@@ -41,5 +53,12 @@
             );       
             $this->db->where('id', $id);
             return $this->db->update('categories', $data);
+        }
+
+        public function get_all_icons(){
+            $this->db->distinct('category_icon');
+            $this->db->select('category_icon');
+            $query = $this->db->get('categories');
+            return $query->result_array();
         }
     }
