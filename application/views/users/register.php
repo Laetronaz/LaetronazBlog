@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label>User Type</label>
-                <select class="form-control" name="usertype">
+                <select class="form-control form-control-sm" name="usertype">
                     <?php foreach($types as $type) : ?>
                         <option value="<?php echo $type['id']?>"><?php echo $type['name'];?></option>
                     <?php endforeach;?>

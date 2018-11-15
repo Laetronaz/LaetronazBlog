@@ -1,4 +1,5 @@
-<h2 class="text-center"><?= $title; ?></h2>
+
+<h2><?= $title; ?></h2>
 <table class="table table-hover">
     <thead>
         <tr>
@@ -14,6 +15,7 @@
     <tbody>
         <tr class="table-secondary">
         <?php foreach($categories as $category) : ?>
+        <?/*=vdebug($category)*/?>       
             <tr class="table-primary">
                 <td class="text-center" scope="row"><img class ="thumbnail" src="<?php echo site_url(); ?>assets/images/categories/<?php echo $category['category_icon'];?>" height="50" width="50"></td>
                 <td class="text-center" ><a href="<?php echo site_url('/categories/posts/'.$category['id']); ?>"><?php echo $category['name'];?></a></td>

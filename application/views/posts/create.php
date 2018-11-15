@@ -21,17 +21,6 @@
       <?php endforeach; ?>
     </select>
   </div>
-  
-  <div class="form-group">
-    <label>Upload Image</label><br>
-    <input type="file" name="userfile" size="20">
-  </div>
-
-  <div class="form-group">
-    <label>Image Preview</label><br>
-    <img id="preview" src="<?php echo base_url(); ?>\assets\images\posts\yourImage.png" alt="your image" height="200" width="200" />
-  </div>
-
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
 <script>CKEDITOR.replace('editor1');</script>

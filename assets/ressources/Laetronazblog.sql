@@ -116,5 +116,5 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('user_enabled', 'alert-success', 'The user have been enabled'),
 ('user_disabled', 'alert-success', 'The user have been disabled'),
 ('unautorized_access', 'alert-danger', 'Only admininstrators have access to this page'),
-('login_failed', 'alert-danger', 'michel.pelland12@gmail.com');
+('login_failed', 'alert-danger', 'You have entered an invalid username or password');
 COMMIT;
