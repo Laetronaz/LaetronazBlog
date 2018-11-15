@@ -3,7 +3,7 @@
 
         //IMAGES CONST
         private const IMAGE_PATH = './assets/images/categories';
-        private const DEFAULT_IMAGE = 'noimage.jpg';
+        public const DEFAULT_IMAGE = 'noimage.jpg';
 
         //TITES CONST
         private const INDEX_TITLE = 'Search by Categories';
@@ -119,6 +119,12 @@
         }
 
         public function update_image(){
+            // Check login
+            if(!$this->session->userdata('logged_in')){
+                redirect($this->const_model::USERS_LOGIN);
+            }
+            $this->post_model->update_post();
+
             //Upload Image
             $category_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
             $this->category_model->update_category_icon($category_image);
@@ -126,6 +132,18 @@
             $message = $this->message_model->get_message('category_updated');
             $this->session->set_flashdata($message['name'], $message);
 
+            $this->clean_images();
             redirect($this->const_model::CATEGORIES_EDIT.'/'.$this->input->post('id'));
+        }
+
+        //delete all image that aren't linked to a category
+        private function clean_images(){
+            //SETUP the list
+            $image_list = array();           
+            foreach($this->category_model->get_all_icons() as $key => $value){
+                array_push($image_list, $value['category_icon']);
+            }
+            $image_list[count($image_list)] = $this::DEFAULT_IMAGE;
+            $this->fileupload_model->clean_unlinked_images($this::IMAGE_PATH,array_values($image_list));
         }
     }

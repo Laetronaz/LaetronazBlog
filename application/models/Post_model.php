@@ -90,5 +90,10 @@
             return $query->result_array();
         }
 
-    
+        public function get_all_images(){
+            $this->db->distinct('post_image');
+            $this->db->select('post_image');
+            $query = $this->db->get('posts');
+            return $query->result_array();
+        }
     }

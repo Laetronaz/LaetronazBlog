@@ -3,7 +3,7 @@
         // "Constant" definitions
         //IMAGES CONST
         private const IMAGE_PATH = './assets/images/posts';
-        private const DEFAULT_IMAGE = 'noimage.jpg';
+        public const DEFAULT_IMAGE = 'noimage.jpg';
 
         //TITLES CONST
         private const INDEX_TITLE = 'Latest Posts';
@@ -156,6 +156,10 @@
         }
 
         public function update_image(){
+            // Check login
+            if(!$this->session->userdata('logged_in')){
+                redirect($this->const_model::USERS_LOGIN);
+            }
             //Upload Image
             $post_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
             $this->post_model->update_post_image($post_image);
@@ -163,7 +167,20 @@
             $message = $this->message_model->get_message('post_updated');
             $this->session->set_flashdata($message['name'], $message);
             
+            $this->clean_images();
+            
             $post = $this->post_model->get_post($this->input->post('id'));
             redirect($this->const_model::POSTS_EDIT.'/'.$post['slug']);
+        }
+
+        //Remove all images that aren't linked to a post
+        private function clean_images(){
+            //SETUP the list
+            $image_list = array();           
+            foreach($this->post_model->get_all_images() as $key => $value){
+                array_push($image_list, $value['post_image']);
+            }
+            $image_list[count($image_list)] = $this::DEFAULT_IMAGE;
+            $this->fileupload_model->clean_unlinked_images($this::IMAGE_PATH,array_values($image_list));
         }
     }

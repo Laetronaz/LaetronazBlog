@@ -54,4 +54,11 @@
             $this->db->where('id', $id);
             return $this->db->update('categories', $data);
         }
+
+        public function get_all_icons(){
+            $this->db->distinct('category_icon');
+            $this->db->select('category_icon');
+            $query = $this->db->get('categories');
+            return $query->result_array();
+        }
     }
