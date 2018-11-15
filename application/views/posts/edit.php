@@ -25,7 +25,6 @@
   <button type="submit" class="btn btn-primary">Update Post</button>
   <button type="button" data-toggle="modal" data-target="#ImageUpdate" class="btn btn-info">Change Thumbnail</button>
 </form>
-
  <!-- Modal -->
  <div class="modal fade" id="ImageUpdate" role="dialog">
         <div class="modal-dialog">  
@@ -51,10 +50,9 @@
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </form>
             </div>
-        </div>
-        
-        </div>
+        </div>  
     </div>
+  </div>
 <script>CKEDITOR.replace('editor1');</script>
 <!-- Image Preview File -->
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/ImageViewer.js"></script>

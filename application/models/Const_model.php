@@ -13,15 +13,20 @@
         public const POSTS_EDIT = 'posts/edit';
         public const POSTS_PATH = 'posts';
 
-        //USERS PATH CONST
-        public const USERS_LOGIN = 'users/login';
-        public const USER_REGISTER = 'users/register';
-
         //CATEGORIES PATH CONST
         public const CATEGORIES = 'categories';
         public const CATEGORIES_INDEX = 'categories/index';
         public const CATEGORIES_CREATE = 'categories/create';
         public const CATEGORIES_EDIT = 'categories/edit';
+
+        //USERS PATH CONST
+        public const USERS = 'users';
+        public const USERS_INDEX = 'users/index';
+        public const USERS_LOGIN = 'users/login';
+        public const USERS_LOGOUT = 'users/logout';
+        public const USERS_REGISTER = 'users/register';
+        public const USERS_EDIT = 'users/edit';
+        public const USERS_VIEW = 'users/view';
 
         //PAGES PATH CONST
         public const PAGES = 'pages/';

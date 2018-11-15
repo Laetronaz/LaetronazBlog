@@ -56,17 +56,23 @@ $route['posts/create'] = 'posts/create';
 $route['posts/(:any)'] = 'posts/view/$1';
 $route['posts'] = 'posts/index';
 $route['default_controller'] = 'posts';
-//$route['default_controller'] = 'pages/view';
 
-$route['categories'] = 'categories/index';
 $route['categories/create'] = 'categories/create';
 $route['categories/update'] = 'categories/update';
 $route['categories/posts/(:any)'] = 'categories/posts/$1';
+$route['categories'] = 'categories/index';
 
 $route['subcategories'] = 'subcategories/index';
 $route['subcategories/create'] = 'subcategories/create';
 $route['subcategories/posts/(:any)'] = 'subcategories/posts/$1';
 
+$route['users/register'] = 'users/register';
+$route['users/update'] = 'users/update';
+$route['users/change_password'] = 'users/change_password';
+$route['users/(:any)'] = 'users/view/$1';
+$route['logout'] = 'users/logout';
+$route['login'] = 'users/login';
+$route['users'] = 'users/index';
 
 $route['404_override'] = '';
 $route['(:any)'] = 'pages/view/$1';
