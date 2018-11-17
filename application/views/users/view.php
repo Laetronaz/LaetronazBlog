@@ -16,6 +16,14 @@
     <p><?php echo $user['username']?></p>
 </div>
 <div class="form-group">
+    <label>User Rank</label>   
+    <?php foreach($types as $type) : ?>
+        <?php if($type['id'] == $user['user_type']) : ?>
+            <p><?php echo $type['name']?></p>
+        <?php endif ?>
+    <?php endforeach;?>   
+</div>
+<div class="form-group">
     <label>Register date</label>
     <p><?php echo $user['register_date']?></p>
 </div>

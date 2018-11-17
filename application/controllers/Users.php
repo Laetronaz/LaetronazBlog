@@ -36,12 +36,11 @@
 
             if($this->form_validation->run() === FALSE){
                 $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::USER_REGISTER, $data);
+                $this->load->view($this->const_model::USERS_REGISTER, $data);
                 $this->load->view($this->const_model::FOOTER);
             }
             else{
-                // ENCRYPT password currently using: CRYPT_BLOWFISH
-                $enc_password = password_hash($this->input->post('password'),PASSWORD_BCRYPT);
+                $enc_password = $this->encrypt_password($this->input->post('password'));
                 $this->user_model->register($enc_password);
 
                 // Set message
@@ -78,7 +77,7 @@
 
                  if(!($user_id === FALSE)){
                     //Verify the password currently : CRYPT_BLOWFISH
-                    if(!password_verify($password, $hashed_password)){
+                    if(!$this->validate_password($user_id, $password)){
                         $this->login_failed();
                     }
 
@@ -98,7 +97,7 @@
                     redirect($this->const_model::POSTS_PATH);
                 }
                 else{
-                    login_failed();
+                    $this->login_failed();
                 }    
             }
         }
@@ -162,6 +161,7 @@
             }
 
             $data['title'] = $this::VIEW_TITLE;
+            $data['types'] = $this->user_model->get_users_type();
 
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::USERS_VIEW, $data);
@@ -176,6 +176,8 @@
             }
 
             $data['user'] = $this->user_model->get_user($id);
+            $data['types'] = $this->user_model->get_users_type();
+            
             
             if(empty($data['user'])){
                 show_404();
@@ -189,7 +191,14 @@
         }
 
         public function update(){
-
+            // Check login
+            if(!$this->session->userdata('logged_in')){
+                redirect($this->const_model::USERS_LOGIN);
+            }
+            $this->user_model->update_user();
+            $message = $this->message_model->get_message('user_updated');
+            $this->session->set_flashdata($message['name'], $message);
+            redirect($this->const_model::USERS_VIEW.'/'.$this->input->post('id'));
         }
 
         public function change_password(){
@@ -198,10 +207,13 @@
                 redirect($this->const_model::USERS_LOGIN);
             }
             $new_password = $this->input->post('password');
-            if($this->validate_password($this->input->post('id'),$new_password)){
-                vdebug('validated');
+            if($this->session->userdata('user_type') == 'Admin' && $this->input->post('id') != $this->session->userdata('user_id')){
                 $this->user_model->update_password($this->encrypt_password($new_password));
-               
+                $message = $this->message_model->get_message('password_changed_success');
+            }
+            else if($this->validate_password($this->input->post('id'),$new_password)){
+                vdebug('validated');
+                $this->user_model->update_password($this->encrypt_password($new_password)); 
                 //set flash_message
                 $message = $this->message_model->get_message('password_changed_success');
             }
@@ -220,7 +232,6 @@
 
         private function validate_password($id, $password){
             $db_password = $this->user_model->get_password($id);
-            //vdebug($db_password);
             if(password_verify($password, $db_password['password'])){
                 return TRUE;
             }

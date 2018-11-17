@@ -22,27 +22,28 @@
                 <td class="text-center" scope="row"><?php echo $user['username']?></td>
                 <td class="text-center"><?php echo $user['register_date'];?></td>
 
-                <form class="form-inline" action="users/edit/<?php echo $user['id']; ?>" method="POST">
+                <form class="form-inline" action="<?php echo base_url(); ?>users/edit/<?php echo $user['id']; ?>?>" method="POST">
                     <td class="text-center" scope="col">
                         <button type="submit" class="btn btn-primary btn-block">
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>
                 </form>
+               
                 <td class="text-center" scope="col">
-                <?php if($user['active'] == TRUE) : ?>
-                    <form class="form-inline" action="users/toggle/<?php echo $user['id']; ?>" method="POST">                        
-                        <button type="submit" class="btn btn-danger btn-block">
-                            <i class="fas fa-toggle-off" ></i>
-                         </button>
-                    </form>
-                <?php else : ?>
-                    <form class="form-inline" action="users/toggle/<?php echo $user['id']; ?>" method="POST">
-                        <button type="submit" class="btn btn-success btn-block">
-                            <i class="fas fa-toggle-on"></i>
-                        </button>
-                    </form>
-                <?php endif; ?>
+                    <?php if($user['active'] == TRUE) : ?>
+                        <form class="form-inline" action="users/toggle/<?php echo $user['id']; ?>" method="POST">                        
+                            <button type="submit" class="btn btn-danger btn-block">
+                                <i class="fas fa-toggle-off" ></i>
+                            </button>
+                        </form>
+                    <?php else : ?>
+                        <form class="form-inline" action="users/toggle/<?php echo $user['id']; ?>" method="POST">
+                            <button type="submit" class="btn btn-success btn-block">
+                                <i class="fas fa-toggle-on"></i>
+                            </button>
+                        </form>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>

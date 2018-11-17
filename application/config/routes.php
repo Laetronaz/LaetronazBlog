@@ -69,10 +69,11 @@ $route['subcategories/posts/(:any)'] = 'subcategories/posts/$1';
 $route['users/register'] = 'users/register';
 $route['users/update'] = 'users/update';
 $route['users/change_password'] = 'users/change_password';
-$route['users/(:any)'] = 'users/view/$1';
-$route['logout'] = 'users/logout';
-$route['login'] = 'users/login';
-$route['users'] = 'users/index';
+$route['users/logout'] = 'users/logout';
+$route['users/login'] = 'users/login';
+$route['users/edit'] = 'users/edit';
+//$route['users/(:any)'] = 'users/view/$1';
+//$route['users'] = 'users/index';
 
 $route['404_override'] = '';
 $route['(:any)'] = 'pages/view/$1';
