@@ -147,11 +147,10 @@
                 redirect($this->const_model::USERS_LOGIN);
             }
             $this->post_model->update_post();
-
+            
              // Set message
              $message = $this->message_model->get_message('post_updated');
              $this->session->set_flashdata($message['name'], $message);
-
             redirect($this->const_model::POSTS);
         }
 
