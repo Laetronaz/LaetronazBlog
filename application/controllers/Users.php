@@ -3,6 +3,9 @@
          //TITLES CONST
          private const REGISTER_TITLE = 'Sign Up';
          private const LOGIN_TITLE = 'Sign In';
+         private const INDEX_TITLE = 'User List';
+         private const VIEW_TITLE = 'User Profile';
+         private const EDIT_TITLE = 'User Profile';
 
          //REGISTER ERRORS
          private const EMAIL_TAKEN = 'This email is already used. Please choose a different one.';
@@ -16,7 +19,6 @@
                 $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::USERS_LOGIN);
             }
-
 
             $data['title'] = $this::REGISTER_TITLE;
             $data['types'] = $this->user_model->get_users_type();
@@ -34,13 +36,11 @@
 
             if($this->form_validation->run() === FALSE){
                 $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::USER_REGISTER, $data);
+                $this->load->view($this->const_model::USERS_REGISTER, $data);
                 $this->load->view($this->const_model::FOOTER);
             }
             else{
-                // ENCRYPT password currently using: CRYPT_BLOWFISH
-                
-                $enc_password = password_hash($this->input->post('password'),PASSWORD_BCRYPT);
+                $enc_password = $this->encrypt_password($this->input->post('password'));
                 $this->user_model->register($enc_password);
 
                 // Set message
@@ -77,7 +77,7 @@
 
                  if(!($user_id === FALSE)){
                     //Verify the password currently : CRYPT_BLOWFISH
-                    if(!password_verify($password, $hashed_password)){
+                    if(!$this->validate_password($user_id, $password)){
                         $this->login_failed();
                     }
 
@@ -97,7 +97,7 @@
                     redirect($this->const_model::POSTS_PATH);
                 }
                 else{
-                    login_failed();
+                    $this->login_failed();
                 }    
             }
         }
@@ -117,9 +117,124 @@
 
 
         private function login_failed(){
-             // Set message
-             $message = $this->message_model->get_message('login_failed');
+            // Set message
+            $message = $this->message_model->get_message('login_failed');
             $this->session->set_flashdata($message['name'], $message);
             redirect($this->const_model::USERS_LOGIN);
+        }
+
+        public function index(){
+            $data['title'] = $this::INDEX_TITLE;
+            $data['users'] = $this->user_model->get_users();
+
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::USERS_INDEX, $data);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
+        public function toggle($id){
+            // Check login
+            if($this->session->userdata('user_type') != 'Admin' ){
+                $message = $this->message_model->get_unauthorized_access();
+                $this->session->set_flashdata($message['name'], $message);
+                redirect($this->const_model::USERS_LOGIN);
+            }
+            $user = $this->user_model->get_user($id);
+            $this->user_model->toggle_user($id, $user['active']);
+
+            //set flash_messages
+            if($user['active'] == TRUE){
+                $message = $this->message_model->get_message('user_disabled');
+            }
+            else{
+                $message = $this->message_model->get_message('user_enabled');
+            }
+            $this->session->set_flashdata($message['name'], $message);
+            redirect($this->const_model::USERS);
+        }
+
+        public function view($id){
+            $data['user'] = $this->user_model->get_user($id);
+
+            if(empty($data['user'])){
+                show_404();
+            }
+
+            $data['title'] = $this::VIEW_TITLE;
+            $data['types'] = $this->user_model->get_users_type();
+
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::USERS_VIEW, $data);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
+        public function edit($id){
+            if($this->session->userdata('user_type') != 'Admin' ){
+                $message = $this->message_model->get_unauthorized_access();
+                $this->session->set_flashdata($message['name'], $message);
+                redirect($this->const_model::USERS_LOGIN);
+            }
+
+            $data['user'] = $this->user_model->get_user($id);
+            $data['types'] = $this->user_model->get_users_type();
+            
+            
+            if(empty($data['user'])){
+                show_404();
+            }
+
+            $data['title'] = $this::EDIT_TITLE;
+
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::USERS_EDIT, $data);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
+        public function update(){
+            // Check login
+            if(!$this->session->userdata('logged_in')){
+                redirect($this->const_model::USERS_LOGIN);
+            }
+            $this->user_model->update_user();
+            $message = $this->message_model->get_message('user_updated');
+            $this->session->set_flashdata($message['name'], $message);
+            redirect($this->const_model::USERS_VIEW.'/'.$this->input->post('id'));
+        }
+
+        public function change_password(){
+            // Check login
+            if(!$this->session->userdata('logged_in')){
+                redirect($this->const_model::USERS_LOGIN);
+            }
+            $new_password = $this->input->post('password');
+            if($this->session->userdata('user_type') == 'Admin' && $this->input->post('id') != $this->session->userdata('user_id')){
+                $this->user_model->update_password($this->encrypt_password($new_password));
+                $message = $this->message_model->get_message('password_changed_success');
+            }
+            else if($this->validate_password($this->input->post('id'),$new_password)){
+                vdebug('validated');
+                $this->user_model->update_password($this->encrypt_password($new_password)); 
+                //set flash_message
+                $message = $this->message_model->get_message('password_changed_success');
+            }
+            else{
+                vdebug('validation failed');
+                $message = $this->message_model->get_message('password_changed_failed');
+            }
+            $this->session->set_flashdata($message['name'], $message);
+            redirect($this->const_model::USERS_EDIT.'/'.$this->input->post('id'));
+        }
+
+        private function encrypt_password($password){
+            // ENCRYPT password currently using: CRYPT_BLOWFISH
+            return password_hash($password, PASSWORD_BCRYPT);
+        }
+
+        private function validate_password($id, $password){
+            $db_password = $this->user_model->get_password($id);
+            if(password_verify($password, $db_password['password'])){
+                return TRUE;
+            }
+            return FALSE;
         }
     }

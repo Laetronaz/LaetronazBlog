@@ -9,7 +9,7 @@
     <hr>
 	<a class="btn btn-default float-left" href="<?php echo base_url(); ?>posts/edit/<?php echo $post['slug']; ?>">Edit</a>
 	<?php echo form_open('/posts/delete/'.$post['id']); ?>
-		<input type="submit" value="Delete" class="btn btn-danger">
+		<input type="submit" value="Toggle Post" class="btn btn-danger">
 	</form>
 <?php endif; ?>
 <div id="disqus_thread"></div>
