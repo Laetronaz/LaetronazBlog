@@ -115,6 +115,9 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('user_loggedout', 'alert-success', 'You are now logged out'),
 ('user_enabled', 'alert-success', 'The user have been enabled'),
 ('user_disabled', 'alert-success', 'The user have been disabled'),
+('user_updated', 'alert_success', 'The user profile have been updated'),
+('password_changed_success', 'alert-success', 'The password has been changed successfuly'),
 ('unautorized_access', 'alert-danger', 'Only admininstrators have access to this page'),
-('login_failed', 'alert-danger', 'You have entered an invalid username or password');
+('login_failed', 'alert-danger', 'You have entered an invalid username or password'),
+('password_change_failed', 'alert-danger', 'The current password is invalid.');
 COMMIT;

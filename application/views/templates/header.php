@@ -64,11 +64,8 @@
                     <a href="<?php echo base_url(); ?>users/register" class="list-group-item list-group-item-action border border-white">
                         <span class="menu-collapsed">Create New User</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action border border-white">
-                        <span class="menu-collapsed">Edit User</span>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action border border-white">
-                        <span class="menu-collapsed">Users Index</span>
+                    <a href="<?php echo base_url();?>users/index" class="list-group-item list-group-item-action border border-white">
+                        <span class="menu-collapsed">Users List</span>
                     </a>
                   </div>
                 </li>
