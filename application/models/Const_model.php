@@ -8,6 +8,7 @@
 
         //POSTS PATH CONST
         public const POSTS_INDEX = 'posts/index';
+        public const POSTS_USER_INDEX = '/posts/userindex';
         public const POSTS_VIEW = 'posts/view';
         public const POSTS_CREATE = 'posts/create';
         public const POSTS_EDIT = 'posts/edit';

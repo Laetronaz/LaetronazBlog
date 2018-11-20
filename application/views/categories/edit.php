@@ -48,4 +48,3 @@
         </div>
     </div>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/ImageViewer.js"></script>
-<script>$("#ImageUpdate").modal()</script>
