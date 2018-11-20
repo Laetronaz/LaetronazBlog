@@ -46,7 +46,7 @@
         }
 
         public function posts($id){
-            $data['title'] = $this->category_model->get_category($id)->name;
+            $data['title'] = $this->category_model->get_category($id)['name'];
             $data['posts'] = $this->post_model->get_posts_by_category($id);
 
             $this->load->view($this->const_model::HEADER);
@@ -123,8 +123,7 @@
             if(!$this->session->userdata('logged_in')){
                 redirect($this->const_model::USERS_LOGIN);
             }
-            $this->post_model->update_post();
-
+            
             //Upload Image
             $category_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
             $this->category_model->update_category_icon($category_image);

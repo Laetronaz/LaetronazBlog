@@ -1,3 +1,5 @@
+DROP TABLE tagpost;
+DROP TABLE tags;
 DROP TABLE posts;
 DROP TABLE categories;
 DROP TABLE users;

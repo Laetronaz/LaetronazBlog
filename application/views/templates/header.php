@@ -1,17 +1,22 @@
 <html>
 <head>
     <title>Laetronaz Blog</title>
-    
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- STYLES -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">   
     <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oxygen" >
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/defaultFont.css" >
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <!-- LOCAL STYLES -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/defaultFont.css" >
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/tagsinput.css">
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="http://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- LOCAL SCRIPTS -->
+    <script src="<?php echo base_url(); ?>assets/javascript/tagsinput.js"></script>
 </head>
 <body>
 
@@ -38,9 +43,6 @@
         </li>
       <?php endif; ?>
       <?php if($this->session->userdata('logged_in')) : ?>
-        <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url(); ?>posts/create">Create Post</a>
-        </li>
         <li class="nav-item">
             <a class="nav-link" href="<?php echo base_url(); ?>users/logout">Logout</a>
         </li>
@@ -83,14 +85,14 @@
                 <li class="nav-item">
                   <a class="nav-link" href="#postssubmenu" data-toggle="collapse" data-target="#postssubmenu">Manage Posts</a>
                   <div id="postssubmenu" class="sidebar-submenu collapse">
-                    <a href="#" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Posts Logs</span>
+                    <a href="<?php echo base_url(); ?>posts/userindex" class="list-group-item list-group-item-action border-white">
+                        <span class="menu-collapsed">My Posts</span>
+                    </a>          
+                    <a href="<?php echo base_url(); ?>posts/create" class="list-group-item list-group-item-action border-white">
+                        <span class="menu-collapsed">Create New Post</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Posts Users Logs</span>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Posts Categories Logs</span>
+                    <a href="<?php echo base_url(); ?>" class="list-group-item list-group-item-action border-white">
+                        <span class="menu-collapsed">Posts List</span>
                     </a>
                   </div>
                 </li>
@@ -104,5 +106,3 @@
               <!--Flash messages -->
               <p class="alert <?php echo $this->session->flashdata($flashkey)['type']?>"><?php echo $this->session->flashdata($flashkey)['value']?></p>
             <?php endforeach; ?>
-                
-
