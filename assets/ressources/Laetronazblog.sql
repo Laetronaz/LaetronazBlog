@@ -44,7 +44,7 @@ CREATE TABLE categories (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `active` boolean NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`id`),
-  CONSTRAINT FK_SubCategoryUser FOREIGN KEY (user_id)
+  CONSTRAINT FK_CategoryUser FOREIGN KEY (user_id)
   REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -68,6 +68,28 @@ CREATE TABLE posts (
   CONSTRAINT FK_PostUser FOREIGN KEY (user_id)
   REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `tags`
+--
+CREATE TABLE `tags` ( 
+  `id` INT(11) NOT NULL AUTO_INCREMENT , 
+  `title` VARCHAR(255) NOT NULL UNIQUE, PRIMARY KEY (`id`),
+  CONSTRAINT UC_Title UNIQUE(`title`)
+) ENGINE = InnoDB;
+
+--
+-- Table structure for table `tagpost`
+--
+CREATE TABLE `tagpost` ( 
+  `post_id` INT(11) NOT NULL , 
+  `tag_id` INT(11) NOT NULL,
+  PRIMARY KEY(post_id, tag_id),
+  CONSTRAINT FK_PostIDTag FOREIGN KEY(post_id)
+  REFERENCES posts(id),
+  CONSTRAINT FKTagsIDTag FOREIGN KEY (tag_id)
+  REFERENCES tags(id) 
+) ENGINE = InnoDB;
 
 --
 -- Table structure for table `messages`
@@ -115,7 +137,7 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('user_loggedout', 'alert-success', 'You are now logged out'),
 ('user_enabled', 'alert-success', 'The user have been enabled'),
 ('user_disabled', 'alert-success', 'The user have been disabled'),
-('user_updated', 'alert_success', 'The user profile have been updated'),
+('user_updated', 'alert-success', 'The user profile have been updated'),
 ('password_changed_success', 'alert-success', 'The password has been changed successfuly'),
 ('unautorized_access', 'alert-danger', 'Only admininstrators have access to this page'),
 ('login_failed', 'alert-danger', 'You have entered an invalid username or password'),

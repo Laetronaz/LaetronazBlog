@@ -1,7 +1,6 @@
 <?php
     class Post_model extends CI_Model{
         
-
         public function __construct(){
             $this->load->database();
         }
@@ -22,11 +21,18 @@
         }
 
         public function get_post($id){
+            $this->db->order_by('posts.created_at', 'ASC');
             $query = $this->db->get_where('posts', array('id'=> $id));
             return $query->row_array();
         }
 
-
+        public function get_user_posts($id){
+            $data = array(
+                'user_id' => $id
+            );
+            $query = $this->db->get_where('posts', $data);
+            return $query->result_array();
+        }
 
         public function get_post_by_slug($slug){
             $query = $this->db->get_where('posts', array('slug'=> $slug));
@@ -41,11 +47,11 @@
                 'body' => $this->input->post('body'),
                 'category_id' => $this->input->post('category_id'),
                 'user_id' => $this->session->userdata('user_id'),
-                'post_image' => $post_image
+                'post_image' => $post_image,
                 
             );
-
-            return $this->db->insert('posts', $data);
+            $this->db->insert('posts', $data);
+            return $this->db->insert_id();
         }
 
         public function toogle_post($id, $active){

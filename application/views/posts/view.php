@@ -4,14 +4,6 @@
 <div class="post-body">
     <?php echo $post['body']; ?>
 </div>
-
-<?php if($this->session->userdata('user_id') == $post['user_id']) : ?>
-    <hr>
-	<a class="btn btn-default float-left" href="<?php echo base_url(); ?>posts/edit/<?php echo $post['slug']; ?>">Edit</a>
-	<?php echo form_open('/posts/delete/'.$post['id']); ?>
-		<input type="submit" value="Toggle Post" class="btn btn-danger">
-	</form>
-<?php endif; ?>
 <div id="disqus_thread"></div>
 
 <script>

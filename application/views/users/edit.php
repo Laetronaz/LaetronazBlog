@@ -70,4 +70,3 @@
         </div>  
     </div>
   </div>
-  <script>$("#PasswordChange").modal()</script>

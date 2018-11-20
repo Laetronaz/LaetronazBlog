@@ -21,6 +21,9 @@
       <?php endforeach; ?>
     </select>
   </div>
+  <div class="form-group">
+    <label for="tagsinput">Tags</label>
+    <input class="form-control" name="tagsinput" type="text" data-role="tagsinput" value="">
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
 <script>CKEDITOR.replace('editor1');</script>
