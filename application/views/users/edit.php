@@ -46,7 +46,7 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-              <?php echo form_open_multipart('users/change_password'); ?>
+              <?php echo form_open_multipart('users/change-password'); ?>
                     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
                     <?php if($this->session->userdata('user_id') != $user['id'] && $this->session->user_data['user_type'] == 'Admin') : ?>
                     <div class="form-group">

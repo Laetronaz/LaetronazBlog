@@ -84,17 +84,27 @@
             return $this->db->update('users', $data);
         }
 
-        public function update_password($crypted_password){
+        public function update_password($crypted_password,$id = -1){
+            if($id == -1){
+                $id = $this->input->post('id');
+            }
             $data = array(
                 'password' => $crypted_password
             );
-            $this->db->where('id', $this->input->post('id'));
+            
+            $this->db->where('id', $id);
             return $this->db->update('users', $data);
         }
 
         public function get_password($id){
             $this->db->select('password');
             $query = $this->db->get_where('users', array('id' => $id));
+            return $query->row_array();
+        }
+
+        public function get_user_by_email(){
+            $data = array('email'=>$this->input->post('email'));
+            $query = $this->db->get_where('users',$data);
             return $query->row_array();
         }
 

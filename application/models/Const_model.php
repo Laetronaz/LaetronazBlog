@@ -28,8 +28,19 @@
         public const USERS_REGISTER = 'users/register';
         public const USERS_EDIT = 'users/edit';
         public const USERS_VIEW = 'users/view';
+        public const USERS_FORGOTTEN_PASSWORD = 'users/forgotpassword';
+        public const USERS_CHANGE_PASSWORD = 'users/resetpassword';
+        public const PASSWORD_TOKEN_EXPIRED = 'users/password-expired';
+        public const VALIDATION_TOKEN_EXPIRED = 'users/validation-expired';
+
+        public const WEBSITE_NAME = 'Laetronaz Blog';
+        public const EMAIL_ADDRESS='laetronaz@gmail.com';
+        public const EMAIL_PASSWORD ='';
 
         //PAGES PATH CONST
         public const PAGES = 'pages/';
+
+        //EMAIL PATH CONST
+        public const EMAIL = 'email/sendEmail';
         
     }

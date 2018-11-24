@@ -46,7 +46,23 @@
                 // Set message
                 $message = $this->message_model->get_message('user_registered');
                 $this->session->set_flashdata($message['name'], $message);
-            
+
+
+                //SEND VERIFICATION EMAIL HERE
+                $recipient = $this->input->post('email');
+                $subject = $this->const_model::WEBSITE_NAME.' verify your email';
+                $html_content = file_get_contents(base_url().'assets/emails/verify_email.html');
+
+                //CREATE TOKEN
+                $token = bin2hex(random_bytes(78));
+
+                //REPLACE CONTENT
+                $html_content = str_replace('$1',$this->input->post('name'),$html_content);
+                $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
+                $html_content = str_replace('$3', base_url().'users/verifyemail/'.$token,$html_content);
+
+
+                $this->sendEmail($recipient, $subject, $html_content);
                 redirect($this->const_model::POSTS_PATH);
             }
         }
@@ -201,28 +217,34 @@
             redirect($this->const_model::USERS_VIEW.'/'.$this->input->post('id'));
         }
 
-        public function change_password(){
+
+        //======================================PASSWORD=================================================
+        public function change_password($user_id = FALSE){//User change the user by himself
             // Check login
-            if(!$this->session->userdata('logged_in')){
-                redirect($this->const_model::USERS_LOGIN);
-            }
             $new_password = $this->input->post('password');
-            if($this->session->userdata('user_type') == 'Admin' && $this->input->post('id') != $this->session->userdata('user_id')){
-                $this->user_model->update_password($this->encrypt_password($new_password));
+            if($user_id != FALSE){
+                $this->user_model->update_password($this->encrypt_password($new_password),$user_id);
                 $message = $this->message_model->get_message('password_changed_success');
             }
             else if($this->validate_password($this->input->post('id'),$new_password)){
-                vdebug('validated');
-                $this->user_model->update_password($this->encrypt_password($new_password)); 
                 //set flash_message
+                 $message = $this->message_model->get_message('password_same');
+             }
+            else if($this->session->userdata('user_type') == 'Admin'){
+                $this->user_model->update_password($this->encrypt_password($new_password));
                 $message = $this->message_model->get_message('password_changed_success');
             }
             else{
-                vdebug('validation failed');
                 $message = $this->message_model->get_message('password_changed_failed');
             }
             $this->session->set_flashdata($message['name'], $message);
-            redirect($this->const_model::USERS_EDIT.'/'.$this->input->post('id'));
+            
+            if($user_id != FALSE){
+                redirect('users/login');
+            }
+            else{
+                redirect($this->const_model::USERS_EDIT.'/'.$this->input->post('id'));
+            }
         }
 
         private function encrypt_password($password){
@@ -236,5 +258,120 @@
                 return TRUE;
             }
             return FALSE;
+        }
+
+        public function request_password_reset_form(){//For where user enter his email.
+            $data['title'] = $this::EDIT_TITLE;
+
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::USERS_FORGOTTEN_PASSWORD, $data);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
+        public function request_password_reset(){
+            //TODO: change state of the user need to create new table for different states
+            //TODO: might need to rework a good part of the user logic
+            //TODO: check if there's an active token for the user.
+            $user = $this->user_model->get_user_by_email();
+            if(!empty($user)){
+                vdebug();
+                $token = $this->password_model->get_current_token($user['id']);
+
+                //CREATE TOKEN AND SEND EMAIL
+                if(empty($token)){//if not on an active token
+                    $recipient = $this->input->post('email');
+                    $subject = 'Your '.$this->const_model::WEBSITE_NAME.' account password reset';
+                    $html_content = file_get_contents(base_url().'assets/emails/password_recovery.html');
+
+                    $token = bin2hex(random_bytes(78));//create it
+                    $this->password_model->create_password_request($token, $user['id']);
+                
+                    //REPLACE CONTENT
+                    $html_content = str_replace('$1',$user['name'],$html_content);
+                    $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
+                    $html_content = str_replace('$3', base_url().'users/resetpassword/'.$token,$html_content);
+
+                    $this->sendEmail($recipient, $subject, $html_content);
+
+                    //CREATE MESSAGE
+                    $message = $this->message_model->get_message('password_reset');
+                    $this->session->set_flashdata($message['name'], $message);
+                    redirect('users/login');
+                }
+                //SHOW MESSAGE WITH A RESEND BUTTON
+                else{
+
+                }
+                
+                
+            }
+            else{
+                //CREATE MESSAGE
+                $message = $this->message_model->get_message('inexisting_user');
+                $this->session->set_flashdata($message['name'], $message);
+                redirect('users/password-reset');
+            } 
+        }
+
+        public function change_password_form($token){
+            $reset_request = $this->password_model->get_password_resquest_by_token($token);
+            if(!empty($reset_request)){//if token is valid
+                $current_date = date('Y-m-d H:i:s',time());
+                if($current_date > $reset_request['creation_time'] && $current_date < $reset_request['expiration_time']){
+                    $data['user_id'] = $reset_request['user_id'];
+                    $this->load->view($this->const_model::HEADER);
+                    $this->load->view($this->const_model::USERS_CHANGE_PASSWORD,$data);
+                    $this->load->view($this->const_model::FOOTER);
+                }
+                else{
+                    redirect('users/password-expired');
+                }
+            }
+            else{
+                show_404();
+            }
+        }
+
+        public function password_token_expired(){
+            vdebug('enter here');
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::PASSWORD_TOKEN_EXPIRED);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
+        public function validation_token_expired(){
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::VALIDATION_TOKEN_EXPIRED);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
+        //===========================================EMAIL===========================================
+        private function sendEmail($recipient,$subject ,$html_content){
+            //LOAD LIBRARY
+            $this->load->library('email');
+            //EMAIL CONTENT
+            $this->email->to($recipient);
+            $this->email->from('laetronaz@gmail.com','Laetronaz Automatic MailSender');
+            $this->email->subject($subject);
+            $this->email->message($html_content);
+            
+            //SEND EMAIL
+            $sent_email =$this->email->send();
+        }
+
+        public function verify_email($token){        
+
+            $data['title'] = $this::EDIT_TITLE;
+
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::USERS_FORGOTTEN_PASSWORD, $data);
+            $this->load->view($this->const_model::FOOTER);
+
+            $this->form_validation->set_rules('password', 'Password', 'required');
+            $this->form_validation->set_rules('verifypassword', 'Confirm Password', 'matches[password]');
+        }
+
+        private function resend_password_recovery_email(){
+
         }
     }

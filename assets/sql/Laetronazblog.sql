@@ -33,6 +33,33 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Table structure for table `users`
+--
+CREATE TABLE email_verification ( 
+  `token` VARCHAR(255) NOT NULL , 
+  `creation_time` TIMESTAMP NOT NULL , 
+  `expiration_time` TIMESTAMP NOT NULL , 
+  `user_id` INT NOT NULL,
+  PRIMARY KEY(`token`), 
+  CONSTRAINT FK_UserVerify FOREIGN KEY (user_id)
+  REFERENCES users(`id`)
+) ENGINE = InnoDB;
+
+--
+-- Table structure for table `users`
+--
+CREATE TABLE password_reset ( 
+  `token` VARCHAR(255) NOT NULL , 
+  `creation_time` TIMESTAMP NOT NULL , 
+  `expiration_time` TIMESTAMP NOT NULL , 
+  `user_id` INT NOT NULL,
+  PRIMARY KEY(`token`), 
+  CONSTRAINT FK_UserPassReset FOREIGN KEY (user_id)
+  REFERENCES users(`id`)
+) ENGINE = InnoDB;
+
+
+--
 -- Table structure for table `categories`
 --
 
@@ -138,8 +165,11 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('user_enabled', 'alert-success', 'The user have been enabled'),
 ('user_disabled', 'alert-success', 'The user have been disabled'),
 ('user_updated', 'alert-success', 'The user profile have been updated'),
+('password_reset', 'alert-success', "Your password reset request has been received. You'll receive a email shortly."),
 ('password_changed_success', 'alert-success', 'The password has been changed successfuly'),
 ('unautorized_access', 'alert-danger', 'Only admininstrators have access to this page'),
 ('login_failed', 'alert-danger', 'You have entered an invalid username or password'),
-('password_change_failed', 'alert-danger', 'The current password is invalid.');
+('password_change_failed', 'alert-danger', 'The current password is invalid.'),
+('password_same', 'alert-danger', 'The password could not be changed, please use a new password.'),
+('inexisting_user', 'alert-danger', 'No account was found for the email you entered.');
 COMMIT;

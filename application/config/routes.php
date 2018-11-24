@@ -72,10 +72,20 @@ $route['subcategories/posts/(:any)'] = 'subcategories/posts/$1';
 
 $route['users/register'] = 'users/register';
 $route['users/update'] = 'users/update';
-$route['users/change_password'] = 'users/change_password';
+$route['users/change-password'] = 'users/change_password';
+$route['users/change-password/(:any)'] = 'users/change_password/$1';
 $route['users/logout'] = 'users/logout';
 $route['users/login'] = 'users/login';
 $route['users/edit'] = 'users/edit';
+$route['users/password-reset'] = 'users/request_password_reset_form';
+$route['users/password-expired'] = 'users/password_token_expired';
+$route['users/validation-expired'] = 'users/validation_token_expired';
+$route['users/requestpassword'] = 'users/forgotten_password';
+
+//Mail function links
+$route['users/resetpassword/(:any)'] = 'users/change_password_form/$1';
+$route['users/verifyemail/(:any)'] = 'users/verify_email/$1';
+
 
 $route['404_override'] = '';
 $route['(:any)'] = 'pages/view/$1';
