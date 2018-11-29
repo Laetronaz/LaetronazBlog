@@ -30,6 +30,7 @@
         public const USERS_VIEW = 'users/view';
         public const USERS_FORGOTTEN_PASSWORD = 'users/forgotpassword';
         public const USERS_CHANGE_PASSWORD = 'users/resetpassword';
+        public const USERS_VALIDATE_EMAIL = 'users/verifyemail';
         public const PASSWORD_TOKEN_EXPIRED = 'users/password-expired';
         public const VALIDATION_TOKEN_EXPIRED = 'users/validation-expired';
 
@@ -42,5 +43,6 @@
 
         //EMAIL PATH CONST
         public const EMAIL = 'email/sendEmail';
+        public const VERIFICATION_EMAIL = 'assets/emails/verify_email.html';
         
     }

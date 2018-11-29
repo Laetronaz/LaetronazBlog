@@ -15,14 +15,10 @@
                 'expiration_time' => date('Y-m-d H:i:s', strtotime('+1 day', time())),
                 'user_id' => $user_id
             );
-            //insert password_reset request
             return $this->db->insert('password_reset', $data);
         }
 
         public function get_current_token($user_id){
-
-            //$this->db->where('user_id =', $user_id);
-            //vdebug($this->db);
             $where =  "TIMESTAMP('".date('Y-m-d H:i:s',time())."') BETWEEN creation_time AND expiration_time AND user_id = $user_id";
             $query = $this->db->where($where)->get('password_reset');
             return $query->row_array();

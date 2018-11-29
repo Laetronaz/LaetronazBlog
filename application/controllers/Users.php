@@ -1,4 +1,14 @@
 <?php
+    //TODO: might need to rework a good part of the user logic
+    //TODO: deal with usage of the token. Only one use.
+    //TODO: User locked out for 15minutes after 3 tries.
+    //TODO: add state validation to public functions
+    //TODO: test DB events
+    //TODO: test DB triggers
+    //TODO: return integer from model creation function
+    //TODO: remove useless functions
+    //TODO: connections attempts
+
     class Users extends CI_Controller{
          //TITLES CONST
          private const REGISTER_TITLE = 'Sign Up';
@@ -41,28 +51,26 @@
             }
             else{
                 $enc_password = $this->encrypt_password($this->input->post('password'));
-                $this->user_model->register($enc_password);
+                $user_id = $this->user_model->register($enc_password);
+                //SEND VERIFICATION EMAIL HERE
+                
+                $recipient = $this->input->post('email');
+                $subject = $this->const_model::WEBSITE_NAME.' verify your email';
+                $html_content = file_get_contents(base_url().$this->const_model::VERIFICATION_EMAIL);
+
+                //CREATE TOKEN
+                $token = bin2hex(random_bytes(78));
+                $validation_token = $this->user_model->create_verification_request($token, $user_id);
+                //REPLACE CONTENT
+                $html_content = str_replace('$1',$this->input->post('name'),$html_content);
+                $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
+                $html_content = str_replace('$3', base_url().$this->const_model::USERS_VALIDATE_EMAIL.'/'.$token,$html_content);
+                $html_content = str_replace('$4', $validation_token['expiration_time'],$html_content);
+                $this->sendEmail($recipient, $subject, $html_content);
 
                 // Set message
                 $message = $this->message_model->get_message('user_registered');
                 $this->session->set_flashdata($message['name'], $message);
-
-
-                //SEND VERIFICATION EMAIL HERE
-                $recipient = $this->input->post('email');
-                $subject = $this->const_model::WEBSITE_NAME.' verify your email';
-                $html_content = file_get_contents(base_url().'assets/emails/verify_email.html');
-
-                //CREATE TOKEN
-                $token = bin2hex(random_bytes(78));
-
-                //REPLACE CONTENT
-                $html_content = str_replace('$1',$this->input->post('name'),$html_content);
-                $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
-                $html_content = str_replace('$3', base_url().'users/verifyemail/'.$token,$html_content);
-
-
-                $this->sendEmail($recipient, $subject, $html_content);
                 redirect($this->const_model::POSTS_PATH);
             }
         }
@@ -90,8 +98,24 @@
                 $user_id = $user_datas['id'];
                 $hashed_password = $user_datas['password'];
                 $user_type = $user_datas['user_type'];
+                if($user_datas['user_state'] != 3){//state which cannot log in.
+                    switch ($user_datas['user_state']) {
+                        case 1:
+                            $message = $this->message_model->get_message('user_waiting');
+                            $message['value'] .= " <a href='".base_url()."users/resendverification/".$user_id."'> Resend email</a>";
+                            break;
+                        case 2:
+                            $message = $this->message_model->get_message('user_lockedout');
+                            break;
+                        case 4:
+                            $message = $this->message_model->get_message('user_inactive');
+                            break;
+                    }
+                    $this->session->set_flashdata($message['name'], $message);
+                    redirect('');
+                }
 
-                 if(!($user_id === FALSE)){
+                if(!($user_id === FALSE)){
                     //Verify the password currently : CRYPT_BLOWFISH
                     if(!$this->validate_password($user_id, $password)){
                         $this->login_failed();
@@ -156,10 +180,10 @@
                 redirect($this->const_model::USERS_LOGIN);
             }
             $user = $this->user_model->get_user($id);
-            $this->user_model->toggle_user($id, $user['active']);
+            $this->user_model->toggle_user($id, $user['user_state']);
 
             //set flash_messages
-            if($user['active'] == TRUE){
+            if($user['user_state'] == 3){
                 $message = $this->message_model->get_message('user_disabled');
             }
             else{
@@ -269,14 +293,9 @@
         }
 
         public function request_password_reset(){
-            //TODO: change state of the user need to create new table for different states
-            //TODO: might need to rework a good part of the user logic
-            //TODO: check if there's an active token for the user.
             $user = $this->user_model->get_user_by_email();
             if(!empty($user)){
-                vdebug();
                 $token = $this->password_model->get_current_token($user['id']);
-
                 //CREATE TOKEN AND SEND EMAIL
                 if(empty($token)){//if not on an active token
                     $recipient = $this->input->post('email');
@@ -285,11 +304,12 @@
 
                     $token = bin2hex(random_bytes(78));//create it
                     $this->password_model->create_password_request($token, $user['id']);
-                
+                    $password_token = $this->password_model->get_current_token($user['id']);
                     //REPLACE CONTENT
                     $html_content = str_replace('$1',$user['name'],$html_content);
                     $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
                     $html_content = str_replace('$3', base_url().'users/resetpassword/'.$token,$html_content);
+                    $html_content = str_replace('$4', $password_token['expiration_time'],$html_content);
 
                     $this->sendEmail($recipient, $subject, $html_content);
 
@@ -298,18 +318,19 @@
                     $this->session->set_flashdata($message['name'], $message);
                     redirect('users/login');
                 }
-                //SHOW MESSAGE WITH A RESEND BUTTON
+                //SHOW MESSAGE WITH A RESEND LINK
                 else{
-
+                    $message = $this->message_model->get_message('resend_password');
+                    $message['value'] .= "<a href='".base_url()."users/resend_password/".$user['id']."'> Resend email</a>";
+                    $this->session->set_flashdata($message['name'], $message);
+                    redirect('');
                 }
-                
-                
             }
             else{
                 //CREATE MESSAGE
                 $message = $this->message_model->get_message('inexisting_user');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect('users/password-reset');
+                redirect('');
             } 
         }
 
@@ -324,25 +345,47 @@
                     $this->load->view($this->const_model::FOOTER);
                 }
                 else{
-                    redirect('users/password-expired');
+                    //SET MESSAGE
+                    $message = $this->message_model->get_message('password_expired');
+                    $message['value'] .= "<a href='".base_url()."users/password-reset'>Forgot my password</a>";
+                    $this->session->set_flashdata($message['name'], $message);
+                    redirect('');
                 }
             }
             else{
-                show_404();
+               //SET MESSAGE
+               $message = $this->message_model->get_message('invalid_password_token');
+               $this->session->set_flashdata($message['name'], $message);
+               redirect('');
             }
         }
-
-        public function password_token_expired(){
-            vdebug('enter here');
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::PASSWORD_TOKEN_EXPIRED);
-            $this->load->view($this->const_model::FOOTER);
-        }
-
-        public function validation_token_expired(){
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::VALIDATION_TOKEN_EXPIRED);
-            $this->load->view($this->const_model::FOOTER);
+        //===========================================AUTHORIZATION===========================================
+       
+        
+        public function confirm_email($token_string){
+            $token = $this->user_model->get_verification_resquest($token_string);
+            //TODO:make token as used so it can't be used again.
+            //TODO:option to resend verification through login function.
+            if(!empty($token)){
+                $user = $this->user_model->get_user($token['user_id']);
+                if($token === $this->user_model->get_current_token($user['id'])){
+                    $this->user_model->set_user_active($user['id']);
+                    $message = $this->message_model->get_message('email_verified');
+                    $this->session->set_flashdata($message['name'], $message);
+                    redirect('');
+                }
+                else{//is expired
+                    $message = $this->message_model->get_message('confirmation_expired');
+                    $message['value'] .= " <a href='".base_url()."users/resendverification/".$user['id']."'> Resend email</a>";
+                    $this->session->set_flashdata($message['name'], $message);
+                    redirect('');
+                }
+            }
+            else{// is not an existing token
+                $message = $this->message_model->get_message('invalid_verification_token');
+                $this->session->set_flashdata($message['name'], $message);
+                redirect('');
+            } 
         }
 
         //===========================================EMAIL===========================================
@@ -371,7 +414,50 @@
             $this->form_validation->set_rules('verifypassword', 'Confirm Password', 'matches[password]');
         }
 
-        private function resend_password_recovery_email(){
+        public function resend_password_recovery_email($user_id){
+            $user = $this->user_model->get_user($user_id);
+            $recipient = $user['email'];
+            $token =$this->password_model->get_current_token($user_id);
+            
+            $subject = $this->const_model::WEBSITE_NAME.' account password reset';
+            $html_content = file_get_contents(base_url().'assets/emails/password_recovery.html');
+            //REPLACE CONTENT
+            $html_content = str_replace('$1',$user['name'],$html_content);
+            $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
+            $html_content = str_replace('$3', base_url().'users/resetpassword/'.$token['token'],$html_content);
+            $html_content = str_replace('$4', $token['expiration_time'],$html_content);
 
+            $this->sendEmail($recipient,$subject,$html_content);
+            //SET MESSAGE
+            $message = $this->message_model->get_message('password_reset_resent');
+            $this->session->set_flashdata($message['name'], $message);
+            redirect('');
+        }
+
+        public function resend_verification_email($user_id){
+            $user = $this->user_model->get_user($user_id);
+            $recipient = $user['email'];
+
+            //create new token if no token are currently active.
+            $token = $this->user_model->get_current_token($user_id);  
+            if(empty($token)){
+                $token_string = bin2hex(random_bytes(78));//create it
+                $this->user_model->create_verification_request($token_string, $user_id);
+                $token = $this->user_model->get_verification_resquest($token_string);        
+            }
+            
+            $subject = 'Your '.$this->const_model::WEBSITE_NAME.' verify your email';
+            $html_content = file_get_contents(base_url().$this->const_model::VERIFICATION_EMAIL);
+            //REPLACE CONTENT
+            $html_content = str_replace('$1',$user['name'],$html_content);
+            $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
+            $html_content = str_replace('$3', base_url().$this->const_model::USERS_VALIDATE_EMAIL.'/'.$token['token'],$html_content);
+            $html_content = str_replace('$4', $token['expiration_time'],$html_content);
+            
+            $this->sendEmail($recipient,$subject,$html_content);
+            //SET MESSAGE
+            $message = $this->message_model->get_message('password_reset_resent');
+            $this->session->set_flashdata($message['name'], $message);
+            redirect('');
         }
     }
