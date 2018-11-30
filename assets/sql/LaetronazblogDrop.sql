@@ -13,5 +13,3 @@ DROP TABLE IF EXISTS messages;
 
 -- 	EVENTS --
 DROP EVENT IF EXISTS reset_lockout;
-
-DROP TRIGGER IF EXISTS user_lockout;

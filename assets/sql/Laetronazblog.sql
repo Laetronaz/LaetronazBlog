@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS email_verification (
   `token` VARCHAR(255) NOT NULL , 
   `creation_time` TIMESTAMP NOT NULL , 
   `expiration_time` TIMESTAMP NOT NULL , 
-  `user_id` INT NOT NULL,
+  `user_id` INT(11) NOT NULL,
+  `used` BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY(`token`), 
   CONSTRAINT FK_UserVerify FOREIGN KEY (user_id)
   REFERENCES users(`id`)
@@ -74,6 +75,7 @@ CREATE TABLE IF NOT EXISTS password_reset (
   `creation_time` TIMESTAMP NOT NULL , 
   `expiration_time` TIMESTAMP NOT NULL , 
   `user_id` INT NOT NULL,
+  `used` BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY(`token`), 
   CONSTRAINT FK_UserPassReset FOREIGN KEY (user_id)
   REFERENCES users(`id`)
@@ -201,7 +203,7 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('password_reset', 'alert-success', "Your password reset request has been received. You'll receive a email shortly."),
 ('password_changed_success', 'alert-success', 'The password has been changed successfuly'),
 ('password_reset_resent', 'alert-success', 'The reset password link was resent, check your emails.'),
-('email_verified', 'alert-success', 'Your email have been successfully verified. You can now log in.');
+('email_verified', 'alert-success', 'Your email have been successfully verified. You can now log in.'),
 ('password_expired', 'alert-info', 'The password reset link you used is expired, if you still want to reset your password, use the following link: '),
 ('invalid_password_token', 'alert-info', 'The password reset link you just used is invalid, if this link was sent to you by email, please contact an administrator by answering to the email.'),
 ('resend_password', 'alert-info', 'You already asked for a password reset please check your email.'),
@@ -212,7 +214,7 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('login_failed', 'alert-danger', 'You have entered an invalid username or password'),
 ('password_change_failed', 'alert-danger', 'The current password is invalid.'),
 ('password_same', 'alert-danger', 'The password could not be changed, please use a new password.'),
-('inexisting_user', 'alert-danger', 'No account was found for the email you entered.');
+('inexisting_user', 'alert-danger', 'No account was found for the email you entered.'),
 ('user_lockedout', 'alert-danger', 'You have tried to access this account too many time in a short while, please wait 15 minutes and try again.'),
 ('user_inactive', 'alert-info', 'This account have been disabled by the administration, if you want to re-enable this account,if you are the legemit user of this account please contact the administration.');
 COMMIT;
@@ -226,35 +228,12 @@ COMMIT;
 SET GLOBAL event_scheduler = ON;
 
 CREATE EVENT IF NOT EXISTS reset_lockout
-ON SCHEDULE EVERY 15 MINUTE STARTS '2018-01-01 00:00:00' 
+ON SCHEDULE EVERY 5 MINUTE STARTS '2018-01-01 00:00:00' 
 DO 
   UPDATE users
-  SET user_state = 3
-  WHERE users_state = 2 AND id IN(
+  SET user_state = 3, connection_attempts = 0
+  WHERE user_state = 2 AND id IN(
     SELECT DISTINCT user_id
     FROM users_lockout
-    WHERE CURRENT_TIMESTAMP() BETWEEN creation_time AND expiration_time
+    WHERE CURRENT_TIMESTAMP() NOT BETWEEN creation_time AND expiration_time
   );
-
---
--- Setup Triggers
---
-DELIMITER $$
-CREATE TRIGGER user_lockout 
-    BEFORE UPDATE ON users
-    FOR EACH ROW 
-BEGIN
-  IF (NEW.connection_attempts >= 3) THEN
-    UPDATE users
-    SET action='update',
-      users_state = 2
-    WHERE id = NEW.id;
-
-    INSERT INTO users_lockout
-    SET action = 'update',
-      user_id = NEW.id,
-      creation_time = NOW(),
-      expiration_time = NOW() + INTERVAL 15 MINUTE;
-  END IF;
-END$$
-DELIMITER ;

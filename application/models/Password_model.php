@@ -23,4 +23,12 @@
             $query = $this->db->where($where)->get('password_reset');
             return $query->row_array();
         }
+
+        public function use_token($token){
+            $data = array(
+                'used'=> TRUE
+            );
+            $this->db->where('token', $token);
+            return $this->db->update('password_reset', $data);
+        }
     }

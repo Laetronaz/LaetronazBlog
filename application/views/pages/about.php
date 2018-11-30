@@ -18,6 +18,14 @@
 <a href="https://github.com/Laetronaz/LaetronazBlog"><i class="fab fa-github fa-3x"></i></a>
 <a href="https://trello.com/b/E7Hu1XBw"><i class="fab fa-trello fa-3x"></i></a>
 <br><br>
+<h3>Hobbies</h3>
+<p>In term of hobbies, I like learning about new technologies, so the devloppement of this blog is, in a way one of my hobbies, I also play some online and offline games.
+Sometimes you will even see me streaming some events and stuff on my twitch channel, mostly World of Warcraft stuff, beware however that it's heavily in french due to the
+fact that I'm a french canadian. Feel free to pay me a visit when I'm streaming.
+</p>
+<br>
+<a href="https://www.twitch.tv/laetronaz"><i class="fab fa-twitch fa-3x"></i></a>
+<br><br>
 
 <h3>Education</h3>
 <p>

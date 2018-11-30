@@ -29,7 +29,8 @@
                     'id' => $result->row(0)->id,
                     'password' => $result->row(0)->password,
                     'user_type' => $this->get_user_type($result->row(0)->user_type),
-                    'user_state' => $result->row(0)->user_state
+                    'user_state' => $result->row(0)->user_state,
+                    'connection_attempts' => $result->row(0)->connection_attempts
                 );
                 return $user_data;
             }
@@ -141,6 +142,46 @@
         public function set_user_active($user_id){
             $data = array(
                 'user_state'=> 3
+            );
+            $this->db->where('id', $user_id);
+            return $this->db->update('users', $data);
+        }
+
+        public function use_token($token){
+            $data = array(
+                'used'=> TRUE
+            );
+            $this->db->where('token', $token);
+            return $this->db->update('email_verification', $data);
+        }
+
+
+        //=================================================ATTEMPTS AND LOCKOUT================================================
+
+        public function reset_attempts($user_id){
+            $data = array(
+                'connection_attempts'=> 0
+            );
+            $this->db->where('id', $user_id);
+            return $this->db->update('users', $data);
+        }
+
+        public function augment_attempts($user_id){
+            $user = $this->get_user($user_id);
+            if($user['connection_attempts'] == 2){
+                return $this->lockout_user($user_id);
+            }
+            $data = array(
+                'connection_attempts'=> $user['connection_attempts'] + 1
+            );
+            $this->db->where('id', $user_id);
+            return $this->db->update('users', $data);
+        }
+
+        private function lockout_user($user_id){
+            $data = array(
+                'connection_attempts'=> 3,
+                'user_state' => 2
             );
             $this->db->where('id', $user_id);
             return $this->db->update('users', $data);

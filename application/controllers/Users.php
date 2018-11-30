@@ -1,14 +1,4 @@
 <?php
-    //TODO: might need to rework a good part of the user logic
-    //TODO: deal with usage of the token. Only one use.
-    //TODO: User locked out for 15minutes after 3 tries.
-    //TODO: add state validation to public functions
-    //TODO: test DB events
-    //TODO: test DB triggers
-    //TODO: return integer from model creation function
-    //TODO: remove useless functions
-    //TODO: connections attempts
-
     class Users extends CI_Controller{
          //TITLES CONST
          private const REGISTER_TITLE = 'Sign Up';
@@ -118,6 +108,7 @@
                 if(!($user_id === FALSE)){
                     //Verify the password currently : CRYPT_BLOWFISH
                     if(!$this->validate_password($user_id, $password)){
+                        $this->user_model->augment_attempts($user_id);
                         $this->login_failed();
                     }
 
@@ -128,8 +119,12 @@
                         'logged_in' => true,
                         'user_type' => $user_type
                     );
-
                     $this->session->set_userdata($user_data);
+                    //reset attempts on successful login
+                    if($user_datas['connection_attempts'] != 0){
+                        $this->user_model->reset_attempts($user_id);
+                    }
+                    
 
                     // Set message
                     $message = $this->message_model->get_message('user_loggedin');
@@ -243,14 +238,17 @@
 
 
         //======================================PASSWORD=================================================
-        public function change_password($user_id = FALSE){//User change the user by himself
+        public function change_password($user_id = FALSE){
             // Check login
             $new_password = $this->input->post('password');
             if($user_id != FALSE){
                 $this->user_model->update_password($this->encrypt_password($new_password),$user_id);
+                $token = $this->password_model->get_current_token($user_id);
+                $this->password_model->use_token($token['token']);
+
                 $message = $this->message_model->get_message('password_changed_success');
             }
-            else if($this->validate_password($this->input->post('id'),$new_password)){
+            else if($this->validate_password($this->input->post('id'),$new_password)){//User change the user by himself
                 //set flash_message
                  $message = $this->message_model->get_message('password_same');
              }
@@ -338,7 +336,7 @@
             $reset_request = $this->password_model->get_password_resquest_by_token($token);
             if(!empty($reset_request)){//if token is valid
                 $current_date = date('Y-m-d H:i:s',time());
-                if($current_date > $reset_request['creation_time'] && $current_date < $reset_request['expiration_time']){
+                if($current_date > $reset_request['creation_time'] && $current_date < $reset_request['expiration_time'] && $reset_request['used'] == 0){
                     $data['user_id'] = $reset_request['user_id'];
                     $this->load->view($this->const_model::HEADER);
                     $this->load->view($this->const_model::USERS_CHANGE_PASSWORD,$data);
@@ -364,12 +362,11 @@
         
         public function confirm_email($token_string){
             $token = $this->user_model->get_verification_resquest($token_string);
-            //TODO:make token as used so it can't be used again.
-            //TODO:option to resend verification through login function.
             if(!empty($token)){
                 $user = $this->user_model->get_user($token['user_id']);
-                if($token === $this->user_model->get_current_token($user['id'])){
+                if($token === $this->user_model->get_current_token($user['id']) && $token['used'] == 0){
                     $this->user_model->set_user_active($user['id']);
+                    $this->user_model->use_token($token['token']);
                     $message = $this->message_model->get_message('email_verified');
                     $this->session->set_flashdata($message['name'], $message);
                     redirect('');
