@@ -1,5 +1,5 @@
 <?php
-    class FileUpload_model extends CI_Model{
+    class Fileupload_model extends CI_Model{
         //ERROR FILTERING CONST
         private const ERROR_FILTER = 'You did not select a file to upload.';
        
