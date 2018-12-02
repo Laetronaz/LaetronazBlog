@@ -81,6 +81,7 @@ $route['users/edit'] = 'users/edit';
 $route['users/password-reset'] = 'users/request_password_reset_form';
 $route['users/validation-expired'] = 'users/validation_token_expired';
 $route['users/requestpassword'] = 'users/forgotten_password';
+$route['users'] = 'users/index';
 
 //Mail function links
 $route['users/resetpassword/(:any)'] = 'users/change_password_form/$1';
