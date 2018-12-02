@@ -2,4 +2,15 @@ body {
     font-family: 'Oxygen', sans-serif;
 }
 
-
+.state-waiting{
+    color:#1E90FF;
+}
+.state-lockedout{
+    color:#B22222;
+}
+.state-active{
+    color: #228B22;
+}
+.state-inactive{
+    color:#C0C0C0;
+}

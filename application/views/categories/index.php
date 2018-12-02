@@ -18,7 +18,7 @@
                 <td class="text-center" scope="row"><img class ="thumbnail" src="<?php echo site_url(); ?>assets/images/categories/<?php echo $category['category_icon'];?>" height="50" width="50"></td>
                 <td class="text-center" ><a href="<?php echo site_url('/categories/posts/'.$category['id']); ?>"><?php echo $category['name'];?></a></td>
                 <?php if($this->session->userdata('user_id') == $category['user_id'] || $this->session->userdata('user_type') == 'Admin') : ?>
-                    <td class="text-center"><?php echo $category['created_at'];?></th>
+                    <td class="text-center"><?php echo date("Y-m-d",strtotime($category['created_at']));?></th>
                     <form class="form-inline" action="categories/edit/<?php echo $category['id']; ?>" method="POST">
                         <td class="text-center" scope="col">
                             <button type="submit" class="btn btn-primary btn-block">

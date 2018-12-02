@@ -161,6 +161,23 @@
         public function index(){
             $data['title'] = $this::INDEX_TITLE;
             $data['users'] = $this->user_model->get_users();
+            foreach($data['users'] as $key => $user){//set style data
+                switch($user['user_state']){
+                    case 1:
+                        $data['users'][$key]['style'] = "state-waiting";
+                        break;
+                    case 2:
+                        $data['users'][$key]['style'] = "state-lockedout";
+                        break;
+                    case 3:
+                        $data['users'][$key]['style'] = "state-active";
+                        break;
+                    case 4:
+                        $data['users'][$key]['style'] = "state-inactive";
+                        break;
+                }
+            }
+            
 
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::USERS_INDEX, $data);
@@ -197,6 +214,21 @@
 
             $data['title'] = $this::VIEW_TITLE;
             $data['types'] = $this->user_model->get_users_type();
+                switch($data['user']['user_state']){
+                    case 1:
+                        $data['user']['style'] = "state-waiting";
+                        break;
+                    case 2:
+                        $data['user']['style'] = "state-lockedout";
+                        break;
+                    case 3:
+                        $data['user']['style'] = "state-active";
+                        break;
+                    case 4:
+                        $data['user']['style'] = "state-inactive";
+                        break;
+                }
+            $data['user']['state_name'] = $this->user_model->get_user_state($data['user']['user_state']);
 
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::USERS_VIEW, $data);
