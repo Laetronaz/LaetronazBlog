@@ -17,7 +17,7 @@
                 <td class="text-center" scope="row"><img class ="thumbnail" src="<?php echo site_url(); ?>assets/images/posts/<?php echo $post['post_image'];?>" height="50" width="50"></td>
                 <td class="text-center" ><a href="<?php echo base_url() ?>posts/<?php echo $post['slug']?>"><?php echo $post['title']?></a></td>
                     <td class="text-center"><?php echo $categories[array_search($post['category_id'],array_column($categories,'id'))]['name'];?></td> 
-                    <td class="text-center"><?php echo $post['created_at'];?></td>
+                    <td class="text-center"><?php echo date("Y-m-d G:i",strtotime($post['created_at']));?></td>
                     <?php echo form_open('/posts/edit/'.$post['slug']); ?>
                         <td class="text-center" scope="col">
                             <button type="submit" class="btn btn-primary btn-block">

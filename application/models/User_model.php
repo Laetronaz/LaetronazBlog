@@ -61,6 +61,12 @@
             return $query->result_array();
         }
 
+        public function get_user_state($id){
+            $this->db->where('id', $id);
+            $result = $this->db->get('users_state');
+            return $result->row(0)->name;
+        }
+
         public function get_users(){
             $this->db->order_by('id');
             $query = $this->db->get('users');
@@ -87,7 +93,7 @@
         public function toggle_user($id, $active){
             $active = ($active == 3 ? 4 : 3);
             $data = array(
-                 'active' => $active 
+                 'user_state' => $active 
             );       
             $this->db->where('id', $id);
             return $this->db->update('users', $data);

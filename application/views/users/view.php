@@ -25,19 +25,12 @@
 </div>
 <div class="form-group">
     <label>Register date</label>
-    <p><?php echo $user['register_date']?></p>
+    <p><?php echo date("Y-m-d",strtotime($user['register_date']));?></p>
 </div>
 <div class="form-group">
     <label>Current state</label>
-    <?php if($user['active'] == 1): ?>
-        <p>Active</p>
-    <?php else : ?>
-        <p>Inactive</p>
-    <?php endif;?>
+    <p><i class="fas fa-circle <?php echo $user['style']; ?>" ></i> <?php echo $user['state_name'];?> </p>
 </div>
 
 <hr>
 <a class="btn btn-primary float-left" href="<?php echo base_url(); ?>users/edit/<?php echo $user['id']; ?>">Edit</a>
-<?php echo form_open('/users/toggle/'.$user['id']); ?>
-	<input type="submit" value="Toggle User" class="btn btn-danger">
-</form>

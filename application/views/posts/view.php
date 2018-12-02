@@ -1,6 +1,6 @@
 <img class="thumbnail" src="<?php echo site_url(); ?>assets/images/posts/<?php echo $post['post_image'];?>" width="100%" height="379">
 <h2><?php echo $post['title']; ?></h2>
-<small class="post-date">Posted on: <?php echo $post['created_at']; ?></small></br>
+<small class="post-date">Posted on: <?php echo date("Y-m-d G:i",strtotime($post['created_at'])); ?></small></br>
 <div class="post-body">
     <?php echo $post['body']; ?>
 </div>
