@@ -18,11 +18,11 @@
             }
 
             $data['title'] = $this::CREATE_TITLE;
-            $this->form_validation->set_rules('name', 'Name', 'required');
-            if ($this->form_validation->run() === FALSE){
+            if ($this->form_validation->run('category') === FALSE){
                 $this->load->view($this->const_model::HEADER);
                 $this->load->view($this->const_model::CATEGORIES_CREATE, $data);
                 $this->load->view($this->const_model::FOOTER);
+                $this->form_validation->reset_validation();
             } 
             else{
                 $category_image = $this::DEFAULT_IMAGE;
@@ -39,6 +39,16 @@
         public function index(){
             $data['title'] = $this::INDEX_TITLE;
             $data['categories'] = $this->category_model->get_categories();
+            foreach($data['categories'] as $key => $category){//set style data
+                switch($category['active']){
+                    case 1:
+                        $data['categories'][$key]['style'] = "state-active";
+                        break;
+                    case 0:
+                        $data['categories'][$key]['style'] = "state-inactive";
+                        break;
+                }
+            }
 
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::CATEGORIES_INDEX, $data);
@@ -81,6 +91,7 @@
         }
 
         public function edit($id){
+           
             // Check login
             if($this->session->userdata('user_type') != 'Admin' ){
                 $message = $this->message_model->get_unauthorized_access();
@@ -89,33 +100,24 @@
             }
 
             $data['category'] = $this->category_model->get_category($id);
-            
             if(empty($data['category'])){
                 show_404();
             }
 
             $data['title'] = $data['category']['name'];
-
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::CATEGORIES_EDIT, $data);
-            $this->load->view($this->const_model::FOOTER);
-        }
-
-
-        public function update(){
-            // Check login
-            if($this->session->userdata('user_type') != 'Admin' ){
-                $message = $this->message_model->get_unauthorized_access();
-                $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::USERS_LOGIN);
+            if ($this->form_validation->run('category') === FALSE){
+                $this->load->view($this->const_model::HEADER);
+                $this->load->view($this->const_model::CATEGORIES_EDIT, $data);
+                $this->load->view($this->const_model::FOOTER);
             }
-            $this->category_model->update_category();
+            else{
+                $this->category_model->update_category();
 
-             // Set message
-             $message = $this->message_model->get_message('category_updated');
-             $this->session->set_flashdata($message['name'], $message);
-            
-            redirect($this->const_model::CATEGORIES);
+                // Set message
+                $message = $this->message_model->get_message('category_updated');
+                $this->session->set_flashdata($message['name'], $message);
+                redirect($this->const_model::CATEGORIES);
+            }
         }
 
         public function update_image(){
@@ -124,14 +126,21 @@
                 redirect($this->const_model::USERS_LOGIN);
             }
             
-            //Upload Image
-            $category_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
-            $this->category_model->update_category_icon($category_image);
-            // Set message
-            $message = $this->message_model->get_message('category_updated');
-            $this->session->set_flashdata($message['name'], $message);
+            if($this->form_validation->run('image')===TRUE){
+                //Upload Image
+                $category_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+                $this->category_model->update_category_icon($category_image);
+                // Set message
+                $message = $this->message_model->get_message('category_updated');
+                $this->session->set_flashdata($message['name'], $message);
 
-            $this->clean_images();
+                $this->clean_images();
+            }
+            else{
+                // Set message
+                $message = $this->message_model->get_message('image_update_failed');
+                $this->session->set_flashdata($message['name'], $message);
+            }
             redirect($this->const_model::CATEGORIES_EDIT.'/'.$this->input->post('id'));
         }
 
