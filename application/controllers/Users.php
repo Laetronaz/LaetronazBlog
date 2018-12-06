@@ -7,10 +7,6 @@
          private const VIEW_TITLE = 'User Profile';
          private const EDIT_TITLE = 'User Profile';
 
-         //REGISTER ERRORS
-         private const EMAIL_TAKEN = 'This email is already used. Please choose a different one.';
-         private const USERNAME_TAKEN = 'This username is already taken. Please choose a different one.';
-
         //register user
         public function register(){
             // Check login
@@ -23,18 +19,7 @@
             $data['title'] = $this::REGISTER_TITLE;
             $data['types'] = $this->user_model->get_users_type();
 
-            $this->form_validation->set_rules('name', 'Name', 'required');
-            $this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]', array(
-                'is_unique' => $this::USERNAME_TAKEN)
-            );
-            $this->form_validation->set_rules('email', 'Email', 'required|is_unique[users.email]', array(
-                'is_unique' => $this::EMAIL_TAKEN
-            ));
-            $this->form_validation->set_rules('password', 'Password', 'required');
-            $this->form_validation->set_rules('password2', 'Confirm Password', 'matches[password]');
-
-
-            if($this->form_validation->run() === FALSE){
+            if($this->form_validation->run('user_register') === FALSE){
                 $this->load->view($this->const_model::HEADER);
                 $this->load->view($this->const_model::USERS_REGISTER, $data);
                 $this->load->view($this->const_model::FOOTER);
@@ -68,12 +53,8 @@
         //login user
         public function login(){
             $data['title'] = $this::LOGIN_TITLE;
-
-            $this->form_validation->set_rules('username', 'Username', 'required');
-            $this->form_validation->set_rules('password', 'Password', 'required');
-
-
-            if($this->form_validation->run() === FALSE){
+            
+            if($this->form_validation->run('login') === FALSE){
                 $this->load->view($this->const_model::HEADER);
                 $this->load->view($this->const_model::USERS_LOGIN, $data);
                 $this->load->view($this->const_model::FOOTER);
@@ -88,52 +69,56 @@
                 $user_id = $user_datas['id'];
                 $hashed_password = $user_datas['password'];
                 $user_type = $user_datas['user_type'];
-                if($user_datas['user_state'] != 3){//state which cannot log in.
-                    switch ($user_datas['user_state']) {
-                        case 1:
-                            $message = $this->message_model->get_message('user_waiting');
-                            $message['value'] .= " <a href='".base_url()."users/resendverification/".$user_id."'> Resend email</a>";
-                            break;
-                        case 2:
-                            $message = $this->message_model->get_message('user_lockedout');
-                            break;
-                        case 4:
-                            $message = $this->message_model->get_message('user_inactive');
-                            break;
-                    }
-                    $this->session->set_flashdata($message['name'], $message);
-                    redirect('');
-                }
-
-                if(!($user_id === FALSE)){
-                    //Verify the password currently : CRYPT_BLOWFISH
-                    if(!$this->validate_password($user_id, $password)){
-                        $this->user_model->augment_attempts($user_id);
-                        $this->login_failed();
-                    }
-
-                    // Create session
-                    $user_data = array(
-                        'user_id' => $user_id,
-                        'username' => $username,
-                        'logged_in' => true,
-                        'user_type' => $user_type
-                    );
-                    $this->session->set_userdata($user_data);
-                    //reset attempts on successful login
-                    if($user_datas['connection_attempts'] != 0){
-                        $this->user_model->reset_attempts($user_id);
+                if($user_datas !== FALSE){
+                    if($user_datas['user_state'] != 3){//state which cannot log in.
+                        switch ($user_datas['user_state']) {
+                            case 1:
+                                $message = $this->message_model->get_message('user_waiting');
+                                $message['value'] .= " <a href='".base_url()."users/resendverification/".$user_id."'> Resend email</a>";
+                                break;
+                            case 2:
+                                $message = $this->message_model->get_message('user_lockedout');
+                                break;
+                            case 4:
+                                $message = $this->message_model->get_message('user_inactive');
+                                break;
+                        }
+                        $this->session->set_flashdata($message['name'], $message); 
+                        redirect('');
                     }
                     
-
-                    // Set message
-                    $message = $this->message_model->get_message('user_loggedin');
-                    $this->session->set_flashdata($message['name'], $message);
-                    redirect($this->const_model::POSTS_PATH);
+                    if(!($user_id === FALSE)){
+                        //Verify the password currently : CRYPT_BLOWFISH
+                        if(!$this->validate_password($user_id, $password)){
+                            $this->user_model->augment_attempts($user_id);
+                            $this->login_failed();
+                        }
+                        // Create session
+                        $user_data = array(
+                            'user_id' => $user_id,
+                            'username' => $username,
+                            'logged_in' => true,
+                            'user_type' => $user_type
+                        );
+                        $this->session->set_userdata($user_data);
+                        //reset attempts on successful login
+                        if($user_datas['connection_attempts'] != 0){
+                            $this->user_model->reset_attempts($user_id);
+                        }
+    
+                        // Set message
+                        $message = $this->message_model->get_message('user_loggedin');
+                        $this->session->set_flashdata($message['name'], $message);
+                        redirect($this->const_model::POSTS_PATH);
+                    }
+                    else{
+                        $this->login_failed();
+                    }    
                 }
                 else{
                     $this->login_failed();
-                }    
+                }
+                
             }
         }
 
@@ -146,14 +131,6 @@
 
             // Set message
             $message = $this->message_model->get_message('user_loggedout');
-            $this->session->set_flashdata($message['name'], $message);
-            redirect($this->const_model::USERS_LOGIN);
-        }
-
-
-        private function login_failed(){
-            // Set message
-            $message = $this->message_model->get_message('login_failed');
             $this->session->set_flashdata($message['name'], $message);
             redirect($this->const_model::USERS_LOGIN);
         }
@@ -244,30 +221,24 @@
 
             $data['user'] = $this->user_model->get_user($id);
             $data['types'] = $this->user_model->get_users_type();
-            
-            
+
             if(empty($data['user'])){
                 show_404();
             }
 
             $data['title'] = $this::EDIT_TITLE;
-
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::USERS_EDIT, $data);
-            $this->load->view($this->const_model::FOOTER);
-        }
-
-        public function update(){
-            // Check login
-            if(!$this->session->userdata('logged_in')){
-                redirect($this->const_model::USERS_LOGIN);
+            if($this->form_validation->run('user_edit') === FALSE){
+                $this->load->view($this->const_model::HEADER);
+                $this->load->view($this->const_model::USERS_EDIT, $data);
+                $this->load->view($this->const_model::FOOTER);
             }
-            $this->user_model->update_user();
-            $message = $this->message_model->get_message('user_updated');
-            $this->session->set_flashdata($message['name'], $message);
-            redirect($this->const_model::USERS_VIEW.'/'.$this->input->post('id'));
+            else{
+                $this->user_model->update_user();
+                $message = $this->message_model->get_message('user_updated');
+                $this->session->set_flashdata($message['name'], $message);
+                redirect($this->const_model::USERS_VIEW.'/'.$this->input->post('id'));
+            } 
         }
-
 
         //======================================PASSWORD=================================================
         public function change_password($user_id = FALSE){
@@ -277,7 +248,6 @@
                 $this->user_model->update_password($this->encrypt_password($new_password),$user_id);
                 $token = $this->password_model->get_current_token($user_id);
                 $this->password_model->use_token($token['token']);
-
                 $message = $this->message_model->get_message('password_changed_success');
             }
             else if($this->validate_password($this->input->post('id'),$new_password)){//User change the user by himself
@@ -301,29 +271,15 @@
             }
         }
 
-        private function encrypt_password($password){
-            // ENCRYPT password currently using: CRYPT_BLOWFISH
-            return password_hash($password, PASSWORD_BCRYPT);
-        }
-
-        private function validate_password($id, $password){
-            $db_password = $this->user_model->get_password($id);
-            if(password_verify($password, $db_password['password'])){
-                return TRUE;
-            }
-            return FALSE;
-        }
-
-        public function request_password_reset_form(){//For where user enter his email.
+        public function request_password_reset(){//For where user enter his email.
             $data['title'] = $this::EDIT_TITLE;
-
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::USERS_FORGOTTEN_PASSWORD, $data);
-            $this->load->view($this->const_model::FOOTER);
-        }
-
-        public function request_password_reset(){
-            $user = $this->user_model->get_user_by_email();
+            if($this->form_validation->run('request_password')===FALSE){
+                $this->load->view($this->const_model::HEADER);
+                $this->load->view($this->const_model::USERS_FORGOTTEN_PASSWORD, $data);
+                $this->load->view($this->const_model::FOOTER);
+            }
+            else{
+                $user = $this->user_model->get_user_by_email();
             if(!empty($user)){
                 $token = $this->password_model->get_current_token($user['id']);
                 //CREATE TOKEN AND SEND EMAIL
@@ -362,6 +318,8 @@
                 $this->session->set_flashdata($message['name'], $message);
                 redirect('');
             } 
+            }
+            
         }
 
         public function change_password_form($token){
@@ -370,9 +328,16 @@
                 $current_date = date('Y-m-d H:i:s',time());
                 if($current_date > $reset_request['creation_time'] && $current_date < $reset_request['expiration_time'] && $reset_request['used'] == 0){
                     $data['user_id'] = $reset_request['user_id'];
-                    $this->load->view($this->const_model::HEADER);
-                    $this->load->view($this->const_model::USERS_CHANGE_PASSWORD,$data);
-                    $this->load->view($this->const_model::FOOTER);
+                    $data['token'] = $token;
+                    if($this->form_validation->run('password_reset') === FALSE){
+                        $this->load->view($this->const_model::HEADER);
+                        $this->load->view($this->const_model::USERS_CHANGE_PASSWORD,$data);
+                        $this->load->view($this->const_model::FOOTER);
+                    }
+                    else{
+                        $user_id = $this->input->post('user_id');
+                        $this->change_password($user_id);
+                    }
                 }
                 else{
                     //SET MESSAGE
@@ -390,8 +355,6 @@
             }
         }
         //===========================================AUTHORIZATION===========================================
-       
-        
         public function confirm_email($token_string){
             $token = $this->user_model->get_verification_resquest($token_string);
             if(!empty($token)){
@@ -418,31 +381,6 @@
         }
 
         //===========================================EMAIL===========================================
-        private function sendEmail($recipient,$subject ,$html_content){
-            //LOAD LIBRARY
-            $this->load->library('email');
-            //EMAIL CONTENT
-            $this->email->to($recipient);
-            $this->email->from('laetronaz@gmail.com','Laetronaz Automatic MailSender');
-            $this->email->subject($subject);
-            $this->email->message($html_content);
-            
-            //SEND EMAIL
-            $sent_email =$this->email->send();
-        }
-
-        public function verify_email($token){        
-
-            $data['title'] = $this::EDIT_TITLE;
-
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::USERS_FORGOTTEN_PASSWORD, $data);
-            $this->load->view($this->const_model::FOOTER);
-
-            $this->form_validation->set_rules('password', 'Password', 'required');
-            $this->form_validation->set_rules('verifypassword', 'Confirm Password', 'matches[password]');
-        }
-
         public function resend_password_recovery_email($user_id){
             $user = $this->user_model->get_user($user_id);
             $recipient = $user['email'];
@@ -488,5 +426,39 @@
             $message = $this->message_model->get_message('password_reset_resent');
             $this->session->set_flashdata($message['name'], $message);
             redirect('');
+        }
+
+        //========================================PRIVATE FUNCTIONS======================================
+        private function sendEmail($recipient,$subject ,$html_content){
+            //LOAD LIBRARY
+            $this->load->library('email');
+            //EMAIL CONTENT
+            $this->email->to($recipient);
+            $this->email->from('laetronaz@gmail.com','Laetronaz Automatic MailSender');
+            $this->email->subject($subject);
+            $this->email->message($html_content);
+            
+            //SEND EMAIL
+            $sent_email =$this->email->send();
+        }
+
+        private function login_failed(){
+            // Set message
+            $message = $this->message_model->get_message('login_failed');
+            $this->session->set_flashdata($message['name'], $message);
+            redirect($this->const_model::USERS_LOGIN);
+        }
+
+        private function encrypt_password($password){
+            // ENCRYPT password currently using: CRYPT_BLOWFISH
+            return password_hash($password, PASSWORD_BCRYPT);
+        }
+
+        private function validate_password($id, $password){
+            $db_password = $this->user_model->get_password($id);
+            if(password_verify($password, $db_password['password'])){
+                return TRUE;
+            }
+            return FALSE;
         }
     }
