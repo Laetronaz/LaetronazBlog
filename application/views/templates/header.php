@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/defaultFont.css" >
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/tagsinput.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/loginForm.css">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/lc_switch.css">
 
     <!-- SCRIPTS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -20,7 +19,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!-- LOCAL SCRIPTS -->
     <script src="<?php echo base_url(); ?>assets/javascript/tagsinput.js"></script>
-    <script src="<?php echo base_url(); ?>assets/javascript/lc_switch.js"></script>
   </head>
 <body>
 
@@ -56,8 +54,8 @@
 </nav>
 <div class="container-fluid">
   <div class="row">
+  <?php if($this->session->userdata('user_type') == 'Admin') : ?>
     <div class="col-md-2">
-          <?php if($this->session->userdata('user_type') == 'Admin') : ?>
             <!-- A vertical navbar -->
             <nav class="navbar bg-light">
               <!-- Links -->
@@ -101,9 +99,9 @@
                 </li>
               </ul>
             </nav>
-          <?php endif; ?>
     </div>
-    <div class="col-md-10">
+    <?php endif; ?>
+    <?php echo ($this->session->userdata('user_type') == 'Admin' ? "<div class='col-md-10'>" : "<div class='col-md-12'>"); ?>
         <div class="container">
           <?php foreach ($this->session->get_flash_keys() as $flashkey) : ?>
               <!--Flash messages -->
