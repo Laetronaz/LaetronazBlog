@@ -82,8 +82,6 @@
             $data = array(
                 'name' => $this->input->post('name'),
                 'zipcode' => $this->input->post('zipcode'),
-                'email' => $this->input->post('email'),
-                'username' => $this->input->post('username'),
                 'user_type'=> $this->input->post('usertype')
             );
             $this->db->where('id', $this->input->post('id'));
@@ -106,7 +104,6 @@
             $data = array(
                 'password' => $crypted_password
             );
-            
             $this->db->where('id', $id);
             return $this->db->update('users', $data);
         }

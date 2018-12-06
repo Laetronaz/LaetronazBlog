@@ -8,44 +8,41 @@
             <h1 class="text-center"><?= $title; ?></h1>
             <div class="form-group">
                 <label>Name</label>
-                <input type="text" class="form-control" name="name" placeholder="Name">
+                <input type="text" class="form-control" name="name" placeholder="Name" value= <?php echo set_value("name")?>>
             </div>
             <div class="form-group">
                 <label>Zipcode</label>
-                <input type="text" class="form-control" name="zipcode" placeholder="Zipcode">
+                <input type="text" class="form-control" name="zipcode" placeholder="Zipcode" value= <?php echo set_value("zipcode")?>>
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" class="form-control" name="email" placeholder="Email">
+                <input type="email" class="form-control" name="email" placeholder="Email" value= <?php echo set_value("email")?>>
             </div>
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" class="form-control" name="username" placeholder="Username">
+                <input type="text" class="form-control" name="username" placeholder="Username" value= <?php echo set_value("username")?>>
             </div>
             <div class="form-group">
                 <label>User Type</label>
                 <select class="form-control form-control-sm" name="usertype">
                     <?php foreach($types as $type) : ?>
-                        <option value="<?php echo $type['id']?>"><?php echo $type['name'];?></option>
+                        <option value="<?php echo $type['id']?>" <?php echo set_select("usertype", $type['id'])?>><?php echo $type['name'];?></option>
                     <?php endforeach;?>
                 </select>
             </div>
-
-
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-control" name="password" placeholder="Password">
+                <input type="password" class="form-control" name="password" placeholder="Password" value= <?php echo set_value("password")?>>
             </div>
             <div class="form-group">
                 <label>Confirm Password</label>
-                <input type="password" class="form-control" name="password2" placeholder="Confirm Password">
+                <input type="password" class="form-control" name="password2" placeholder="Confirm Password" value= <?php echo set_value("password2")?>>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </div>
     </div>
 <?php echo form_close(); ?>
 <script>
-
     var nav_item = document.getElementById('nav_item');
     var nav_link = document.getElementById('nav_link');
     var dropdown_menu = document.getElementById('dropdown_menu'); 

@@ -39,6 +39,17 @@
             $data['title'] = $this::USER_INDEX_TITLE;
             $data['categories'] = $this->post_model->get_categories();
 
+            foreach($data['posts'] as $key => $post){//set style data
+                switch($post['active']){
+                    case 1:
+                        $data['posts'][$key]['style'] = "state-active";
+                        break;
+                    case 0:
+                        $data['posts'][$key]['style'] = "state-inactive";
+                        break;
+                }
+            }
+
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::POSTS_USER_INDEX, $data);
             $this->load->view($this->const_model::FOOTER);
@@ -69,10 +80,7 @@
             $data['title'] = $this::CREATE_TITLE;
             $data['categories'] = $this->post_model->get_categories();
 
-            $this->form_validation->set_rules('title', 'Title', 'required');           
-            $this->form_validation->set_rules('body', 'Body', 'required');
-
-            if ($this->form_validation->run() === FALSE) {
+            if ($this->form_validation->run('post') === FALSE) {
                 $this->load->view($this->const_model::HEADER);
                 $this->load->view($this->const_model::POSTS_CREATE, $data);
                 $this->load->view($this->const_model::FOOTER);  
@@ -132,29 +140,25 @@
             if(empty($data['post'])){
                 show_404();
             }
+            
 
             $data['title'] = $data['post']['title'];
-
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::POSTS_EDIT, $data);
-            $this->load->view($this->const_model::FOOTER);
-        }
-
-        public function update(){
-            // Check login
-            if(!$this->session->userdata('logged_in')){
-                redirect($this->const_model::USERS_LOGIN);
+            if ($this->form_validation->run('post') === FALSE) {
+                $this->load->view($this->const_model::HEADER);
+                $this->load->view($this->const_model::POSTS_EDIT, $data);
+                $this->load->view($this->const_model::FOOTER);
             }
-            $post_tags = $this->create_tags_array();
-            $this->post_model->update_post();
-            $this->update_relationships($this->input->post('id'),$post_tags); 
-             
-            // Set message
-             $message = $this->message_model->get_message('post_updated');
-             $this->session->set_flashdata($message['name'], $message);
-            redirect($this->const_model::POSTS_USER_INDEX);
+            else {
+                $post_tags = $this->create_tags_array();
+                $this->post_model->update_post();
+                $this->update_relationships($this->input->post('id'),$post_tags); 
+                 
+                // Set message
+                 $message = $this->message_model->get_message('post_updated');
+                 $this->session->set_flashdata($message['name'], $message);
+                redirect($this->const_model::POSTS_USER_INDEX);
+            }
         }
-
         
 
         //======================================IMAGES======================================
@@ -163,17 +167,23 @@
             if(!$this->session->userdata('logged_in')){
                 redirect($this->const_model::USERS_LOGIN);
             }
-            //Upload Image
-            $post_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
-            $this->post_model->update_post_image($post_image);
-            // Set message
-            $message = $this->message_model->get_message('post_updated');
-            $this->session->set_flashdata($message['name'], $message);
-            
-            $this->clean_images();
-            
+            if($this->form_validation->run('image')===TRUE){
+                //Upload Image
+                $post_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+                $this->post_model->update_post_image($post_image);
+                // Set message
+                $message = $this->message_model->get_message('post_updated');
+                $this->session->set_flashdata($message['name'], $message);
+                
+                $this->clean_images();
+            }
+            else{
+                // Set message
+                $message = $this->message_model->get_message('image_update_failed');
+                $this->session->set_flashdata($message['name'], $message);
+            }
             $post = $this->post_model->get_post($this->input->post('id'));
-            redirect($this->const_model::POSTS_EDIT.'/'.$post['slug']);
+            redirect($this->const_model::POSTS_EDIT.'/'.$post['slug']);  
         }
 
         //Remove all images that aren't linked to a post

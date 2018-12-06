@@ -31,6 +31,3 @@
     <label>Current state</label>
     <p><i class="fas fa-circle <?php echo $user['style']; ?>" ></i> <?php echo $user['state_name'];?> </p>
 </div>
-
-<hr>
-<a class="btn btn-primary float-left" href="<?php echo base_url(); ?>users/edit/<?php echo $user['id']; ?>">Edit</a>
