@@ -51,16 +51,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 $route['default_controller'] = 'posts';
-
+//posts
 $route['posts/userindex'] = 'posts/userindex';
 $route['posts/update_image'] = 'posts/update_image';
 $route['posts'] = 'posts/index';
+$route['posts/create'] = 'posts/create';
 $route['posts/(:any)'] = 'posts/view/$1';
-
+//categories
 $route['categories/create'] = 'categories/create';
 $route['categories/posts/(:any)'] = 'categories/posts/$1';
 $route['categories'] = 'categories/index';
-
+//users
 $route['users/register'] = 'users/register';
 $route['users/logout'] = 'users/logout';
 $route['users/login'] = 'users/login';
