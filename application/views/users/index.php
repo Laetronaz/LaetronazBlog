@@ -23,27 +23,21 @@
                 <td class="text-center" scope="row"><?php echo $user['email']?></td>
                 <td class="text-center" scope="row"><?php echo $user['username']?></td>
                 <td class="text-center"><?php echo date("Y-m-d",strtotime($user['register_date']));?></td>
-
-                <form class="form-inline" action="<?php echo base_url(); ?>users/edit/<?php echo $user['id']; ?>" method="POST">
-                    <td class="text-center" scope="col">
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </td>
-                </form>
-               
                 <td class="text-center" scope="col">
-                    <?php $attributes = array('class' => 'form-inline');?>
-                    <?php echo form_open('users/toggle/'.$user['id'],$attributes); ?>
-                        <?php if($user['user_state'] == 3) : ?>                       
-                                <button type="submit" class="btn btn-danger btn-block">
-                                    <i class="fas fa-toggle-off" ></i>
-                                </button>
-                            </form>
+                    <a class="btn btn-primary btn-block" href="<?php echo base_url(); ?>users/edit/<?php echo $user['id'];?>">
+                        <i class="fas fa-edit"></i>
+                    </a>    
+                </td>
+                <td class="text-center" scope="col">
+                       <?php if($user['user_state'] == 3) : ?>          
+                            <a href="<?php echo base_url(); ?>users/toggle/<?php echo $user['id']?>" class="btn btn-danger btn-block">
+                                <i class="fas fa-toggle-on"></i>
+                            </a>             
+
                         <?php elseif($user['user_state'] == 4) : ?>
-                                <button type="submit" class="btn btn-success btn-block">
-                                    <i class="fas fa-toggle-on"></i>
-                                </button>
+                            <a href="<?php echo base_url(); ?>users/toggle/<?php echo $user['id']?>" class="btn btn-danger btn-block">
+                                <i class="fas fa-toggle-off" ></i>
+                            </a>
                         <?php endif; ?>
                     </form>
                 </td>

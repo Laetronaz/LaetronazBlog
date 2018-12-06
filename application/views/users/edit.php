@@ -1,32 +1,23 @@
 <h2><?= $title; ?></h2>
-<?php echo form_open_multipart('users/update'); ?>
+<?php echo validation_errors(); ?>
+
+<?php echo form_open_multipart('users/edit/'.$user['id']); ?>
     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
     <div class="form-group">
         <label>Name</label>
-        <input type="text" class="form-control" name ="name" placeholder="Add Name" Value="<?php echo $user['name']; ?>">
+        <input type="text" class="form-control" name ="name" placeholder="Add Name" value="<?php echo set_value("name",$user['name']); ?>">
     </div>
     <div class="form-group">
         <label>Zipcode</label>
-        <input type="text" class="form-control" name ="zipcode" placeholder="Add Zipcode" Value="<?php echo $user['zipcode']; ?>">
+        <input type="text" class="form-control" name ="zipcode" placeholder="Add Zipcode" value="<?php echo set_value("zipcode",$user['zipcode']); ?>">
     </div>
     <div class="form-group">
-        <label>Email</label>
-        <input type="text" class="form-control" name ="email" placeholder="Add Email" Value="<?php echo $user['email']; ?>">
-    </div>
-    <div class="form-group">
-        <label>Username</label>
-        <input type="text" class="form-control" name ="username" placeholder="Add Username" Value="<?php echo $user['username']; ?>">
-    </div>
-    <div class="form-group">
-        <label>User Rank</label>
+        <label>User Rights</label>
         <select class="form-control form-control-sm" name="usertype">   
             <?php foreach($types as $type) : ?>
-                <option value="<?php echo $type['id']?>" 
-                    <?php if($user['user_type'] == $type['id']) :?>
-                        <?php echo "selected" ?>   
-                    <?php endif?>
-                ><?php echo $type['name'];?>
-            </option>
+                <option value="<?php echo $type['id']?>"<?php echo set_select("usertype",$type['id'])?>>
+                    <?php echo $type['name'];?>
+                </option>
             <?php endforeach;?>   
         </select>
     </div>
