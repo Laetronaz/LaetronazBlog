@@ -97,6 +97,20 @@
                     </a>
                   </div>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#filtersubmenu" data-toggle="collapse" data-target="#filtersubmenu">Search Filter</a>
+                  <div id="filtersubmenu" class="sidebar-submenu collapse">
+                    <a href="<?php echo base_url().CATEGORIES_INDEX_PATH ?>" class="list-group-item list-group-item-action border-white">
+                        <span class="menu-collapsed">Search by Categories</span>
+                    </a>          
+                    <a href="<?php echo base_url().TAGS_INDEX_PATH ?>" class="list-group-item list-group-item-action border-white">
+                        <span class="menu-collapsed">Search by Tags</span>
+                    </a>
+                    <a href="<?php echo base_url(); ?>" class="list-group-item list-group-item-action border-white">
+                        <span class="menu-collapsed">Search By Authors</span>
+                    </a>
+                  </div>
+                </li>
               </ul>
             </nav>
     </div>

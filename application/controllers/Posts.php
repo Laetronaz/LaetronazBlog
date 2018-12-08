@@ -65,6 +65,7 @@
             }
 
             $data['title'] = $data['post']['title'];
+            $data['tags'] =  $this->tag_model->get_tags_from_list(array_column($this->tag_model->get_post_tags($post_id),'tag_id'));
 
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::POSTS_VIEW, $data);
@@ -154,8 +155,8 @@
                 $this->update_relationships($this->input->post('id'),$post_tags); 
                  
                 // Set message
-                 $message = $this->message_model->get_message('post_updated');
-                 $this->session->set_flashdata($message['name'], $message);
+                $message = $this->message_model->get_message('post_updated');
+                $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::POSTS_USER_INDEX);
             }
         }

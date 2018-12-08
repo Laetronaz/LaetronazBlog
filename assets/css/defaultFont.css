@@ -14,3 +14,22 @@ body {
 .state-inactive{
     color:#C0C0C0;
 }
+.badge-padding{
+    margin-right: 1%;
+    margin-bottom: 1%;
+    font-size: 14px;
+}
+.anchor-padding{
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 2.3%;
+}
+.top-buffer { margin-top:1%; }
+
+.post-tag-link {
+    font-size: 24px;
+}
+
+.post-date {
+    font-size: smaller;
+}
