@@ -31,13 +31,6 @@ $config = array(
                 'rules' => 'trim|min_length[3]'
             )
     ),
-    'image' => array(
-        array(
-                'field' => 'userfile',
-                'label' => 'Uploaded Image',
-                'rules' => 'trim|required'
-        )
-    ),
     'user_register' => array(
         array(
             'field' => 'name',
@@ -55,11 +48,6 @@ $config = array(
             'label' => 'Email',
             'rules' => 'trim|required|is_unique[users.email]|valid_email',
             'errors' => array('is_unique' => 'This email is already used. Please choose a different one.')
-        ),
-        array(
-            'field' => 'zipcode',
-            'label' => 'zipcode',
-            'rules' => 'trim|required|min_length[7]'
         ),
         array(
             'field' => 'usertype',
@@ -82,11 +70,6 @@ $config = array(
             'field' => 'name',
             'label' => 'Name',
             'rules' => 'trim|required|min_length[5]|max_length[50]'
-        ),
-        array(
-            'field' => 'zipcode',
-            'label' => 'zipcode',
-            'rules' => 'trim|required|min_length[7]'
         ),
         array(
             'field' => 'usertype',
@@ -121,6 +104,18 @@ $config = array(
         ),
         array(
             'field' => 'password2',
+            'label' => 'Password Confirmation',
+            'rules' => 'trim|required|matches[password]'
+        )
+    ),  
+    'password_change' => array(
+        array(
+            'field' => 'new-password',
+            'label' => 'Password',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'new-password2',
             'label' => 'Password Confirmation',
             'rules' => 'trim|required|matches[password]'
         )

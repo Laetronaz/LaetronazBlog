@@ -105,6 +105,7 @@
             }
 
             $data['title'] = $data['category']['name'];
+            
             if ($this->form_validation->run('category') === FALSE){
                 $this->load->view($this->const_model::HEADER);
                 $this->load->view($this->const_model::CATEGORIES_EDIT, $data);
@@ -125,16 +126,15 @@
             if(!$this->session->userdata('logged_in')){
                 redirect($this->const_model::USERS_LOGIN);
             }
-            
-            if($this->form_validation->run('image')===TRUE){
-                //Upload Image
-                $category_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+
+            //Upload Image
+            $category_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+            if(!is_null($category_image)){
                 $this->category_model->update_category_icon($category_image);
+                $this->clean_images();
                 // Set message
                 $message = $this->message_model->get_message('category_updated');
                 $this->session->set_flashdata($message['name'], $message);
-
-                $this->clean_images();
             }
             else{
                 // Set message
