@@ -30,7 +30,6 @@ CREATE TABLE IF NOT EXISTS users_state (
 CREATE TABLE IF NOT EXISTS users (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `zipcode` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -158,9 +157,7 @@ CREATE TABLE IF NOT EXISTS messages (
 --
 
 INSERT INTO users_type ( `id`, `name`) VALUES
-(1, 'Admin'),
-(2, 'Moderator'),
-(3, 'Writer');
+(1, 'Admin');
 COMMIT;
 
 --
@@ -178,8 +175,8 @@ COMMIT;
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `zipcode`, `email`, `username`, `password`, `register_date`, `user_type`, `user_state`) VALUES
-(1, 'Michel Pelland', 'H4E 2Y3', 'michel.pelland12@gmail.com', 'Laetronaz', '$2y$10$zeJUWUzGm2Px2hIFJd880ebfiXjXFc9Gyy2ElRRTu.FA/k5Qpxr3O', '2018-08-09 20:09:41', 1, 3);
+INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `register_date`, `user_type`, `user_state`) VALUES
+(1, 'Michel Pelland', 'michel.pelland12@gmail.com', 'Laetronaz', '$2y$10$zeJUWUzGm2Px2hIFJd880ebfiXjXFc9Gyy2ElRRTu.FA/k5Qpxr3O', '2018-08-09 20:09:41', 1, 3);
 COMMIT;
 
 --

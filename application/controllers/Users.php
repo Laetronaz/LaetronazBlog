@@ -241,33 +241,41 @@
         }
 
         //======================================PASSWORD=================================================
-        public function change_password($user_id = FALSE){
+        public function change_password($user_id){
             // Check login
-            $new_password = $this->input->post('password');
-            if($user_id != FALSE){
-                $this->user_model->update_password($this->encrypt_password($new_password),$user_id);
-                $token = $this->password_model->get_current_token($user_id);
-                $this->password_model->use_token($token['token']);
-                $message = $this->message_model->get_message('password_changed_success');
-            }
-            else if($this->validate_password($this->input->post('id'),$new_password)){//User change the user by himself
-                //set flash_message
-                 $message = $this->message_model->get_message('password_same');
-             }
-            else if($this->session->userdata('user_type') == 'Admin'){
-                $this->user_model->update_password($this->encrypt_password($new_password));
-                $message = $this->message_model->get_message('password_changed_success');
+            $new_password = $this->input->post('new-password');
+
+            if(!$this->form_validation->run('change_password') === FALSE){
+                if($user_id != FALSE){
+                    $this->user_model->update_password($this->encrypt_password($new_password),$user_id);
+                    $token = $this->password_model->get_current_token($user_id);
+                    $this->password_model->use_token($token['token']);
+                    $message = $this->message_model->get_message('password_changed_success');
+                }
+                else if($this->validate_password($this->input->post('id'),$new_password)){//User change the user by himself
+                    //set flash_message
+                     $message = $this->message_model->get_message('password_same');
+                 }
+                else if($this->session->userdata('user_type') == 'Admin'){
+                    $this->user_model->update_password($this->encrypt_password($new_password));
+                    $message = $this->message_model->get_message('password_changed_success');
+                }
+                else{
+                    $message = $this->message_model->get_message('password_changed_failed');
+                }
+                $this->session->set_flashdata($message['name'], $message);
+                
+                if($user_id != FALSE){
+                    redirect('users/login');
+                }
+                else{
+                    redirect($this->const_model::USERS_EDIT.'/'.$this->input->post('id'));
+                }
             }
             else{
-                $message = $this->message_model->get_message('password_changed_failed');
-            }
-            $this->session->set_flashdata($message['name'], $message);
-            
-            if($user_id != FALSE){
-                redirect('users/login');
-            }
-            else{
-                redirect($this->const_model::USERS_EDIT.'/'.$this->input->post('id'));
+                $message = $this->message_model->get_message('password_change_failed');
+                $this->session->set_flashdata($message['name'], $message);
+                redirect('users/edit/'.$user_id);
             }
         }
 

@@ -4,10 +4,6 @@
     <p><?php echo $user['name']?></p>
 </div>
 <div class="form-group">
-    <label>Zipcode</label>
-    <p><?php echo $user['zipcode']?></p>
-</div>
-<div class="form-group">
     <label>Email</label>
     <p><?php echo $user['email']?></p>
 </div>
