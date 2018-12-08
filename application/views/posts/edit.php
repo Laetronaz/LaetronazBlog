@@ -27,9 +27,11 @@
   <div class="form-group">
     <label for="tagsinput">Tags</label>
     <?php $tags = ""; ?>
-    <?php foreach($post_tags as $tag) : ?>
-        <?php $tags .= $tag['title'].','?>
-    <?php endforeach ?>
+    <?php if(!empty($post_tags)) :?>
+      <?php foreach($post_tags as $tag) : ?>
+          <?php $tags .= $tag['title'].','?>
+      <?php endforeach ?>
+    <?php endif;?>
     <input class="form-control" name="tagsinput" type="text" data-role="tagsinput" value="<?php echo set_value("tagsinput", $tags)?>">
   </div>
   <button type="submit" class="btn btn-primary">Update Post</button>
