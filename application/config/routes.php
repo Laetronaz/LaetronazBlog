@@ -61,6 +61,10 @@ $route['posts/(:any)'] = 'posts/view/$1';
 $route['categories/create'] = 'categories/create';
 $route['categories/posts/(:any)'] = 'categories/posts/$1';
 $route['categories'] = 'categories/index';
+//tags
+$route[TAGS_INDEX_ROUTE] = TAGS_INDEX_FUNC;
+$route[TAGS_VIEW_ROUTE] = TAGS_VIEW_FUNC;
+
 //users
 $route['users/register'] = 'users/register';
 $route['users/logout'] = 'users/logout';
