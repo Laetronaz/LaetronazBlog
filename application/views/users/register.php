@@ -11,16 +11,12 @@
                 <input type="text" class="form-control" name="name" placeholder="Name" value= <?php echo set_value("name")?>>
             </div>
             <div class="form-group">
-                <label>Zipcode</label>
-                <input type="text" class="form-control" name="zipcode" placeholder="Zipcode" value= <?php echo set_value("zipcode")?>>
-            </div>
-            <div class="form-group">
                 <label>Email</label>
                 <input type="email" class="form-control" name="email" placeholder="Email" value= <?php echo set_value("email")?>>
             </div>
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" class="form-control" name="username" placeholder="Username" value= <?php echo set_value("username")?>>
+                <input type="text" class="form-control" name="username" id="username" placeholder="Username" value= <?php echo set_value("username")?>>
             </div>
             <div class="form-group">
                 <label>User Type</label>
@@ -32,11 +28,11 @@
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-control" name="password" placeholder="Password" value= <?php echo set_value("password")?>>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password" value= <?php echo set_value("password")?> autocomplete="off">
             </div>
             <div class="form-group">
                 <label>Confirm Password</label>
-                <input type="password" class="form-control" name="password2" placeholder="Confirm Password" value= <?php echo set_value("password2")?>>
+                <input type="password" class="form-control" name="password2" placeholder="Confirm Password" value= <?php echo set_value("password2")?> autocomplete="off">
             </div>
             <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </div>

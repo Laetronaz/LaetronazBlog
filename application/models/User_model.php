@@ -11,7 +11,6 @@
                 'email' => $this->input->post('email'),
                 'username' => $this->input->post('username'),
                 'password' => $enc_password,
-                'zipcode' => $this->input->post('zipcode'),
                 'user_type' => $this->input->post('usertype')
             );
             //insert user
@@ -81,7 +80,6 @@
         public function update_user(){
             $data = array(
                 'name' => $this->input->post('name'),
-                'zipcode' => $this->input->post('zipcode'),
                 'user_type'=> $this->input->post('usertype')
             );
             $this->db->where('id', $this->input->post('id'));

@@ -8,7 +8,7 @@
             </div>
                 <?php echo form_open('users/login'); ?>
                     <div class="form-group">
-                        <input type="text" name="username" class="form-control" id="inputEmail" placeholder="Username" value = "<?php echo set_value("username")?>" autofocus>
+                        <input type="text" name="username" class="form-control" id="inputEmail" placeholder="Username" value = "<?php echo set_value("username")?>" autofocus >
                     </div>
                     <div class="form-group">
                         <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" value= "<?php echo set_value("password") ?>" autofocus>

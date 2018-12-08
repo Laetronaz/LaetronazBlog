@@ -168,9 +168,10 @@
             if(!$this->session->userdata('logged_in')){
                 redirect($this->const_model::USERS_LOGIN);
             }
-            if($this->form_validation->run('image')===TRUE){
-                //Upload Image
-                $post_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+
+            //Upload Image
+            $post_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+            if(!is_null($post_image)){  
                 $this->post_model->update_post_image($post_image);
                 // Set message
                 $message = $this->message_model->get_message('post_updated');
