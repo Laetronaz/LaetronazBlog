@@ -102,4 +102,19 @@
             $query = $this->db->get('posts');
             return $query->result_array();
         }
+
+        public function get_posts_by_tag($tag_id){
+            $in_array = $this->tag_model->get_post_id($tag_id);
+            if(!empty($in_array)){
+                $this->db->select('*');
+                $this->db->where_in("id",$in_array);
+                $query =$this->db->get('posts');
+                return $query->result_array();
+            }
+            else if($in_array === FALSE){
+                return FALSE;
+            }
+            else
+                return array();
+        }
     }

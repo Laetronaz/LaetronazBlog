@@ -6,6 +6,7 @@
 
         public function get_tags_list(){
             $query = $this->db->get('tags');
+            $this->db->order_by("title", "asc");
             return $query->result_array();
         }
 
@@ -61,9 +62,29 @@
 
         public function get_post_tags($id){
             $data = array(
-                'post_id' =>$id
+                'post_id' => $id
             );
             $query = $this->db->get_where('tagpost',$data);
+            return $query->result_array();
+        }
+
+        public function get_post_id($tag_id){
+            if(is_null($this->get_tag($tag_id))){
+                return FALSE;
+            }
+            else{
+                $data = array(
+                    'tag_id' => $tag_id
+                );
+                $this->db->select('post_id');
+                $query = $this->db->get_where('tagpost',$data);
+                return array_column($query->result_array(),'post_id');
+            }
+        }
+        public function get_tags_from_list($array_id){
+            $this->db->select('*');
+            $this->db->where_in("id", $array_id);
+            $query =$this->db->get('tags');
             return $query->result_array();
         }
     }

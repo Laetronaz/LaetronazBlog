@@ -211,6 +211,7 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('confirmation_expired', 'alert-info', 'The confirmation link you just used is expired to have a new confirmation link, click the following link: '),
 ('invalid_verification_token', 'alert-info', 'The email verification link you just used is invalid, if this link was sent to you by email, please contact an administrator by answering to the email.'),
 ('user_inactive', 'alert-info', 'This account have been disabled by the administration, if you want to re-enable this account,if you are the legemit user of this account please contact the administration.'),
+('tag_invalid', 'alert-info', 'The tag you tried to access does not exist.'),
 ('unautorized_access', 'alert-danger', 'Only admininstrators have access to this page'),
 ('login_failed', 'alert-danger', 'You have entered an invalid username or password'),
 ('password_change_failed', 'alert-danger', 'The current password is invalid.'),
