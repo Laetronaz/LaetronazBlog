@@ -119,5 +119,12 @@ $config = array(
             'label' => 'Password Confirmation',
             'rules' => 'trim|required|matches[password]'
         )
-    )  
+    ),
+    'search' => array(
+        array(
+            'field' => 'search',
+            'label' => 'Search',
+            'rules' => 'trim|required'
+        )
+    )    
 );

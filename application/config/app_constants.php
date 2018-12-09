@@ -25,6 +25,8 @@ defined('USERS_FILTER_FUNC') OR define('USERS_FILTER_FUNC','users/filter');
 //POSTS
 defined('USERS_POSTS_FUNC') OR define('USERS_POSTS_FUNC','users/posts/$1');
 
+//SEARCH
+defined('SEARCH_FUNC') OR define('SEARCH_FUNC','searchs/search');
 
 //====================================ROUTES=====================================
 
@@ -40,6 +42,8 @@ defined('USERS_FILTER_ROUTE') OR define('USERS_FILTER_ROUTE','users/filter');
 //POSTS
 defined('USERS_POSTS_ROUTE') OR define('USERS_POSTS_ROUTE','users/posts/(:any)');
 
+//SEARCH
+defined('SEARCH_ROUTE') OR define('SEARCH_ROUTE','search');
 //====================================PATHS=====================================
 
 //VIEW
@@ -58,3 +62,6 @@ defined('USERS_POSTS_PATH') OR define('USERS_POSTS_PATH','users/posts/');
 defined('TAGS_FILTER_PATH') OR define('TAGS_FILTER_PATH','tags/filter');
 defined('CATEGORIES_FILTER_PATH') OR define('CATEGORIES_FILTER_PATH','categories/filter');
 defined('USERS_FILTER_PATH') OR define('USERS_FILTER_PATH','users/filter');
+
+//SEARCH
+defined('SEARCH_PATH') OR define('SEARCH_PATH','searchs/search');
