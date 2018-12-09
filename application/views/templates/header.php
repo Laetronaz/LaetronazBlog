@@ -18,8 +18,8 @@
     <script src="https://cdn.ckeditor.com/4.11.1/full/ckeditor.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!-- LOCAL SCRIPTS -->
-    <script src="<?php echo base_url(); ?>assets/javascript/tagsinput.js"></script>
-    <script src="<?php echo base_url(); ?>assets/javascript/disqus.js"></script>
+    <link rel="preload" href="<?php echo base_url(); ?>assets/javascript/tagsinput.js" as="script">
+    <link rel="preload" href="<?php echo base_url(); ?>assets/javascript/disqus.js" as="script">
   </head>
 <body>
 
@@ -60,7 +60,7 @@
             <!-- A vertical navbar -->
             <nav class="navbar bg-light">
               <!-- Links -->
-              <a class="navbar-brand" href="#">Administration Menu</a>
+              <a class="navbar-brand admin-menu" href="#">Admin Menu</a>
               <ul class="navbar-nav">
                 <li class="nav-item">
                   <a class="nav-link" href="#usersubmenu" data-toggle="collapse" data-target="#usersubmenu">Manage Users</a>
@@ -79,7 +79,7 @@
                     <a href="<?php echo base_url(); ?>categories/create" class="list-group-item list-group-item-action border border-white">
                         <span class="menu-collapsed">Create New Category</span>
                     </a>
-                    <a href="<?php echo base_url(); ?>categories" class="list-group-item list-group-item-action border border-white">
+                    <a href="<?php echo base_url().CATEGORIES_INDEX_PATH; ?>" class="list-group-item list-group-item-action border border-white">
                         <span class="menu-collapsed">List Categories</span>
                     </a>
                   </div>
@@ -101,13 +101,13 @@
                 <li class="nav-item">
                   <a class="nav-link" href="#filtersubmenu" data-toggle="collapse" data-target="#filtersubmenu">Search Filter</a>
                   <div id="filtersubmenu" class="sidebar-submenu collapse">
-                    <a href="<?php echo base_url().CATEGORIES_INDEX_PATH ?>" class="list-group-item list-group-item-action border-white">
+                    <a href="<?php echo base_url().CATEGORIES_FILTER_PATH ?>" class="list-group-item list-group-item-action border-white">
                         <span class="menu-collapsed">Search by Categories</span>
                     </a>          
-                    <a href="<?php echo base_url().TAGS_INDEX_PATH ?>" class="list-group-item list-group-item-action border-white">
+                    <a href="<?php echo base_url().TAGS_FILTER_PATH ?>" class="list-group-item list-group-item-action border-white">
                         <span class="menu-collapsed">Search by Tags</span>
                     </a>
-                    <a href="<?php echo base_url(); ?>" class="list-group-item list-group-item-action border-white">
+                    <a href="<?php echo base_url().USERS_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
                         <span class="menu-collapsed">Search By Authors</span>
                     </a>
                   </div>
