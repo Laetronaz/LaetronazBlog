@@ -3,11 +3,11 @@
         private const INDEX_TITLE = "Search by Tags";
 
 
-        public function index(){
+        public function filter(){
             $data['title'] = $this::INDEX_TITLE;
             $data['tags'] = $this->build_alphabetical_tags_list($this->tag_model->get_tags_list());
             $this->load->view($this->const_model::HEADER);
-            $this->load->view(TAGS_INDEX_PATH, $data);
+            $this->load->view(TAGS_FILTER_PATH, $data);
             $this->load->view($this->const_model::FOOTER);
         }
         
@@ -18,7 +18,7 @@
                 // Set message
                 $message = $this->message_model->get_message('tag_invalid');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect(TAGS_INDEX_ROUTE);
+                redirect(TAGS_FILTER_ROUTE);
             }
             else{
                 $data['title'] = $tag['title'];

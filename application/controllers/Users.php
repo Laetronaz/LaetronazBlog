@@ -3,7 +3,7 @@
          //TITLES CONST
          private const REGISTER_TITLE = 'Sign Up';
          private const LOGIN_TITLE = 'Sign In';
-         private const INDEX_TITLE = 'User List';
+         private const INDEX_TITLE = 'Search by Authors';
          private const VIEW_TITLE = 'User Profile';
          private const EDIT_TITLE = 'User Profile';
 
@@ -155,9 +155,25 @@
                 }
             }
             
-
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::USERS_INDEX, $data);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
+        public function filter(){//Open for everyone
+            $data['title'] = $this::INDEX_TITLE;
+            $data['users'] = $this->build_alphabetical_users_list($this->user_model->get_users());
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view(USERS_FILTER_PATH, $data);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
+        public function posts($id){
+            $data['title'] = $this->user_model->get_user($id)['name'];
+            $data['posts'] = $this->post_model->get_posts_by_user($id);
+
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::POSTS_INDEX, $data);
             $this->load->view($this->const_model::FOOTER);
         }
 
@@ -468,5 +484,23 @@
                 return TRUE;
             }
             return FALSE;
+        }
+
+        private function build_alphabetical_users_list($users_list){
+            $alpha_list = array();
+            foreach (range('A', 'Z') as $char){
+                $alpha_list[$char] = $this->user_start_with($char, $users_list);   
+            }
+            return $alpha_list;
+        }
+
+        private function user_start_with($char, $users_list){
+            $user_starting_with_char = array();
+            foreach(array_column($users_list,'name') as $key => $name){
+                if(strtoupper(trim(substr($name,0,1))) == $char){
+                    array_push($user_starting_with_char,$users_list[$key]);
+                }
+            }
+            return $user_starting_with_char;
         }
     }
