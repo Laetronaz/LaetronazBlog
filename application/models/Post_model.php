@@ -39,6 +39,35 @@
             return $query->row_array();
         }
 
+        public function get_posts_by_category($category_id){
+            $this->db->order_by('posts.id', 'DESC');
+            $this->db->join('categories', 'categories.id = posts.category_id');
+            $query = $this->db->get_where('posts', array('category_id'=> $category_id));
+            return $query->result_array();
+        }
+
+        public function get_posts_by_user($user_id){
+            $this->db->order_by('posts.id', 'DESC');
+            $this->db->join('users', 'users.id = posts.user_id');
+            $query = $this->db->get_where('posts', array('user_id'=> $user_id));
+            return $query->result_array();
+        }
+
+        public function get_posts_by_tag($tag_id){
+            $in_array = $this->tag_model->get_post_id($tag_id);
+            if(!empty($in_array)){
+                $this->db->select('*');
+                $this->db->where_in("id",$in_array);
+                $query =$this->db->get('posts');
+                return $query->result_array();
+            }
+            else if($in_array === FALSE){
+                return FALSE;
+            }
+            else
+                return array();
+        }
+
         public function create_post($post_image){
             $slug = url_title($this->input->post('title'));
             $data = array(
@@ -89,13 +118,6 @@
             return $query->result_array();
         }
 
-        public function get_posts_by_category($category_id){
-            $this->db->order_by('posts.id', 'DESC');
-            $this->db->join('categories', 'categories.id = posts.category_id');
-            $query = $this->db->get_where('posts', array('category_id'=> $category_id));
-            return $query->result_array();
-        }
-
         public function get_all_images(){
             $this->db->distinct('post_image');
             $this->db->select('post_image');
@@ -103,18 +125,5 @@
             return $query->result_array();
         }
 
-        public function get_posts_by_tag($tag_id){
-            $in_array = $this->tag_model->get_post_id($tag_id);
-            if(!empty($in_array)){
-                $this->db->select('*');
-                $this->db->where_in("id",$in_array);
-                $query =$this->db->get('posts');
-                return $query->result_array();
-            }
-            else if($in_array === FALSE){
-                return FALSE;
-            }
-            else
-                return array();
-        }
+        
     }

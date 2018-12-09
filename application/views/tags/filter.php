@@ -19,7 +19,7 @@
             </div>
             <div class="row">
                 <?php foreach($tag_list as $tag) :?>
-                    <a href="<?php echo base_url().'tag/'.$tag['id']?>" class="badge badge-pill badge-info badge-padding"><?php echo $tag['title'] ?></a>
+                    <a href="<?php echo base_url().TAGS_POSTS_PATH.$tag['id']?>" class="badge badge-pill badge-info badge-padding"><?php echo $tag['title'] ?></a>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>

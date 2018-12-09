@@ -62,8 +62,10 @@ $route['categories/create'] = 'categories/create';
 $route['categories/posts/(:any)'] = 'categories/posts/$1';
 $route['categories'] = 'categories/index';
 //tags
-$route[TAGS_INDEX_ROUTE] = TAGS_INDEX_FUNC;
+$route[TAGS_FILTER_ROUTE] = TAGS_FILTER_FUNC;
 $route[TAGS_VIEW_ROUTE] = TAGS_VIEW_FUNC;
+
+
 
 //users
 $route['users/register'] = 'users/register';
@@ -76,6 +78,8 @@ $route['users/edit'] = 'users/edit';
 $route['users/password-reset'] = 'users/request_password_reset';
 $route['users/validation-expired'] = 'users/validation_token_expired';
 $route['users/requestpassword'] = 'users/forgotten_password';
+$route[USERS_FILTER_ROUTE] = USERS_FILTER_FUNC;
+$route[USERS_POSTS_ROUTE] = USERS_POSTS_FUNC;
 $route['users'] = 'users/index';
 
 //Mail function links

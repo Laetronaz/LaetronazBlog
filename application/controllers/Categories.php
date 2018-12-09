@@ -36,7 +36,7 @@
             }
         }
 
-        public function index(){
+        public function index(){//Admin only
             $data['title'] = $this::INDEX_TITLE;
             $data['categories'] = $this->category_model->get_categories();
             foreach($data['categories'] as $key => $category){//set style data
@@ -61,6 +61,14 @@
 
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::POSTS_INDEX, $data);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
+        public function filter(){//Open for everyone
+            $data['title'] = $this::INDEX_TITLE;
+            $data['categories'] = $this->build_alphabetical_categories_list($this->category_model->get_categories());
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view(CATEGORIES_FILTER_PATH, $data);
             $this->load->view($this->const_model::FOOTER);
         }
 
@@ -143,6 +151,7 @@
             }
             redirect($this->const_model::CATEGORIES_EDIT.'/'.$this->input->post('id'));
         }
+        //============================================= PRIVATE ========================================
 
         //delete all image that aren't linked to a category
         private function clean_images(){
@@ -153,5 +162,23 @@
             }
             $image_list[count($image_list)] = $this::DEFAULT_IMAGE;
             $this->fileupload_model->clean_unlinked_images($this::IMAGE_PATH,array_values($image_list));
+        }
+
+        private function build_alphabetical_categories_list($categories_list){
+            $alpha_list = array();
+            foreach (range('A', 'Z') as $char){
+                $alpha_list[$char] = $this->category_start_with($char, $categories_list);   
+            }
+            return $alpha_list;
+        }
+
+        private function category_start_with($char, $categories_list){
+            $category_starting_with_char = array();
+            foreach(array_column($categories_list,'name') as $key => $name){
+                if(strtoupper(trim(substr($name,0,1))) == $char){
+                    array_push($category_starting_with_char,$categories_list[$key]);
+                }
+            }
+            return $category_starting_with_char;
         }
     }
