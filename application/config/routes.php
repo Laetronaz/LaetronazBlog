@@ -82,6 +82,10 @@ $route[USERS_FILTER_ROUTE] = USERS_FILTER_FUNC;
 $route[USERS_POSTS_ROUTE] = USERS_POSTS_FUNC;
 $route['users'] = 'users/index';
 
+//search
+$route[SEARCH_ROUTE] = SEARCH_FUNC;
+
+
 //Mail function links
 $route['users/resetpassword/(:any)'] = 'users/change_password_form/$1';
 $route['users/verifyemail/(:any)'] = 'users/confirm_email/$1';

@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oxygen" >
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+
+
     <!-- LOCAL STYLES -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/defaultFont.css" >
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/tagsinput.css">
@@ -17,9 +20,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.ckeditor.com/4.11.1/full/ckeditor.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
     <!-- LOCAL SCRIPTS -->
-    <link rel="preload" href="<?php echo base_url(); ?>assets/javascript/tagsinput.js" as="script">
-    <link rel="preload" href="<?php echo base_url(); ?>assets/javascript/disqus.js" as="script">
+    <script src="<?php echo base_url(); ?>assets/javascript/tagsinput.js"></script>
+    <script src="<?php echo base_url(); ?>assets/javascript/disqus.js"></script>
   </head>
 <body>
 
@@ -38,15 +42,21 @@
         <a class="nav-link" href="<?php echo base_url(); ?>about">About</a>
       </li>
     </ul>
-
+    
     <ul class="nav navbar-nav navbar-right">
+    <li class="nav-item">
+    <?php echo form_open(SEARCH_ROUTE,array("class" => "form-inline my-2 my-lg-0"));?>
+      <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search" required>
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    </li>
     <?php if(!$this->session->userdata('logged_in')) : ?>
-        <li class="nav-item">
+        <li class="nav-item center">
             <a class="nav-link" href="<?php echo base_url(); ?>users/login">Login</a>
         </li>
       <?php endif; ?>
       <?php if($this->session->userdata('logged_in')) : ?>
-        <li class="nav-item">
+        <li class="nav-item center">
             <a class="nav-link" href="<?php echo base_url(); ?>users/logout">Logout</a>
         </li>
       <?php endif; ?>  
@@ -101,10 +111,10 @@
                 <li class="nav-item">
                   <a class="nav-link" href="#filtersubmenu" data-toggle="collapse" data-target="#filtersubmenu">Search Filter</a>
                   <div id="filtersubmenu" class="sidebar-submenu collapse">
-                    <a href="<?php echo base_url().CATEGORIES_FILTER_PATH ?>" class="list-group-item list-group-item-action border-white">
+                    <a href="<?php echo base_url().CATEGORIES_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
                         <span class="menu-collapsed">Search by Categories</span>
                     </a>          
-                    <a href="<?php echo base_url().TAGS_FILTER_PATH ?>" class="list-group-item list-group-item-action border-white">
+                    <a href="<?php echo base_url().TAGS_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
                         <span class="menu-collapsed">Search by Tags</span>
                     </a>
                     <a href="<?php echo base_url().USERS_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
