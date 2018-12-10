@@ -64,6 +64,8 @@ $route['categories'] = 'categories/index';
 //tags
 $route[TAGS_FILTER_ROUTE] = TAGS_FILTER_FUNC;
 $route[TAGS_VIEW_ROUTE] = TAGS_VIEW_FUNC;
+//roles
+
 
 
 
@@ -82,8 +84,16 @@ $route[USERS_FILTER_ROUTE] = USERS_FILTER_FUNC;
 $route[USERS_POSTS_ROUTE] = USERS_POSTS_FUNC;
 $route['users'] = 'users/index';
 
+//roles
+$route[ROLES_CREATE_ROUTE] = ROLES_CREATE_FUNC;
+$route[ROLES_EDIT_ROUTE] = ROLES_EDIT_FUNC;  
+$route[ROLES_DELETE_ROUTE] = ROLES_EDIT_FUNC;
+$route[ROLES_INDEX_ROUTE] = ROLES_EDIT_FUNC;
+
 //search
 $route[SEARCH_ROUTE] = SEARCH_FUNC;
+
+
 
 
 //Mail function links

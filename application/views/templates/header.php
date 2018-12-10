@@ -65,7 +65,7 @@
 </nav>
 <div class="container-fluid">
   <div class="row">
-  <?php if($this->session->userdata('user_type') == 'Admin') : ?>
+  <?php if($this->session->userdata('role') == 'Admin') : ?>
     <div class="col-md-2">
             <!-- A vertical navbar -->
             <nav class="navbar bg-light">
@@ -122,11 +122,22 @@
                     </a>
                   </div>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#rolessubmenu" data-toggle="collapse" data-target="#rolessubmenu">Roles Management</a>
+                  <div id="rolessubmenu" class="sidebar-submenu collapse">
+                    <a href="<?php echo base_url().ROLES_CREATE_ROUTE ?>" class="list-group-item list-group-item-action border-white">
+                        <span class="menu-collapsed">Create New Role</span>
+                    </a>          
+                    <a href="<?php echo base_url().ROLES_INDEX_ROUTE ?>" class="list-group-item list-group-item-action border-white">
+                        <span class="menu-collapsed">Manage Roles</span>
+                    </a>
+                  </div>
+                </li>
               </ul>
             </nav>
     </div>
     <?php endif; ?>
-    <?php echo ($this->session->userdata('user_type') == 'Admin' ? "<div class='col-md-10'>" : "<div class='col-md-12'>"); ?>
+    <?php echo ($this->session->userdata('role') == 'Admin' ? "<div class='col-md-10'>" : "<div class='col-md-12'>"); ?>
         <div class="container">
           <?php foreach ($this->session->get_flash_keys() as $flashkey) : ?>
               <!--Flash messages -->

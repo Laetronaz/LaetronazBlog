@@ -11,7 +11,7 @@
 
         public function create(){
              // Check login
-            if($this->session->userdata('user_type') != 'Admin' ){
+            if($this->session->userdata('role') != 'Admin' ){
                 $message = $this->message_model->get_unauthorized_access();
                 $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::USERS_LOGIN);
@@ -74,7 +74,7 @@
 
         public function delete($id){
             // Check login
-            if($this->session->userdata('user_type') != 'Admin' ){
+            if($this->session->userdata('role') != 'Admin' ){
                 $message = $this->message_model->get_unauthorized_access();
                 $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::USERS_LOGIN);
@@ -101,7 +101,7 @@
         public function edit($id){
            
             // Check login
-            if($this->session->userdata('user_type') != 'Admin' ){
+            if($this->session->userdata('role') != 'Admin' ){
                 $message = $this->message_model->get_unauthorized_access();
                 $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::USERS_LOGIN);

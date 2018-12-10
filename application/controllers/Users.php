@@ -10,7 +10,7 @@
         //register user
         public function register(){
             // Check login
-            if($this->session->userdata('user_type') != 'Admin' ){
+            if($this->session->userdata('role') != 'Admin' ){
                 $message = $this->message_model->get_unauthorized_access();
                 $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::USERS_LOGIN);
@@ -68,7 +68,7 @@
                 $user_datas = $this->user_model->login($username);
                 $user_id = $user_datas['id'];
                 $hashed_password = $user_datas['password'];
-                $user_type = $user_datas['user_type'];
+                $role = $user_datas['role'];
                 if($user_datas !== FALSE){
                     if($user_datas['user_state'] != 3){//state which cannot log in.
                         switch ($user_datas['user_state']) {
@@ -98,7 +98,7 @@
                             'user_id' => $user_id,
                             'username' => $username,
                             'logged_in' => true,
-                            'user_type' => $user_type
+                            'role' => $role
                         );
                         $this->session->set_userdata($user_data);
                         //reset attempts on successful login
@@ -127,7 +127,7 @@
             $this->session->unset_userdata('logged_in');
             $this->session->unset_userdata('user_id');
             $this->session->unset_userdata('username');
-            $this->session->unset_userdata('user_type');
+            $this->session->unset_userdata('role');
 
             // Set message
             $message = $this->message_model->get_message('user_loggedout');
@@ -179,7 +179,7 @@
 
         public function toggle($id){
             // Check login
-            if($this->session->userdata('user_type') != 'Admin' ){
+            if($this->session->userdata('role') != 'Admin' ){
                 $message = $this->message_model->get_unauthorized_access();
                 $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::USERS_LOGIN);
@@ -229,7 +229,7 @@
         }
 
         public function edit($id){
-            if($this->session->userdata('user_type') != 'Admin' ){
+            if($this->session->userdata('role') != 'Admin' ){
                 $message = $this->message_model->get_unauthorized_access();
                 $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::USERS_LOGIN);
@@ -272,7 +272,7 @@
                     //set flash_message
                      $message = $this->message_model->get_message('password_same');
                  }
-                else if($this->session->userdata('user_type') == 'Admin'){
+                else if($this->session->userdata('role') == 'Admin'){
                     $this->user_model->update_password($this->encrypt_password($new_password));
                     $message = $this->message_model->get_message('password_changed_success');
                 }

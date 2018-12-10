@@ -35,7 +35,7 @@
             <div class="modal-body">
               <?php echo form_open_multipart('users/change-password/'.$user['id']); ?>
                     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
-                    <?php if($this->session->userdata('user_id') != $user['id'] && $this->session->user_data['user_type'] == 'Admin') : ?>
+                    <?php if($this->session->userdata('user_id') != $user['id'] && $this->session->user_data['role'] == 'Admin') : ?>
                     <div class="form-group">
                         <label>Current Password</label><br>
                         <input type="password" class="form-control" name="old_password" placeholder="Current Password" autocomplete="off"> 

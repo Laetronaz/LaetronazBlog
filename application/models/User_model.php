@@ -11,7 +11,7 @@
                 'email' => $this->input->post('email'),
                 'username' => $this->input->post('username'),
                 'password' => $enc_password,
-                'user_type' => $this->input->post('usertype')
+                'role' => $this->input->post('usertype')
             );
             //insert user
             $this->db->insert('users', $data);
@@ -27,7 +27,7 @@
                 $user_data = array(
                     'id' => $result->row(0)->id,
                     'password' => $result->row(0)->password,
-                    'user_type' => $this->get_user_type($result->row(0)->user_type),
+                    'role' => $this->get_role($result->row(0)->role),
                     'user_state' => $result->row(0)->user_state,
                     'connection_attempts' => $result->row(0)->connection_attempts
                 );
@@ -38,7 +38,7 @@
             }
         }
 
-        private function get_user_type($id){//TODO: get rid of this function
+        private function get_role($id){//TODO: get rid of this function
             $this->db->where('id', $id);
             $result = $this->db->get('users_type');
             if($result->num_rows() == 1){
@@ -80,7 +80,7 @@
         public function update_user(){
             $data = array(
                 'name' => $this->input->post('name'),
-                'user_type'=> $this->input->post('usertype')
+                'role'=> $this->input->post('role')
             );
             $this->db->where('id', $this->input->post('id'));
             return $this->db->update('users', $data);
