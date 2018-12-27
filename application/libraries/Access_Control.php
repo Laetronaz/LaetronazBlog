@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Access_Control {
+class Access_control {
         private const IMAGE_PATH = 'logged_in';
         
         
