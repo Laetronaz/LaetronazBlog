@@ -22,7 +22,7 @@
                 'post_id' => $post_id,
                 'tag_id' => $tag_id
             );
-            return $this->db->insert('tagpost',$data);
+            return $this->db->insert('tag_post',$data);
         }
 
         public function unlink_post_from_tag($post_id, $tag_id){
@@ -30,7 +30,7 @@
                 'post_id' => $post_id,
                 'tag_id' => $tag_id
             );
-            $this->db->delete('tagpost',$data);
+            $this->db->delete('tag_post',$data);
         }
 
         public function get_tag_by_title($title){
@@ -48,7 +48,7 @@
                 'post_id' => $post_id,
                 'tag_id' => $tag_id
             );
-            $query = $this->db->get_where('tagpost', $data);
+            $query = $this->db->get_where('tag_post', $data);
             return $query->row_array();
         }
 
@@ -56,7 +56,7 @@
             $data = array(
                 'post_id' => $post_id
             );
-            $query = $this->db->get_where('tagpost', $data);
+            $query = $this->db->get_where('tag_post', $data);
             return $query->result_array();
         }
 
@@ -64,7 +64,7 @@
             $data = array(
                 'post_id' => $id
             );
-            $query = $this->db->get_where('tagpost',$data);
+            $query = $this->db->get_where('tag_post',$data);
             return $query->result_array();
         }
 
@@ -77,7 +77,7 @@
                     'tag_id' => $tag_id
                 );
                 $this->db->select('post_id');
-                $query = $this->db->get_where('tagpost',$data);
+                $query = $this->db->get_where('tag_post',$data);
                 return array_column($query->result_array(),'post_id');
             }
         }

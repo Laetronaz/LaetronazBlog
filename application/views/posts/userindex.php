@@ -1,5 +1,10 @@
 
-<h2><?= $title; ?></h2>
+<h2><?= $title; ?>
+    <a class="float-right" href="<?php echo base_url().POSTS_CREATE_PATH?>">
+        <i class="fas fa-plus-circle fa-2x link-color-new"></i>
+    </a>
+</h2>
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -15,18 +20,18 @@
     <tbody>
         <?php foreach($posts as $post) : ?> 
             <tr class="table-secondary">
-                <td class="text-center" scope="row"><i class="fas fa-circle <?php echo $post['style']?>" ></i></td>
-                <td class="text-center" scope="row"><img class ="thumbnail" src="<?php echo site_url(); ?>assets/images/posts/<?php echo $post['post_image'];?>" height="50" width="50"></td>
-                <td class="text-center" ><a href="<?php echo base_url() ?>posts/<?php echo $post['slug']?>"><?php echo $post['title']?></a></td>
-                <td class="text-center"><?php echo $categories[array_search($post['category_id'],array_column($categories,'id'))]['name'];?></td> 
-                <td class="text-center"><?php echo date("Y-m-d G:i",strtotime($post['created_at']));?></td>
-                <td class="text-center" scope="col">
+                <td class="text-center align-middle" scope="row"><i class="fas fa-circle <?php echo $post['style']?>" ></i></td>
+                <td class="text-center align-middle" scope="row"><img class ="thumbnail" src="<?php echo site_url(); ?>assets/images/posts/<?php echo $post['post_image'];?>" height="50" width="50"></td>
+                <td class="text-center align-middle" ><a href="<?php echo base_url() ?>posts/<?php echo $post['slug']?>"><?php echo $post['title']?></a></td>
+                <td class="text-center align-middle"><?php echo $categories[array_search($post['category_id'],array_column($categories,'id'))]['name'];?></td> 
+                <td class="text-center align-middle"><?php echo date("Y-m-d G:i",strtotime($post['created_at']));?></td>
+                <td class="text-center align-middle" scope="col">
                     <a class="btn btn-primary btn-block" href="<?php echo site_url(); ?>posts/edit/<?php echo $post['slug']?>">
                         <i class="fas fa-edit"></i>
                     </a>
                 </td>
-                <td class="text-center" scope="col">
-                    <?php if($post['active'] == TRUE) : ?>
+                <td class="text-center align-middle" scope="col">
+                    <?php if($post['state'] == TRUE) : ?>
                         <a class="btn btn-danger btn-block" href="<?php echo site_url(); ?>posts/toggle/<?php echo $post['id']?>">
                             <i class="fas fa-toggle-off" ></i>
                         </a>

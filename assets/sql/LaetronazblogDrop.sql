@@ -1,5 +1,5 @@
 -- TABLES --
-DROP TABLE IF EXISTS tagpost;
+DROP TABLE IF EXISTS tag_post;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS categories;
@@ -7,7 +7,9 @@ DROP TABLE IF EXISTS password_reset;
 DROP TABLE IF EXISTS email_verification;
 DROP TABLE IF EXISTS users_lockout;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS users_type;
+DROP TABLE IF EXISTS role_right;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS rights;
 DROP TABLE IF EXISTS users_state;
 DROP TABLE IF EXISTS messages;
 

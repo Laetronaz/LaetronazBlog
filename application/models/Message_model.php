@@ -2,6 +2,7 @@
     class Message_model extends CI_Model{
         public function __construct(){
             $this->load->database();
+            
         }
         //get all the message from the DB
         public function get_messages(){
@@ -11,6 +12,7 @@
         }
         //Get Specific message from DB
         public function get_message($message_name){
+            $this->db->reset_query();//fix an possible error message with others queries.
             $query = $this->db->get_where('messages', array('name'=> $message_name));
             return $query->row_array();
         }

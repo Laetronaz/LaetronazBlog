@@ -1,6 +1,5 @@
 <h2><?= $title; ?></h2>
 <?php echo validation_errors(); ?>
-
 <?php echo form_open_multipart('users/edit/'.$user['id']); ?>
     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
     <div class="form-group">
@@ -9,9 +8,10 @@
     </div>
     <div class="form-group">
         <label>User Rights</label>
-        <select class="form-control form-control-sm" name="usertype">   
+        <select name="usertype" class="form-control form-control-sm">   
             <?php foreach($types as $type) : ?>
-                <option value="<?php echo $type['id']?>"<?php echo set_select("usertype",$type['id'])?>>
+                
+                <option <?php if ($user['role'] == $type['id']){ echo "selected"; }?> value="<?php echo $type['id']?>"<?php echo set_select("usertype",$type['id'])?>>
                     <?php echo $type['name'];?>
                 </option>
             <?php endforeach;?>   
@@ -21,8 +21,6 @@
     <button type="submit" class="btn btn-primary">Update Profile</button>
     <button type="button" data-toggle="modal" data-target="#PasswordChange" class="btn btn-info">Change Password</button>
 </form>
-
-
 
 <div class="modal fade" id="PasswordChange" role="dialog">
         <div class="modal-dialog">  
@@ -35,7 +33,7 @@
             <div class="modal-body">
               <?php echo form_open_multipart('users/change-password/'.$user['id']); ?>
                     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
-                    <?php if($this->session->userdata('user_id') != $user['id'] && $this->session->user_data['user_type'] == 'Admin') : ?>
+                    <?php if($this->session->userdata('user_id') != $user['id'] && $this->session->user_data['role'] == 'Admin') : ?>
                     <div class="form-group">
                         <label>Current Password</label><br>
                         <input type="password" class="form-control" name="old_password" placeholder="Current Password" autocomplete="off"> 

@@ -3,12 +3,23 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 
 --
--- Table structure for table `user_type`
+-- Table structure for table `roles`
 --
 
-CREATE TABLE IF NOT EXISTS users_type (
+CREATE TABLE IF NOT EXISTS roles (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `rights`
+--
+
+CREATE TABLE IF NOT EXISTS rights (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -22,7 +33,6 @@ CREATE TABLE IF NOT EXISTS users_state (
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
-
 --
 -- Table structure for table `users`
 --
@@ -34,15 +44,33 @@ CREATE TABLE IF NOT EXISTS users (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `user_type` int(11) NOT NULL,
+  `role` int(11) NOT NULL,
   `user_state` INT(11) NOT NULL DEFAULT 1,
   `connection_attempts` INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  CONSTRAINT FK_UserType FOREIGN KEY (user_type)
-  REFERENCES users_type(`id`),
+  CONSTRAINT FK_Role FOREIGN KEY (role)
+  REFERENCES roles(`id`),
   CONSTRAINT FK_UserState FOREIGN KEY (user_state)
   REFERENCES users_state(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `role_right`
+--
+
+CREATE TABLE IF NOT EXISTS role_right (
+  `role_id` int(11) NOT NULL,
+  `right_id` int(11) NOT NULL,
+  PRIMARY KEY (`role_id`,`right_id`),
+  CONSTRAINT FK_RoleRight FOREIGN KEY (`role_id`)
+  REFERENCES roles(`id`),
+  CONSTRAINT FK_RoleUser FOREIGN KEY (`right_id`)
+  REFERENCES rights(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `users_lockout`
+--
 
 CREATE TABLE IF NOT EXISTS users_lockout (
     `user_id` INT(11) NOT NULL, 
@@ -110,7 +138,7 @@ CREATE TABLE IF NOT EXISTS posts (
   `body` text NOT NULL,
   `post_image` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `active` boolean NOT NULL DEFAULT TRUE,
+  `state` boolean NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`id`),
   CONSTRAINT FK_PostCategory FOREIGN KEY (category_id)
   REFERENCES categories(id),
@@ -128,9 +156,9 @@ CREATE TABLE IF NOT EXISTS `tags` (
 ) ENGINE = InnoDB;
 
 --
--- Table structure for table `tagpost`
+-- Table structure for table `tag_post`
 --
-CREATE TABLE IF NOT EXISTS `tagpost` ( 
+CREATE TABLE IF NOT EXISTS `tag_post` ( 
   `post_id` INT(11) NOT NULL , 
   `tag_id` INT(11) NOT NULL,
   PRIMARY KEY(post_id, tag_id),
@@ -153,16 +181,39 @@ CREATE TABLE IF NOT EXISTS messages (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user_type`
+-- Dumping data for table `rights`
 --
 
-INSERT INTO users_type ( `id`, `name`) VALUES
-(1, 'Admin');
+INSERT INTO rights( `id`, `name`, `description`) VALUES
+(1, 'admin', 'Give the users of this role all rights on everything.'), 
+(2, 'manage categories', 'Give the users the right to add, edit and toggle categories.'), 
+(3, 'manage posts','Give the users the right to create, edit and toggle his own posts.'), 
+(4, 'manage users', 'Give the users the right to add, edit and toggle users.'), 
+(5, 'manage roles', 'Give the users the right to add, edit and delete roles for the users.'),
+(6, 'manage all posts', 'Give the users the right to manage the posts of any users.' );
 COMMIT;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO roles( `id`, `name`) VALUES
+(1, 'admin');
+COMMIT;
+
+--
+-- Dumping data for table `role_right`
+--
+
+INSERT INTO role_right( `role_id`, `right_id`) VALUES
+(1, 1);
+COMMIT;
+
 
 --
 -- Dumping data for table `user_state`
 --
+
 INSERT INTO users_state ( `id`, `name`) VALUES
 (1, 'Waiting Authorization'),
 (2, 'Locked out'),
@@ -175,7 +226,7 @@ COMMIT;
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `register_date`, `user_type`, `user_state`) VALUES
+INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `register_date`, `role`, `user_state`) VALUES
 (1, 'Michel Pelland', 'michel.pelland12@gmail.com', 'Laetronaz', '$2y$10$zeJUWUzGm2Px2hIFJd880ebfiXjXFc9Gyy2ElRRTu.FA/k5Qpxr3O', '2018-08-09 20:09:41', 1, 3);
 COMMIT;
 
@@ -201,6 +252,9 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('password_changed_success', 'alert-success', 'The password has been changed successfuly'),
 ('password_reset_resent', 'alert-success', 'The reset password link was resent, check your emails.'),
 ('email_verified', 'alert-success', 'Your email have been successfully verified. You can now log in.'),
+('role_delete_success', 'alert-success', 'The role has been successfully deleted.'),
+('new_role_success', 'alert-success', 'The role was successfully created.'),
+('change_role_success', 'alert-success', 'The role was successfully updated.'),
 ('password_expired', 'alert-info', 'The password reset link you used is expired, if you still want to reset your password, use the following link: '),
 ('invalid_password_token', 'alert-info', 'The password reset link you just used is invalid, if this link was sent to you by email, please contact an administrator by answering to the email.'),
 ('resend_password', 'alert-info', 'You already asked for a password reset please check your email.'),
@@ -209,13 +263,20 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('invalid_verification_token', 'alert-info', 'The email verification link you just used is invalid, if this link was sent to you by email, please contact an administrator by answering to the email.'),
 ('user_inactive', 'alert-info', 'This account have been disabled by the administration, if you want to re-enable this account,if you are the legemit user of this account please contact the administration.'),
 ('tag_invalid', 'alert-info', 'The tag you tried to access does not exist.'),
+('access_refused', 'alert-info', 'You do not have the required rights to access this page.'),
+('not_logged_in', 'alert-info', 'You must be logged in to do that'),
 ('unautorized_access', 'alert-danger', 'Only admininstrators have access to this page'),
 ('login_failed', 'alert-danger', 'You have entered an invalid username or password'),
 ('password_change_failed', 'alert-danger', 'The current password is invalid.'),
 ('password_same', 'alert-danger', 'The password could not be changed, please use a new password.'),
 ('inexisting_user', 'alert-danger', 'No account was found for the email you entered.'),
 ('user_lockedout', 'alert-danger', 'You have tried to access this account too many time in a short while, please wait 15 minutes and try again.'),
-('image_update_failed', 'alert-danger', 'Failed to update the image, please make sure to fill the required field.');
+('image_update_failed', 'alert-danger', 'Failed to update the image, please make sure to fill the required field.'),
+('admin_role', 'alert-danger', "It's impossible to change this role."),
+('change_role_failure', 'alert-danger', 'The role has failed to update.'),
+('new_role_failure', 'alert-danger', 'The role has failed to be created.'),
+('role_delete_failure', 'alert-danger', 'The role has failed to be delete. Please make sure that no users are using this role.'),
+('role_does_not_exists', 'alert-danger', 'This role does not exists!');
 COMMIT;
 
 
