@@ -3,7 +3,7 @@
 <h2 class="top-buffer">Posts marked with this tag:</h2>
 <div class="container">
     <?php foreach($posts as $post) : ?>
-        <?php if($post['active'] == 1) :?>
+        <?php if($post['state'] == 1) :?>
         <div class="row">
             <div class="col-md-3">
                 <img class ="thumbnail" src="<?php echo site_url(); ?>assets/images/posts/<?php echo $post['post_image'];?>" height="200" width="200">

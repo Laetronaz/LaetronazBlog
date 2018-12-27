@@ -16,6 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //====================================FUNCTIONS=====================================
 //INDEX
 defined('ROLES_INDEX_FUNC') OR define('ROLES_INDEX_FUNC','roles/index');
+defined('POSTS_ALLINDEX_FUNC') OR define('POSTS_ALLINDEX_FUNC','posts/all_index');
 //VIEW
 defined('TAGS_VIEW_FUNC') OR define('TAGS_VIEW_FUNC', 'tags/view/$1');
 defined('ROLES_VIEW_FUNC') OR define('ROLES_VIEW_FUNC','roles/view/$1');
@@ -38,6 +39,7 @@ defined('SEARCH_FUNC') OR define('SEARCH_FUNC','searchs/search');
 
 //INDEX
 defined('ROLES_INDEX_ROUTE') OR define('ROLES_INDEX_ROUTE','roles');
+defined('POSTS_ALLINDEX_ROUTE') OR define('POSTS_ALLINDEX_ROUTE','posts/all');
 //VIEW
 defined('TAGS_VIEW_ROUTE') OR define('TAGS_VIEW_ROUTE','tags/(:any)');
 defined('ROLES_VIEW_ROUTE') OR define('ROLES_VIEW_ROUTE','roles/view/(:any)');
@@ -61,6 +63,8 @@ defined('SEARCH_ROUTE') OR define('SEARCH_ROUTE','search');
 //INDEX
 defined('CATEGORIES_INDEX_PATH') OR define('CATEGORIES_INDEX_PATH', 'categories');
 defined('ROLES_INDEX_PATH') OR define('ROLES_INDEX_PATH','roles');
+defined('POSTS_INDEX_PATH') OR define('POSTS_INDEX_PATH','');
+defined('POSTS_ALLINDEX_PATH') OR define('POSTS_ALLINDEX_PATH','posts/all');
 //VIEW
 defined('TAGS_VIEW_PATH') OR define('TAGS_VIEW_PATH', 'tags/view');
 defined('ROLES_VIEW_PATH') OR define('ROLES_VIEW_PATH','roles/view/');
@@ -74,9 +78,22 @@ defined('TAGS_POSTS_PATH') OR define('TAGS_POSTS_PATH','tags/');
 defined('USERS_POSTS_PATH') OR define('USERS_POSTS_PATH','users/posts/');
 //CREATE
 defined('ROLES_CREATE_PATH') OR define('ROLES_CREATE_PATH','roles/create');
+defined('POSTS_CREATE_PATH') OR define('POSTS_CREATE_PATH','posts/create');
+defined('CATEGORIES_CREATE_PATH') OR define('CATEGORIES_CREATE_PATH','categories/create');
 //EDIT
 defined('ROLES_EDIT_PATH') OR define('ROLES_EDIT_PATH','roles/edit/');
+defined('POSTS_EDIT_PATH') OR define('POSTS_EDIT_PATH','posts/edit/');
+
+
 //DELETE
 defined('ROLES_DELETE_PATH') OR define('ROLES_DELETE_PATH','roles/delete/');
+//TOGGLE
+defined('POSTS_TOGGLE_PATH') OR define('POSTS_TOGGLE_PATH','posts/toggle/');
 //SEARCH
 defined('SEARCH_PATH') OR define('SEARCH_PATH','searchs/search');
+
+
+//LOGIN
+defined('USERS_LOGIN_PATH') OR define('USERS_LOGIN_PATH','users/login');
+//REGISTER
+defined('USERS_REGISTER_PATH') OR define('USERS_REGISTER_PATH','users/register');

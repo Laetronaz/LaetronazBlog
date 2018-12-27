@@ -8,7 +8,7 @@
         private const INDEX_TITLE = 'Latest Posts';
         private const CREATE_TITLE = 'Create Post';
         private const EDIT_TITLE = 'Edit Post';
-        private const USER_INDEX_TITLE = 'My Posts';
+        private const USER_INDEX_TITLE = 'Manage Posts';
 
         //====================================CRUD====================================
         public function index($offset = 0){
@@ -18,19 +18,19 @@
             $this->pagination->initialize($config);
 
             $data['title'] = $this::INDEX_TITLE;
-
-            $data['posts'] = $this->post_model->get_posts(FALSE, $config['per_page'], $offset);
+            $data['posts'] = $this->post_model->get_active_posts(FALSE, $config['per_page'], $offset);
+            //$data['posts'] = $this->post_model->get_posts(FALSE, $config['per_page'], $offset);
 
             $this->load->view($this->const_model::HEADER);
             $this->load->view($this->const_model::POSTS_INDEX, $data);
             $this->load->view($this->const_model::FOOTER);
         }
 
-        public function userindex(){
+        public function user_index(){
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_posts('user_index');
 
-            if(!$this->session->userdata('logged_in')){
-                redirect($this->const_model::USERS_LOGIN);
-            }
             //Pagination config
             $config = $this->create_pagination_config(base_url().$this->const_model::POSTS_INDEX);
             //Init Pagination
@@ -40,7 +40,7 @@
             $data['categories'] = $this->post_model->get_categories();
 
             foreach($data['posts'] as $key => $post){//set style data
-                switch($post['active']){
+                switch($post['state']){
                     case 1:
                         $data['posts'][$key]['style'] = "state-active";
                         break;
@@ -54,6 +54,35 @@
             $this->load->view($this->const_model::POSTS_USER_INDEX, $data);
             $this->load->view($this->const_model::FOOTER);
         }
+
+        public function all_index(){
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_posts('all_index');
+            //Pagination config
+            $config = $this->create_pagination_config(base_url().$this->const_model::POSTS_INDEX);
+            //Init Pagination
+            $this->pagination->initialize($config);
+            $data['posts'] = $this->post_model->get_posts();
+            $data['title'] = $this::USER_INDEX_TITLE;
+            $data['categories'] = $this->post_model->get_categories();
+
+            foreach($data['posts'] as $key => $post){//set style data
+                switch($post['state']){
+                    case 1:
+                        $data['posts'][$key]['style'] = "state-active";
+                        break;
+                    case 0:
+                        $data['posts'][$key]['style'] = "state-inactive";
+                        break;
+                }
+            }
+
+            $this->load->view($this->const_model::HEADER);
+            $this->load->view($this->const_model::POSTS_USER_INDEX, $data);
+            $this->load->view($this->const_model::FOOTER);
+        }
+
 
         public function view($slug = NULL){
             $data['post'] = $this->post_model->get_posts($slug);
@@ -73,10 +102,9 @@
         }
 
         public function create(){
-            // Check login
-            if(!$this->session->userdata('logged_in')){
-                redirect($this->const_model::USERS_LOGIN);
-            }
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_posts('create');
 
             $data['title'] = $this::CREATE_TITLE;
             $data['categories'] = $this->post_model->get_categories();
@@ -104,45 +132,38 @@
         }
 
         public function toggle($id){
-            // Check login
-            if(!$this->session->userdata('logged_in')){
-                redirect($this->const_model::USERS_LOGIN);
-            }
             $post = $this->post_model->get_post($id);
-            $this->post_model->toogle_post($id, $post['active']);
+
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_posts('post');        
+            
+            $this->post_model->toogle_post($id, $post['state']);
 
             // Set message
-            if($post['active'] == TRUE){
+            if($post['state'] == TRUE){
                 $message = $this->message_model->get_message('post_disabled');
             }
             else{
                 $message = $this->message_model->get_message('post_enabled');
             }
             $this->session->set_flashdata($message['name'], $message);
-            redirect($this->const_model::POSTS_USER_INDEX);
+            redirect($_SERVER['HTTP_REFERER']);
         }
 
         public function edit($slug){
-            // Check login
-            if(!$this->session->userdata('logged_in')){
-                redirect($this->const_model::USERS_LOGIN);
-            }
-
-            // Check user
-            if($this->session->userdata('user_id') != $this->post_model->get_posts($slug)['user_id']){
-                redirect($this->const_model::POSTS);
-            }
-
             $data['post'] = $this->post_model->get_posts($slug);
             $data['categories'] = $this->post_model->get_categories();
             $data['post_tags'] = $this->get_post_tags($data['post']['id']);
             
-            
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_posts('edit');
+
             if(empty($data['post'])){
                 show_404();
             }
             
-
             $data['title'] = $data['post']['title'];
             if ($this->form_validation->run('post') === FALSE) {
                 $this->load->view($this->const_model::HEADER);
@@ -153,21 +174,20 @@
                 $post_tags = $this->create_tags_array();
                 $this->post_model->update_post();
                 $this->update_relationships($this->input->post('id'),$post_tags); 
-                 
+                
                 // Set message
                 $message = $this->message_model->get_message('post_updated');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::POSTS_USER_INDEX);
+                redirect($_SERVER['HTTP_REFERER']);
             }
         }
         
 
         //======================================IMAGES======================================
         public function update_image(){
-            // Check login
-            if(!$this->session->userdata('logged_in')){
-                redirect($this->const_model::USERS_LOGIN);
-            }
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_posts('update_image');
 
             //Upload Image
             $post_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
@@ -205,7 +225,6 @@
             return array_map('trim',explode(",",$this->input->post('tagsinput')));
         }
 
-        //TODO: create and link in bunch instead of a single tag
         private function update_relationships($post_id, $current_tags_list){
             $db_tags_list = $this->get_post_tags($post_id);
             $relationships = $this->tag_model->get_relationships($post_id);

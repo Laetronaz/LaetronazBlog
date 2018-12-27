@@ -23,10 +23,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
     <!-- LOCAL SCRIPTS -->
     <script src="<?php echo base_url(); ?>assets/javascript/tagsinput.js"></script>
-    <script src="<?php echo base_url(); ?>assets/javascript/disqus.js"></script>
+    
   </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="<?php echo base_url(); ?>">Laetronaz Blog</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +43,22 @@
     </ul>
     
     <ul class="nav navbar-nav navbar-right">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Search Filter
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a href="<?php echo base_url().CATEGORIES_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
+            <span class="menu-collapsed">Search by Categories</span>
+          </a>  
+          <a href="<?php echo base_url().TAGS_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
+            <span class="menu-collapsed">Search by Tags</span>
+          </a>
+          <a href="<?php echo base_url().USERS_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
+            <span class="menu-collapsed">Search By Authors</span>
+          </a>
+        </div>
+      </li>
     <li class="nav-item">
     <?php echo form_open(SEARCH_ROUTE,array("class" => "form-inline my-2 my-lg-0"));?>
       <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search" required>
@@ -65,79 +80,75 @@
 </nav>
 <div class="container-fluid">
   <div class="row">
-  <?php if($this->session->userdata('role') == 'Admin') : ?>
-    <div class="col-md-2">
+    <?php if($this->session->userdata('rights')) : ?>
+      <div class="col-md-2">
             <!-- A vertical navbar -->
-            <nav class="navbar bg-light">
+            <nav class="navbar bg-light remove-border">
               <!-- Links -->
-              <a class="navbar-brand admin-menu" href="#">Admin Menu</a>
+              <a class="navbar-brand admin-menu" href="#">Menu</a>
               <ul class="navbar-nav">
+              <?php if(array_search('admin',array_column($this->session->userdata('rights'),'name')) !== FALSE || array_search('manage roles',array_column($this->session->userdata('rights'),'name')) !== FALSE): ?>
                 <li class="nav-item">
-                  <a class="nav-link" href="#usersubmenu" data-toggle="collapse" data-target="#usersubmenu">Manage Users</a>
-                  <div id="usersubmenu" class="sidebar-submenu collapse" >
-                    <a href="<?php echo base_url(); ?>users/register" class="list-group-item list-group-item-action border border-white">
-                        <span class="menu-collapsed">Create New User</span>
-                    </a>
-                    <a href="<?php echo base_url();?>users/" class="list-group-item list-group-item-action border border-white">
-                        <span class="menu-collapsed">Users List</span>
-                    </a>
-                  </div>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#categorysubmenu" data-toggle="collapse" data-target="#categorysubmenu">Manage Categories</a>
-                  <div id="categorysubmenu" class="sidebar-submenu collapse">
-                    <a href="<?php echo base_url(); ?>categories/create" class="list-group-item list-group-item-action border border-white">
-                        <span class="menu-collapsed">Create New Category</span>
-                    </a>
-                    <a href="<?php echo base_url().CATEGORIES_INDEX_PATH; ?>" class="list-group-item list-group-item-action border border-white">
-                        <span class="menu-collapsed">List Categories</span>
-                    </a>
-                  </div>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#postssubmenu" data-toggle="collapse" data-target="#postssubmenu">Manage Posts</a>
-                  <div id="postssubmenu" class="sidebar-submenu collapse">
-                    <a href="<?php echo base_url(); ?>posts/userindex" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">My Posts</span>
-                    </a>          
-                    <a href="<?php echo base_url(); ?>posts/create" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Create New Post</span>
-                    </a>
-                    <a href="<?php echo base_url(); ?>" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Posts List</span>
-                    </a>
-                  </div>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#filtersubmenu" data-toggle="collapse" data-target="#filtersubmenu">Search Filter</a>
-                  <div id="filtersubmenu" class="sidebar-submenu collapse">
-                    <a href="<?php echo base_url().CATEGORIES_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Search by Categories</span>
-                    </a>          
-                    <a href="<?php echo base_url().TAGS_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Search by Tags</span>
-                    </a>
-                    <a href="<?php echo base_url().USERS_FILTER_ROUTE ?>" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Search By Authors</span>
-                    </a>
-                  </div>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#rolessubmenu" data-toggle="collapse" data-target="#rolessubmenu">Roles Management</a>
-                  <div id="rolessubmenu" class="sidebar-submenu collapse">
-                    <a href="<?php echo base_url().ROLES_CREATE_ROUTE ?>" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Create New Role</span>
-                    </a>          
-                    <a href="<?php echo base_url().ROLES_INDEX_ROUTE ?>" class="list-group-item list-group-item-action border-white">
-                        <span class="menu-collapsed">Manage Roles</span>
-                    </a>
-                  </div>
-                </li>
+                    <a class="nav-link" href="#rolessubmenu" data-toggle="collapse" data-target="#rolessubmenu">Roles Management</a>
+                    <div id="rolessubmenu" class="sidebar-submenu collapse">         
+                      <a href="<?php echo base_url().ROLES_INDEX_ROUTE ?>" class="list-group-item list-group-item-action border-white">
+                          <span class="menu-collapsed">Manage Roles</span>
+                      </a>
+                    </div>
+                  </li>
+                <?php endif ?>
+                <?php if(array_search('admin',array_column($this->session->userdata('rights'),'name')) !== FALSE || array_search('manage users',array_column($this->session->userdata('rights'),'name')) !== FALSE): ?>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#usersubmenu" data-toggle="collapse" data-target="#usersubmenu">Manage Users</a>
+                    <div id="usersubmenu" class="sidebar-submenu collapse" >
+                      <a href="<?php echo base_url(); ?>users/register" class="list-group-item list-group-item-action border border-white">
+                          <span class="menu-collapsed">Create New User</span>
+                      </a>
+                      <a href="<?php echo base_url();?>users/" class="list-group-item list-group-item-action border border-white">
+                          <span class="menu-collapsed">Manage Users</span>
+                      </a>
+                    </div>
+                  </li>
+                  <?php endif ?>
+                  <?php if(array_search('admin',array_column($this->session->userdata('rights'),'name')) !== FALSE || array_search('manage categories',array_column($this->session->userdata('rights'),'name')) !== FALSE): ?>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#categorysubmenu" data-toggle="collapse" data-target="#categorysubmenu">Manage Categories</a>
+                      <div id="categorysubmenu" class="sidebar-submenu collapse">
+                        <a href="<?php echo base_url(); ?>categories/create" class="list-group-item list-group-item-action border border-white">
+                            <span class="menu-collapsed">Create New Category</span>
+                        </a>
+                        <a href="<?php echo base_url().CATEGORIES_INDEX_PATH; ?>" class="list-group-item list-group-item-action border border-white">
+                            <span class="menu-collapsed">Manage Categories</span>
+                        </a>
+                      </div>
+                    </li> 
+                  <?php endif ?>    
+                  <?php if(!(array_search('admin',array_column($this->session->userdata('rights'),'name')) === FALSE && array_search('manage own posts',array_column($this->session->userdata('rights'),'name')) === FALSE && array_search('manage all posts',array_column($this->session->userdata('rights'),'name')) === FALSE)): ?>
+                    <li class="nav-item">     
+                      <?php if(!(array_search('admin',array_column($this->session->userdata('rights'),'name')) === FALSE && array_search('manage own posts',array_column($this->session->userdata('rights'),'name')) === FALSE && array_search('manage all posts',array_column($this->session->userdata('rights'),'name')) === FALSE)): ?>            
+                        <a class="nav-link" href="#postssubmenu" data-toggle="collapse" data-target="#postssubmenu">Manage Posts</a>
+                        <div id="postssubmenu" class="sidebar-submenu collapse">
+                          <a href="<?php echo base_url(); ?>posts/create" class="list-group-item list-group-item-action border-white">
+                              <span class="menu-collapsed">Create New Post</span>
+                          </a>
+                          <a href="<?php echo base_url(); ?>posts/me" class="list-group-item list-group-item-action border-white">
+                              <span class="menu-collapsed">Manage My Posts</span>
+                          </a>          
+                        </a>    
+                        <?php endif ?>
+                        <?php if(!(array_search('admin',array_column($this->session->userdata('rights'),'name')) === FALSE && array_search('manage all posts',array_column($this->session->userdata('rights'),'name')) === FALSE)): ?>                   
+                        <a href="<?php echo base_url().POSTS_ALLINDEX_PATH ?>" class="list-group-item list-group-item-action border-white">
+                            <span class="menu-collapsed">Manage All Posts</span>
+                        </a>
+                      </div>
+                      <?php endif ?>
+                    </li>
+                  <?php endif ?>
               </ul>
             </nav>
-    </div>
+        </div>
     <?php endif; ?>
-    <?php echo ($this->session->userdata('role') == 'Admin' ? "<div class='col-md-10'>" : "<div class='col-md-12'>"); ?>
+    <?php echo ($this->session->userdata('rights') ? "<div class='col-md-10'>" : "<div class='col-md-12'>"); ?>
         <div class="container">
           <?php foreach ($this->session->get_flash_keys() as $flashkey) : ?>
               <!--Flash messages -->

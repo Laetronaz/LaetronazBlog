@@ -4,20 +4,18 @@
          private const REGISTER_TITLE = 'Sign Up';
          private const LOGIN_TITLE = 'Sign In';
          private const INDEX_TITLE = 'Search by Authors';
+         private const MANAGE_TITLE = 'Manage Authors';
          private const VIEW_TITLE = 'User Profile';
          private const EDIT_TITLE = 'User Profile';
 
         //register user
         public function register(){
-            // Check login
-            if($this->session->userdata('role') != 'Admin' ){
-                $message = $this->message_model->get_unauthorized_access();
-                $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::USERS_LOGIN);
-            }
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_users();
 
             $data['title'] = $this::REGISTER_TITLE;
-            $data['types'] = $this->user_model->get_users_type();
+            $data['types'] = $this->user_model->get_roles();
 
             if($this->form_validation->run('user_register') === FALSE){
                 $this->load->view($this->const_model::HEADER);
@@ -65,13 +63,12 @@
                 $password = $this->input->post('password');
                 
                 // Login user
-                $user_datas = $this->user_model->login($username);
-                $user_id = $user_datas['id'];
-                $hashed_password = $user_datas['password'];
-                $role = $user_datas['role'];
-                if($user_datas !== FALSE){
-                    if($user_datas['user_state'] != 3){//state which cannot log in.
-                        switch ($user_datas['user_state']) {
+                $user = $this->user_model->login($username);
+                $user_id = $user['id'];
+                $hashed_password = $user['password'];
+                if($user !== FALSE){
+                    if($user['user_state'] != 3){//state which cannot log in.
+                        switch ($user['user_state']) {
                             case 1:
                                 $message = $this->message_model->get_message('user_waiting');
                                 $message['value'] .= " <a href='".base_url()."users/resendverification/".$user_id."'> Resend email</a>";
@@ -84,7 +81,7 @@
                                 break;
                         }
                         $this->session->set_flashdata($message['name'], $message); 
-                        redirect('');
+                        redirect(POSTS_INDEX_PATH);
                     }
                     
                     if(!($user_id === FALSE)){
@@ -94,15 +91,16 @@
                             $this->login_failed();
                         }
                         // Create session
-                        $user_data = array(
+                        $session = array(
                             'user_id' => $user_id,
                             'username' => $username,
                             'logged_in' => true,
-                            'role' => $role
+                            'rights' => $this->role_model->get_role_rights($user['role'])
                         );
-                        $this->session->set_userdata($user_data);
+                        
+                        $this->session->set_userdata($session);
                         //reset attempts on successful login
-                        if($user_datas['connection_attempts'] != 0){
+                        if($user['connection_attempts'] != 0){
                             $this->user_model->reset_attempts($user_id);
                         }
     
@@ -128,6 +126,7 @@
             $this->session->unset_userdata('user_id');
             $this->session->unset_userdata('username');
             $this->session->unset_userdata('role');
+            $this->session->unset_userdata('rights');
 
             // Set message
             $message = $this->message_model->get_message('user_loggedout');
@@ -136,7 +135,11 @@
         }
 
         public function index(){
-            $data['title'] = $this::INDEX_TITLE;
+           //check user access
+           $this->load->library('access_control');
+           $this->access_control->verify_access_users();
+
+            $data['title'] = $this::MANAGE_TITLE;
             $data['users'] = $this->user_model->get_users();
             foreach($data['users'] as $key => $user){//set style data
                 switch($user['user_state']){
@@ -169,7 +172,7 @@
         }
 
         public function posts($id){
-            $data['title'] = $this->user_model->get_user($id)['name'];
+            $data['title'] = $this->user_model->get_user($id)['username'];
             $data['posts'] = $this->post_model->get_posts_by_user($id);
 
             $this->load->view($this->const_model::HEADER);
@@ -178,12 +181,10 @@
         }
 
         public function toggle($id){
-            // Check login
-            if($this->session->userdata('role') != 'Admin' ){
-                $message = $this->message_model->get_unauthorized_access();
-                $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::USERS_LOGIN);
-            }
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_users();
+            
             $user = $this->user_model->get_user($id);
             $this->user_model->toggle_user($id, $user['user_state']);
 
@@ -199,6 +200,10 @@
         }
 
         public function view($id){
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_users();
+
             $data['user'] = $this->user_model->get_user($id);
 
             if(empty($data['user'])){
@@ -206,7 +211,7 @@
             }
 
             $data['title'] = $this::VIEW_TITLE;
-            $data['types'] = $this->user_model->get_users_type();
+            $data['types'] = $this->user_model->get_roles();
                 switch($data['user']['user_state']){
                     case 1:
                         $data['user']['style'] = "state-waiting";
@@ -229,14 +234,12 @@
         }
 
         public function edit($id){
-            if($this->session->userdata('role') != 'Admin' ){
-                $message = $this->message_model->get_unauthorized_access();
-                $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::USERS_LOGIN);
-            }
+            //check user access
+            $this->load->library('access_control');
+            $this->access_control->verify_access_users();
 
             $data['user'] = $this->user_model->get_user($id);
-            $data['types'] = $this->user_model->get_users_type();
+            $data['types'] = $this->user_model->get_roles();
 
             if(empty($data['user'])){
                 show_404();

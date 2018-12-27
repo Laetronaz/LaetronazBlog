@@ -7,15 +7,12 @@
 
         //TITES CONST
         private const INDEX_TITLE = 'Search by Categories';
+        private const MANAGE_TITLE = 'Manage Categories';
         private const CREATE_TITLE = 'Create Category';
 
         public function create(){
-             // Check login
-            if($this->session->userdata('role') != 'Admin' ){
-                $message = $this->message_model->get_unauthorized_access();
-                $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::USERS_LOGIN);
-            }
+            $this->load->library('access_control');
+            $this->access_control->verify_access_categories();
 
             $data['title'] = $this::CREATE_TITLE;
             if ($this->form_validation->run('category') === FALSE){
@@ -37,7 +34,9 @@
         }
 
         public function index(){//Admin only
-            $data['title'] = $this::INDEX_TITLE;
+            $this->load->library('access_control');
+            $this->access_control->verify_access_categories();
+            $data['title'] = $this::MANAGE_TITLE;
             $data['categories'] = $this->category_model->get_categories();
             foreach($data['categories'] as $key => $category){//set style data
                 switch($category['active']){
@@ -73,12 +72,9 @@
         }
 
         public function delete($id){
-            // Check login
-            if($this->session->userdata('role') != 'Admin' ){
-                $message = $this->message_model->get_unauthorized_access();
-                $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::USERS_LOGIN);
-            }
+            $this->load->library('access_control');
+            $this->access_control->verify_access_categories();
+
             $category = $this->category_model->get_category($id);
             $this->category_model->toogle_category($id, $category['active']);
             $posts = $this->post_model->get_posts_by_category($id);
@@ -99,13 +95,8 @@
         }
 
         public function edit($id){
-           
-            // Check login
-            if($this->session->userdata('role') != 'Admin' ){
-                $message = $this->message_model->get_unauthorized_access();
-                $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::USERS_LOGIN);
-            }
+            $this->load->library('access_control');
+            $this->access_control->verify_access_categories();
 
             $data['category'] = $this->category_model->get_category($id);
             if(empty($data['category'])){

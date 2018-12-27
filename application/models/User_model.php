@@ -27,7 +27,7 @@
                 $user_data = array(
                     'id' => $result->row(0)->id,
                     'password' => $result->row(0)->password,
-                    'role' => $this->get_role($result->row(0)->role),
+                    'role' => $result->row(0)->role,
                     'user_state' => $result->row(0)->user_state,
                     'connection_attempts' => $result->row(0)->connection_attempts
                 );
@@ -38,20 +38,15 @@
             }
         }
 
-        private function get_role($id){//TODO: get rid of this function
+        public function get_role($id){
             $this->db->where('id', $id);
-            $result = $this->db->get('users_type');
-            if($result->num_rows() == 1){
-                return $result->row(0)->name;
-            }
-            else{
-                return false;
-            }
+            $query = $this->db->get('roles');
+            return $query->row_array();
         }
 
-        public function get_users_type(){
+        public function get_roles(){
             $this->db->order_by('id');
-            $query = $this->db->get('users_type');
+            $query = $this->db->get('roles');
             return $query->result_array();
         }
 
@@ -80,7 +75,7 @@
         public function update_user(){
             $data = array(
                 'name' => $this->input->post('name'),
-                'role'=> $this->input->post('role')
+                'role'=> $this->input->post('usertype')
             );
             $this->db->where('id', $this->input->post('id'));
             return $this->db->update('users', $data);

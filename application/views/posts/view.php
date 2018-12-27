@@ -1,6 +1,14 @@
 <img class="thumbnail" src="<?php echo site_url(); ?>assets/images/posts/<?php echo $post['post_image'];?>" width="100%" height="379">
 <div class="row">
-    <h2><?php echo $post['title']; ?></h2>
+    
+    <h2>
+        <?php echo $post['title']; ?>
+    </h2>
+    <?php if($this->session->userdata('user_id') == $post['user_id']) : ?>
+        <a class="float-left align-middle" href="<?php echo base_url().POSTS_EDIT_PATH.$post['slug']?>">
+                <i class="fas fa-edit fa-2x"></i>
+        </a>
+    <?php endif ?>
 </div>
 <div class = "row post-date">
     Posted on: <?php echo date("Y-m-d G:i",strtotime($post['created_at'])); ?>
@@ -19,7 +27,7 @@
     <?php endforeach; ?> 
 </div>
 <div id="disqus_thread"></div>
-
+<script src="<?php echo base_url(); ?>assets/javascript/disqus.js"></script>
 <script>
     var disqus_config = function () {
         this.page.url = '<?php echo current_url(); ?>'; // Replace PAGE_URL with your page's canonical URL variable
