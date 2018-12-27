@@ -20,6 +20,21 @@
             return $query->row_array();
         }
 
+        public function get_active_posts($slug = FALSE, $limit = FALSE, $offset = FALSE){
+            if($limit){
+                $this->db->limit($limit, $offset);
+            }
+            if($slug === FALSE){
+                $this->db->order_by('posts.id', 'DESC');
+                $this->db->join('categories', 'categories.id = posts.category_id');
+                $query = $this->db->get_where('posts', array('state' => TRUE));
+                return $query->result_array();
+            }
+
+            $query = $this->db->get_where('posts', array('slug'=> $slug));
+            return $query->row_array();
+        }
+
         public function get_post($id){
             $this->db->order_by('posts.created_at', 'ASC');
             $query = $this->db->get_where('posts', array('id'=> $id));
@@ -69,6 +84,11 @@
         }
 
         public function create_post($post_image){
+            $this->load->library('access_control');
+            if(!$this->access_control->can_manage_own_posts()){
+                redirect('');
+            }
+
             $slug = url_title($this->input->post('title'));
             $data = array(
                 'title' => $this->input->post('title'),
@@ -83,10 +103,12 @@
             return $this->db->insert_id();
         }
 
-        public function toogle_post($id, $active){
-            $active = ($active == 1 ? 0 : 1);
+        public function toogle_post($id, $state){
+            $post = $this->post_model->get_post($id);
+            
+            $state = ($state == 1 ? 0 : 1);
             $data = array(
-                 'active' => $active 
+                 'state' => $state 
             );       
             $this->db->where('id', $id);
             return $this->db->update('posts', $data);
@@ -124,6 +146,4 @@
             $query = $this->db->get('posts');
             return $query->result_array();
         }
-
-        
     }

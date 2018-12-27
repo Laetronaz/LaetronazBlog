@@ -126,5 +126,52 @@ $config = array(
             'label' => 'Search',
             'rules' => 'trim|required'
         )
-    )    
+        ),
+    'role' => array(
+        array(
+            'field' => 'name',
+            'label' => 'Role name',
+            'rules' => 'trim|required|alpha|min_length[5]|max_length[50]'
+        ),
+        array(
+            'field' => 'Admin',
+            'label' => 'Admin Right',
+            'rules' => 'trim|integer'
+        ),
+        array(
+            'field' => 'manage_own_categories',
+            'label' => 'Personal Categories Management',
+            'rules' => 'trim|integer'
+        ),
+        array(
+            'field' => 'manage_own_posts',
+            'label' => 'Personal Posts Management',
+            'rules' => 'trim|integer'
+        ),
+        array(
+            'field' => 'manage_users',
+            'label' => 'Users Management',
+            'rules' => 'trim|integer'
+        ),
+        array(
+            'field' => 'manage_roles',
+            'label' => 'Roles Management',
+            'rules' => 'trim|integer'
+        ),
+        array(
+            'field' => 'manage_tags',
+            'label' => 'Tags Management',
+            'rules' => 'trim|integer'
+        ),
+        array(
+            'field' => 'manage_all_categories',
+            'label' => 'Categories Management',
+            'rules' => 'trim|integer'
+        ),
+        array(
+            'field' => 'manage_all_posts',
+            'label' => 'Posts Management',
+            'rules' => 'trim|integer'
+        )
+    )
 );

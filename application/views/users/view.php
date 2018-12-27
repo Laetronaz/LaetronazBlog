@@ -14,7 +14,7 @@
 <div class="form-group">
     <label>User Rank</label>   
     <?php foreach($types as $type) : ?>
-        <?php if($type['id'] == $user['user_type']) : ?>
+        <?php if($type['id'] == $user['role']) : ?>
             <p><?php echo $type['name']?></p>
         <?php endif ?>
     <?php endforeach;?>   

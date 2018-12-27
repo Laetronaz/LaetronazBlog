@@ -52,9 +52,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = 'posts';
 //posts
-$route['posts/userindex'] = 'posts/userindex';
+$route['posts/me'] = 'posts/user_index';
 $route['posts/update_image'] = 'posts/update_image';
 $route['posts'] = 'posts/index';
+$route[POSTS_ALLINDEX_ROUTE] = POSTS_ALLINDEX_FUNC;
 $route['posts/create'] = 'posts/create';
 $route['posts/(:any)'] = 'posts/view/$1';
 //categories
@@ -64,6 +65,8 @@ $route['categories'] = 'categories/index';
 //tags
 $route[TAGS_FILTER_ROUTE] = TAGS_FILTER_FUNC;
 $route[TAGS_VIEW_ROUTE] = TAGS_VIEW_FUNC;
+//roles
+
 
 
 
@@ -82,8 +85,16 @@ $route[USERS_FILTER_ROUTE] = USERS_FILTER_FUNC;
 $route[USERS_POSTS_ROUTE] = USERS_POSTS_FUNC;
 $route['users'] = 'users/index';
 
+//roles
+$route[ROLES_CREATE_ROUTE] = ROLES_CREATE_FUNC;
+$route[ROLES_EDIT_ROUTE] = ROLES_EDIT_FUNC;  
+$route[ROLES_DELETE_ROUTE] = ROLES_DELETE_FUNC;
+$route[ROLES_INDEX_ROUTE] = ROLES_INDEX_FUNC;
+
 //search
 $route[SEARCH_ROUTE] = SEARCH_FUNC;
+
+
 
 
 //Mail function links
