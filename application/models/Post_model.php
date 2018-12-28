@@ -84,11 +84,6 @@
         }
 
         public function create_post($post_image){
-            $this->load->library('access_control');
-            if(!$this->access_control->can_manage_own_posts()){
-                redirect('');
-            }
-
             $slug = url_title($this->input->post('title'));
             $data = array(
                 'title' => $this->input->post('title'),
