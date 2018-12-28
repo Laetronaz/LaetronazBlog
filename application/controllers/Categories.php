@@ -127,7 +127,8 @@
             }
 
             //Upload Image
-            $category_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+            $this->load->library('file_upload');
+            $this->file_upload->upload_image($this::IMAGE_PATH);
             if(!is_null($category_image)){
                 $this->category_model->update_category_icon($category_image);
                 $this->clean_images();
@@ -152,7 +153,8 @@
                 array_push($image_list, $value['category_icon']);
             }
             $image_list[count($image_list)] = $this::DEFAULT_IMAGE;
-            $this->fileupload_model->clean_unlinked_images($this::IMAGE_PATH,array_values($image_list));
+            $this->load->library('file_upload');
+            $this->file_upload->clean_unlinked_images($this::IMAGE_PATH,array_values($image_list));
         }
 
         private function build_alphabetical_categories_list($categories_list){
