@@ -190,7 +190,9 @@
             $this->access_control->verify_access_posts('update_image');
 
             //Upload Image
-            $post_image = $this->fileupload_model->upload_image($this::IMAGE_PATH);
+            $this->load->library('file_upload');
+            
+            $post_image = $this->file_upload->upload_image($this::IMAGE_PATH);
             if(!is_null($post_image)){  
                 $this->post_model->update_post_image($post_image);
                 // Set message
@@ -216,7 +218,8 @@
                 array_push($image_list, $value['post_image']);
             }
             $image_list[count($image_list)] = $this::DEFAULT_IMAGE;
-            $this->fileupload_model->clean_unlinked_images($this::IMAGE_PATH,array_values($image_list));
+            $this->load->library('file_upload');
+            $this->file_upload->clean_unlinked_images($this::IMAGE_PATH,array_values($image_list));
         }
 
         //======================================TAGS====================================== 
