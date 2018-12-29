@@ -227,8 +227,8 @@ COMMIT;
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `register_date`, `role`, `user_state`) VALUES
-(1, 'Michel Pelland', 'michel.pelland12@gmail.com', 'Laetronaz', '$2y$10$zeJUWUzGm2Px2hIFJd880ebfiXjXFc9Gyy2ElRRTu.FA/k5Qpxr3O', '2018-08-09 20:09:41', 1, 3);
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `username`, `password`, `register_date`, `role`, `user_state`) VALUES
+(1, 'Michel', 'Pelland', 'michel.pelland12@gmail.com', 'Laetronaz', '$2y$10$zeJUWUzGm2Px2hIFJd880ebfiXjXFc9Gyy2ElRRTu.FA/k5Qpxr3O', '2018-08-09 20:09:41', 1, 3);
 COMMIT;
 
 --
