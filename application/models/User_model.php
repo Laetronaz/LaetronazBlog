@@ -7,7 +7,8 @@
         public function register($enc_password){
             //user data array
             $data = array(
-                'name' => $this->input->post('name'),
+                'first_name' => $this->input->post('first-name'),
+                'last_name' => $this->input->post('last-name'),
                 'email' => $this->input->post('email'),
                 'username' => $this->input->post('username'),
                 'password' => $enc_password,
@@ -74,7 +75,8 @@
 
         public function update_user(){
             $data = array(
-                'name' => $this->input->post('name'),
+                'first_name' => $this->input->post('first-name'),
+                'last_name' => $this->input->post('last-name'),
                 'role'=> $this->input->post('usertype')
             );
             $this->db->where('id', $this->input->post('id'));
@@ -98,6 +100,22 @@
                 'password' => $crypted_password
             );
             $this->db->where('id', $id);
+            return $this->db->update('users', $data);
+        }
+
+        public function update_username($user_id, $username){
+            $data = array(
+                'username' => $username
+            );
+            $this->db->where('id', $user_id);
+            return $this->db->update('users', $data);
+        }
+
+        public function update_email($user_id, $email){
+            $data = array(
+                'email' => $email
+            );
+            $this->db->where('id', $user_id);
             return $this->db->update('users', $data);
         }
 

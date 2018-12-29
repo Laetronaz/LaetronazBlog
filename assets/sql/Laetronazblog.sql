@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS users_state (
 
 CREATE TABLE IF NOT EXISTS users (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -255,6 +256,8 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('role_delete_success', 'alert-success', 'The role has been successfully deleted.'),
 ('new_role_success', 'alert-success', 'The role was successfully created.'),
 ('change_role_success', 'alert-success', 'The role was successfully updated.'),
+('email_changed', 'alert-success', 'The email was successfully changed.'),
+('username_changed', 'alert-success', 'The username was successfully changed.'),
 ('password_expired', 'alert-info', 'The password reset link you used is expired, if you still want to reset your password, use the following link: '),
 ('invalid_password_token', 'alert-info', 'The password reset link you just used is invalid, if this link was sent to you by email, please contact an administrator by answering to the email.'),
 ('resend_password', 'alert-info', 'You already asked for a password reset please check your email.'),
@@ -263,6 +266,7 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('invalid_verification_token', 'alert-info', 'The email verification link you just used is invalid, if this link was sent to you by email, please contact an administrator by answering to the email.'),
 ('user_inactive', 'alert-info', 'This account have been disabled by the administration, if you want to re-enable this account,if you are the legemit user of this account please contact the administration.'),
 ('tag_invalid', 'alert-info', 'The tag you tried to access does not exist.'),
+('inexisting_user', 'alert-info', 'The user you tried to modify does not exist.'),
 ('access_refused', 'alert-info', 'You do not have the required rights to access this page.'),
 ('not_logged_in', 'alert-info', 'You must be logged in to do that'),
 ('unautorized_access', 'alert-danger', 'Only admininstrators have access to this page'),
