@@ -101,6 +101,22 @@
             return $this->db->update('users', $data);
         }
 
+        public function update_username($user_id, $username){
+            $data = array(
+                'username' => $username
+            );
+            $this->db->where('id', $user_id);
+            return $this->db->update('users', $data);
+        }
+
+        public function update_email($user_id, $email){
+            $data = array(
+                'email' => $email
+            );
+            $this->db->where('id', $user_id);
+            return $this->db->update('users', $data);
+        }
+
         public function get_password($id){
             $this->db->select('password');
             $query = $this->db->get_where('users', array('id' => $id));

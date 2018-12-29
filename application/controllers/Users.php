@@ -259,6 +259,47 @@
             } 
         }
 
+        public function change_username($user_id){
+            $username = $this->input->post('new-username');
+            $user = $this->user_model->get_user($user_id);
+            if(!empty($user)){
+                if(!$this->form_validation->run('username_change') === FALSE){
+                    $update = $this->user_model->update_username($user_id, $username);
+                    //SHOW MESSAGE
+                    $message = $this->message_model->get_message('username_changed');
+                    $this->session->set_flashdata($message['name'], $message);
+                }
+                redirect(USERS_EDIT_PATH.$user_id);
+            }
+            else{
+                //SHOW MESSAGE
+                $message = $this->message_model->get_message('inexisting_user_warning');
+                $this->session->set_flashdata($message['name'], $message);
+                redirect(POSTS_INDEX_PATH);
+            }
+            
+        }
+
+        public function change_email($user_id){
+            $user = $this->user_model->get_user($user_id);
+            if(!empty($user)){
+                if(!$this->form_validation->run('email_change') === FALSE){
+                    $email = $this->input->post('new-email');
+                    $this->user_model->update_email($user_id, $email);
+                    //SHOW MESSAGE
+                    $message = $this->message_model->get_message('email_changed');
+                    $this->session->set_flashdata($message['name'], $message);
+                }
+                redirect(USERS_EDIT_PATH.$user_id);
+            }
+            else{
+                //SHOW MESSAGE
+                $message = $this->message_model->get_message('inexisting_user_warning');
+                $this->session->set_flashdata($message['name'], $message);
+                redirect(POSTS_INDEX_PATH);
+            }
+        }
+
         //======================================PASSWORD=================================================
         public function change_password($user_id){
             // Check login
@@ -294,7 +335,7 @@
             else{
                 $message = $this->message_model->get_message('password_change_failed');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect('users/edit/'.$user_id);
+                redirect(USERS_EDIT_PATH.$user_id);
             }
         }
 

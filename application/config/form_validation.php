@@ -120,13 +120,29 @@ $config = array(
             'rules' => 'trim|required|matches[password]'
         )
     ),
+    'username_change' => array(
+        array(
+            'field' => 'new-username',
+            'label' => 'Username',
+            'rules' => 'trim|required|is_unique[users.username]|min_length[5]|max_length[50]',
+            'errors' => array('is_unique' => 'This username is already taken. Please choose a different one.')
+        )
+    ),
+    'email_change' => array(
+        array(
+            'field' => 'new-email',
+            'label' => 'Email',
+            'rules' => 'trim|required|is_unique[users.email]|valid_email',
+            'errors' => array('is_unique' => 'This email is already used. Please choose a different one.')
+        )
+    ),
     'search' => array(
         array(
             'field' => 'search',
             'label' => 'Search',
             'rules' => 'trim|required'
         )
-        ),
+    ),
     'role' => array(
         array(
             'field' => 'name',

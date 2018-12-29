@@ -30,6 +30,8 @@ defined('USERS_POSTS_FUNC') OR define('USERS_POSTS_FUNC','users/posts/$1');
 defined('ROLES_CREATE_FUNC') OR define('ROLES_CREATE_FUNC','roles/create');
 //EDIT
 defined('ROLES_EDIT_FUNC') OR define('ROLES_EDIT_FUNC','roles/edit/$1');
+defined('USERNAME_EDIT_FUNC') OR define('USERNAME_EDIT_FUNC','users/change_username/$1');
+defined('EMAIL_EDIT_FUNC') OR define('EMAIL_EDIT_FUNC','users/change_email/$1');
 //DELETE
 defined('ROLES_DELETE_FUNC') OR define('ROLES_DELETE_FUNC','roles/delete/$1');
 //SEARCH
@@ -53,6 +55,8 @@ defined('USERS_POSTS_ROUTE') OR define('USERS_POSTS_ROUTE','users/posts/(:any)')
 defined('ROLES_CREATE_ROUTE') OR define('ROLES_CREATE_ROUTE','roles/create');
 //EDIT
 defined('ROLES_EDIT_ROUTE') OR define('ROLES_EDIT_ROUTE','roles/edit/(:any)');
+defined('USERNAME_EDIT_ROUTE') OR define('USERNAME_EDIT_ROUTE','users/change-username/(:any)');
+defined('EMAIL_EDIT_ROUTE') OR define('EMAIL_EDIT_ROUTE','users/change-email/(:any)');
 //DELETE
 defined('ROLES_DELETE_ROUTE') OR define('ROLES_DELETE_ROUTE','roles/delete/(:any)');
 //SEARCH
@@ -82,6 +86,7 @@ defined('POSTS_CREATE_PATH') OR define('POSTS_CREATE_PATH','posts/create');
 defined('CATEGORIES_CREATE_PATH') OR define('CATEGORIES_CREATE_PATH','categories/create');
 //EDIT
 defined('ROLES_EDIT_PATH') OR define('ROLES_EDIT_PATH','roles/edit/');
+defined('USERS_EDIT_PATH') OR define('USERS_EDIT_PATH','users/edit/');
 defined('POSTS_EDIT_PATH') OR define('POSTS_EDIT_PATH','posts/edit/');
 
 
