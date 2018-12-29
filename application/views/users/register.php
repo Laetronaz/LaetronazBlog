@@ -7,8 +7,12 @@
         <div class="col-md-4 offset-md-4">
             <h1 class="text-center"><?= $title; ?></h1>
             <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" name="name" placeholder="Name" value= <?php echo set_value("name")?>>
+                <label>First Name</label>
+                <input type="text" class="form-control" name="first-name" placeholder="First Name" value= <?php echo set_value("first-name")?>>
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" class="form-control" name="last-name" placeholder="Last Name" value= <?php echo set_value("last-name")?>>
             </div>
             <div class="form-group">
                 <label>Email</label>

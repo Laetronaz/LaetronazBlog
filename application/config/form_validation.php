@@ -33,9 +33,14 @@ $config = array(
     ),
     'user_register' => array(
         array(
-            'field' => 'name',
-            'label' => 'Name',
-            'rules' => 'trim|required|min_length[5]|max_length[50]'
+            'field' => 'first-name',
+            'label' => 'First Name',
+            'rules' => 'trim|required|max_length[255]'
+        ),
+        array(
+            'field' => 'last-name',
+            'label' => 'Last Name',
+            'rules' => 'trim|required|max_length[255]'
         ),
         array(
             'field' => 'username',
@@ -67,9 +72,14 @@ $config = array(
     ),
     'user_edit' => array(
         array(
-            'field' => 'name',
-            'label' => 'Name',
-            'rules' => 'trim|required|min_length[5]|max_length[50]'
+            'field' => 'first-name',
+            'label' => 'First Name',
+            'rules' => 'trim|required|max_length[255]'
+        ),
+        array(
+            'field' => 'last-name',
+            'label' => 'Last Name',
+            'rules' => 'trim|required|max_length[255]'
         ),
         array(
             'field' => 'usertype',
@@ -155,8 +165,8 @@ $config = array(
             'rules' => 'trim|integer'
         ),
         array(
-            'field' => 'manage_own_categories',
-            'label' => 'Personal Categories Management',
+            'field' => 'manage_categories',
+            'label' => 'Categories Management',
             'rules' => 'trim|integer'
         ),
         array(
@@ -172,16 +182,6 @@ $config = array(
         array(
             'field' => 'manage_roles',
             'label' => 'Roles Management',
-            'rules' => 'trim|integer'
-        ),
-        array(
-            'field' => 'manage_tags',
-            'label' => 'Tags Management',
-            'rules' => 'trim|integer'
-        ),
-        array(
-            'field' => 'manage_all_categories',
-            'label' => 'Categories Management',
             'rules' => 'trim|integer'
         ),
         array(

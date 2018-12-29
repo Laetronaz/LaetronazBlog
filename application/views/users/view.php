@@ -1,15 +1,19 @@
 <h2><?= $title; ?></h2>
 <div class="form-group">
-    <label>Name</label>
-    <p><?php echo $user['name']?></p>
+    <label>Username</label>
+    <p><?php echo $user['username']?></p>
+</div>
+<div class="form-group">
+    <label>First Name</label>
+    <p><?php echo $user['first_name']?></p>
+</div>
+<div class="form-group">
+    <label>Last Name</label>
+    <p><?php echo $user['last_name']?></p>
 </div>
 <div class="form-group">
     <label>Email</label>
     <p><?php echo $user['email']?></p>
-</div>
-<div class="form-group">
-    <label>Username</label>
-    <p><?php echo $user['username']?></p>
 </div>
 <div class="form-group">
     <label>User Rank</label>   

@@ -5,8 +5,12 @@
 <?php echo form_open_multipart('users/edit/'.$user['id']); ?>
     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
     <div class="form-group">
-        <label>Name</label>
-        <input type="text" class="form-control" name ="name" placeholder="Add Name" value="<?php echo set_value("name",$user['name']); ?>">
+        <label>First Name</label>
+        <input type="text" class="form-control" name ="first-name" placeholder="First Name" value="<?php echo set_value("name",$user['first_name']); ?>">
+    </div>
+    <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" name ="last-name" placeholder="Last Name" value="<?php echo set_value("name",$user['last_name']); ?>">
     </div>
     <div class="form-group">
         <label>Email</label><br>

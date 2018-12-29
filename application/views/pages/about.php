@@ -31,7 +31,7 @@ fact that I'm a french canadian. Feel free to pay me a visit when I'm streaming.
 <p>
     I'm a junior programmer from Montreal Canada <a href="https://goo.gl/maps/D3EnCLuxSUx"><i class="fas fa-map-marked-alt"></i></a>
     with a college diploma in IT management at Cégep André-Laurendeau and around a year of experience on the work market. I've done a fews years at the École des Technologies
-    Supérieurs in software engineering but as life would and money isn't growing on trees I'm looking to go back on the work market this December 2018. 
+    Supérieurs but never finshed it. As of January 2019 I'm a junior java test automatization integrator at Saint-Jean sur Richelieu. <a href="https://goo.gl/maps/BnLq9xxyT932"><i class="fas fa-map-marked-alt"></i></a>  
 </p>
 <br>
 <a href="https://www.claurendeau.qc.ca/formation-reguliere/techniques-de-linformatique/"><i class="fas fa-school fa-3x"></i></a>
