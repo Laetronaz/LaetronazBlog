@@ -102,3 +102,11 @@ defined('SEARCH_PATH') OR define('SEARCH_PATH','searchs/search');
 defined('USERS_LOGIN_PATH') OR define('USERS_LOGIN_PATH','users/login');
 //REGISTER
 defined('USERS_REGISTER_PATH') OR define('USERS_REGISTER_PATH','users/register');
+
+//====================================LOGS LEVELS=====================================
+
+//used for the RAT library
+defined('SUCCESS_LEVEL') OR define('SUCCESS_LEVEL', 0);
+defined('NORMAL_LEVEL') OR define('NORMAL_LEVEL', 1);
+defined('WARNING_LEVEL') OR define('WARNING_LEVEL', 2);
+defined('ERROR_LEVEL') OR define('ERROR_LEVEL', 3);

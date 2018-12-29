@@ -6,11 +6,25 @@ START TRANSACTION;
 -- Table structure for table `roles`
 --
 
+CREATE TABLE application_logs (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `date_time` datetime DEFAULT NULL,
+  `code` int(11) DEFAULT NULL,
+  `message` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `roles`
+--
+
 CREATE TABLE IF NOT EXISTS roles (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-)ENGINE=InnoDB DEFAULT CHARSET=latin1;
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `rights`
@@ -21,7 +35,7 @@ CREATE TABLE IF NOT EXISTS rights (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-)ENGINE=InnoDB DEFAULT CHARSET=latin1;
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `user_state`
@@ -31,7 +45,7 @@ CREATE TABLE IF NOT EXISTS users_state (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `users`
@@ -53,7 +67,7 @@ CREATE TABLE IF NOT EXISTS users (
   REFERENCES roles(`id`),
   CONSTRAINT FK_UserState FOREIGN KEY (user_state)
   REFERENCES users_state(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `role_right`
@@ -67,7 +81,7 @@ CREATE TABLE IF NOT EXISTS role_right (
   REFERENCES roles(`id`),
   CONSTRAINT FK_RoleUser FOREIGN KEY (`right_id`)
   REFERENCES rights(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `users_lockout`
@@ -80,7 +94,7 @@ CREATE TABLE IF NOT EXISTS users_lockout (
     PRIMARY KEY(user_id, creation_time),
     CONSTRAINT FK_UserLockedOut FOREIGN KEY(user_id)
     REFERENCES users(`id`)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- Table structure for table `users`
 --
@@ -93,7 +107,7 @@ CREATE TABLE IF NOT EXISTS email_verification (
   PRIMARY KEY(`token`), 
   CONSTRAINT FK_UserVerify FOREIGN KEY (user_id)
   REFERENCES users(`id`)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `users`
@@ -107,7 +121,7 @@ CREATE TABLE IF NOT EXISTS password_reset (
   PRIMARY KEY(`token`), 
   CONSTRAINT FK_UserPassReset FOREIGN KEY (user_id)
   REFERENCES users(`id`)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 --
@@ -124,7 +138,7 @@ CREATE TABLE IF NOT EXISTS categories (
   PRIMARY KEY (`id`),
   CONSTRAINT FK_CategoryUser FOREIGN KEY (user_id)
   REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `posts`
@@ -145,7 +159,7 @@ CREATE TABLE IF NOT EXISTS posts (
   REFERENCES categories(id),
   CONSTRAINT FK_PostUser FOREIGN KEY (user_id)
   REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tags`
@@ -154,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `tags` (
   `id` INT(11) NOT NULL AUTO_INCREMENT , 
   `title` VARCHAR(255) NOT NULL UNIQUE, PRIMARY KEY (`id`),
   CONSTRAINT UC_Title UNIQUE(`title`)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tag_post`
@@ -167,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `tag_post` (
   REFERENCES posts(id),
   CONSTRAINT FKTagsIDTag FOREIGN KEY (tag_id)
   REFERENCES tags(id) 
-) ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `messages`
@@ -179,7 +193,7 @@ CREATE TABLE IF NOT EXISTS messages (
   `type` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `rights`
@@ -282,7 +296,6 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('role_delete_failure', 'alert-danger', 'The role has failed to be delete. Please make sure that no users are using this role.'),
 ('role_does_not_exists', 'alert-danger', 'This role does not exists!');
 COMMIT;
-
 
 --
 -- Setup timed event
