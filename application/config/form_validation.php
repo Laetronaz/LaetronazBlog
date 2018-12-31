@@ -127,7 +127,7 @@ $config = array(
         array(
             'field' => 'new-password2',
             'label' => 'Password Confirmation',
-            'rules' => 'trim|required|matches[password]'
+            'rules' => 'trim|required|matches[new-password]'
         )
     ),
     'username_change' => array(

@@ -118,7 +118,8 @@
                 'category_id' => $this->input->post('category_id')
             );
             $this->db->where('id', $this->input->post('id'));
-            return $this->db->update('posts', $data);
+            $this->db->update('posts', $data);
+            return $slug;
         }
 
         public function update_post_image($post_image){

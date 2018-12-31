@@ -25,12 +25,17 @@
             else{
                 $enc_password = $this->encrypt_password($this->input->post('password'));
                 $user_id = $this->user_model->register($enc_password);
-                //SEND VERIFICATION EMAIL HERE
+
+                //LOG ACTIVITY
+                $this->load->library('rat');
+                $this->load->library('logs_builder');
+                $this->rat->log($this->logs_builder->user_register_logging($user_id), USERS_LEVEL);
                 
+                //SEND VERIFICATION EMAIL
                 $recipient = $this->input->post('email');
                 $subject = $this->const_model::WEBSITE_NAME.' verify your email';
                 $html_content = file_get_contents(base_url().$this->const_model::VERIFICATION_EMAIL);
-
+                
                 //CREATE TOKEN
                 $token = bin2hex(random_bytes(78));
                 $validation_token = $this->user_model->create_verification_request($token, $user_id);
@@ -183,10 +188,14 @@
         public function toggle($id){
             //check user access
             $this->load->library('access_control');
-            $this->access_control->verify_access_users();
-            
+            $this->access_control->verify_access_users(); 
             $user = $this->user_model->get_user($id);
             $this->user_model->toggle_user($id, $user['user_state']);
+            
+            //LOG ACTIVITY
+            $this->load->library('rat');
+            $this->load->library('logs_builder');
+            $this->rat->log($this->logs_builder->user_toggle_logging($id,$user['user_state']), USERS_LEVEL);
 
             //set flash_messages
             if($user['user_state'] == 3){
@@ -205,6 +214,8 @@
             $this->access_control->verify_access_users();
 
             $data['user'] = $this->user_model->get_user($id);
+            $this->load->library('rat');
+            $data['logs'] = $this->rat->get_log($id, $code = NULL, $date = NULL, $order_by = NULL, $limit = NULL);
 
             if(empty($data['user'])){
                 show_404();
@@ -253,6 +264,13 @@
             }
             else{
                 $this->user_model->update_user();
+
+                //LOG ACTIVITY
+                $this->load->library('rat');
+                $this->load->library('logs_builder');
+                $this->rat->log($this->logs_builder->user_edit_logging($id,$user['user_state']), USERS_LEVEL);
+
+                //set flash_messages
                 $message = $this->message_model->get_message('user_updated');
                 $this->session->set_flashdata($message['name'], $message);
                 redirect($this->const_model::USERS_VIEW.'/'.$this->input->post('id'));
@@ -265,6 +283,12 @@
             if(!empty($user)){
                 if(!$this->form_validation->run('username_change') === FALSE){
                     $update = $this->user_model->update_username($user_id, $username);
+                    
+                    //LOG ACTIVITY
+                    $this->load->library('rat');
+                    $this->load->library('logs_builder');
+                    $this->rat->log($this->logs_builder->username_change_logging($user_id,$user['username'],$username), USERS_LEVEL);
+                    
                     //SHOW MESSAGE
                     $message = $this->message_model->get_message('username_changed');
                     $this->session->set_flashdata($message['name'], $message);
@@ -286,6 +310,12 @@
                 if(!$this->form_validation->run('email_change') === FALSE){
                     $email = $this->input->post('new-email');
                     $this->user_model->update_email($user_id, $email);
+
+                    //LOG ACTIVITY
+                    $this->load->library('rat');
+                    $this->load->library('logs_builder');
+                    $this->rat->log($this->logs_builder->email_change_logging($user_id, $user['email'], $email), USERS_LEVEL);
+
                     //SHOW MESSAGE
                     $message = $this->message_model->get_message('email_changed');
                     $this->session->set_flashdata($message['name'], $message);
@@ -304,9 +334,21 @@
         public function change_password($user_id){
             // Check login
             $new_password = $this->input->post('new-password');
+            if(!$this->form_validation->run('password_change') === FALSE){
+                if(
+                    !(array_search('manage users',array_column($this->session->userdata('rights'),'name')) === FALSE 
+                    && array_search('admin',array_column($this->session->userdata('rights'),'name')) === FALSE)
+                ){//HARCODED
+                    $this->user_model->update_password($this->encrypt_password($new_password));
 
-            if(!$this->form_validation->run('change_password') === FALSE){
-                if($user_id != FALSE){
+                    //LOG ACTIVITY
+                    $this->load->library('rat');
+                    $this->load->library('logs_builder');
+                    $this->rat->log($this->logs_builder->password_change_logging($user_id), USERS_LEVEL);
+
+                    $message = $this->message_model->get_message('password_changed_success');
+                }
+                else if($user_id != FALSE){
                     $this->user_model->update_password($this->encrypt_password($new_password),$user_id);
                     $token = $this->password_model->get_current_token($user_id);
                     $this->password_model->use_token($token['token']);
@@ -316,10 +358,6 @@
                     //set flash_message
                      $message = $this->message_model->get_message('password_same');
                  }
-                else if($this->session->userdata('role') == 'Admin'){
-                    $this->user_model->update_password($this->encrypt_password($new_password));
-                    $message = $this->message_model->get_message('password_changed_success');
-                }
                 else{
                     $message = $this->message_model->get_message('password_changed_failed');
                 }
@@ -333,6 +371,7 @@
                 }
             }
             else{
+                vdebug(validation_errors());
                 $message = $this->message_model->get_message('password_change_failed');
                 $this->session->set_flashdata($message['name'], $message);
                 redirect(USERS_EDIT_PATH.$user_id);
@@ -366,6 +405,12 @@
                     $html_content = str_replace('$4', $password_token['expiration_time'],$html_content);
 
                     $this->sendEmail($recipient, $subject, $html_content);
+
+                    //LOG ACTIVITY
+                    $this->load->library('rat');
+                    $this->load->library('logs_builder');
+                    $this->rat->log($this->logs_builder->password_recovery_logging($user['id']), USERS_LEVEL,$user['id']);
+
 
                     //CREATE MESSAGE
                     $message = $this->message_model->get_message('password_reset');
@@ -430,6 +475,13 @@
                 if($token === $this->user_model->get_current_token($user['id']) && $token['used'] == 0){
                     $this->user_model->set_user_active($user['id']);
                     $this->user_model->use_token($token['token']);
+
+                     //LOG ACTIVITY
+                     $this->load->library('rat');
+                     $this->load->library('logs_builder');
+                     $this->rat->log($this->logs_builder->email_confirmed_logging($user['id']), USERS_LEVEL,$user['id']);
+
+
                     $message = $this->message_model->get_message('email_verified');
                     $this->session->set_flashdata($message['name'], $message);
                     redirect('');
@@ -463,8 +515,14 @@
             $html_content = str_replace('$4', $token['expiration_time'],$html_content);
 
             $this->sendEmail($recipient,$subject,$html_content);
+
+            //LOG ACTIVITY
+            $this->load->library('rat');
+            $this->load->library('logs_builder');
+            $this->rat->log($this->logs_builder->resend_password_recovery_logging($token['user_id']), USERS_LEVEL,$token['user_id']);
+
             //SET MESSAGE
-            $message = $this->message_model->get_message('password_reset_resent');
+            $message = $this->message_model->get_message('password_recovery_resent');
             $this->session->set_flashdata($message['name'], $message);
             redirect('');
         }
@@ -490,6 +548,14 @@
             $html_content = str_replace('$4', $token['expiration_time'],$html_content);
             
             $this->sendEmail($recipient,$subject,$html_content);
+            
+            //LOG ACTIVITY
+            $this->load->library('rat');
+            $this->load->library('logs_builder');
+            $this->rat->log($this->logs_builder->resend_email_confirmation_logging($token['user_id']), USERS_LEVEL,$token['user_id']);
+
+
+
             //SET MESSAGE
             $message = $this->message_model->get_message('password_reset_resent');
             $this->session->set_flashdata($message['name'], $message);
