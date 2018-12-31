@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS rights;
 DROP TABLE IF EXISTS users_state;
 DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS application_logs;
 
 -- 	EVENTS --
 DROP EVENT IF EXISTS reset_lockout;

@@ -68,6 +68,13 @@
             return $query->result_array();
         }
 
+        public function get_users_by_roles($role_id){
+            $this->db->where('role', $role_id);
+            $this->db->order_by('id');
+            $query = $this->db->get('users');
+            return $query->result_array();
+        }
+
         public function get_user($id){
             $query = $this->db->get_where('users', array('id'=> $id));
             return $query->row_array();

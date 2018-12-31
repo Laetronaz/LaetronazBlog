@@ -23,7 +23,12 @@
             } 
             else{
                 $category_image = $this::DEFAULT_IMAGE;
-                $this->category_model->create_category($category_image);
+                $category_id = $this->category_model->create_category($category_image);
+
+                //LOG ACTIVITY
+                $this->load->library('rat');
+                $this->load->library('logs_builder');
+                $this->rat->log($this->logs_builder->categories_create_logging($category_id), CATEGORIES_LEVEL);
 
                 // Set message
                 $message = $this->message_model->get_message('category_created');
@@ -79,10 +84,20 @@
             $this->category_model->toogle_category($id, $category['active']);
             $posts = $this->post_model->get_posts_by_category($id);
 
+            //LOG ACTIVITY
+            $this->load->library('rat');
+            $this->load->library('logs_builder');
+            $this->rat->log($this->logs_builder->categories_toggle_logging($category), CATEGORIES_LEVEL);
+
             foreach($posts as $post){
                 $this->post_model->toogle_post($post['id'], $category['active']);
-            }
 
+                //LOG ACTIVITY
+                $this->load->library('rat');
+                $this->load->library('logs_builder');
+                $this->rat->log($this->logs_builder->posts_toggle_logging($post), CATEGORIES_LEVEL);
+            }
+            
             // Set flash_message
             if($category['active'] == TRUE){
                 $message = $this->message_model->get_message('category_disabled');
@@ -111,7 +126,14 @@
                 $this->load->view($this->const_model::FOOTER);
             }
             else{
+                $category = $this->category_model->get_category($id);
+                $new_name = $this->input->post('name');
                 $this->category_model->update_category();
+
+                //LOG ACTIVITY
+                $this->load->library('rat');
+                $this->load->library('logs_builder');
+                $this->rat->log($this->logs_builder->categories_edit_logging($category, $new_name), CATEGORIES_LEVEL);
 
                 // Set message
                 $message = $this->message_model->get_message('category_updated');
@@ -120,23 +142,29 @@
             }
         }
 
-        public function update_image(){
-            // Check login
-            if(!$this->session->userdata('logged_in')){
-                redirect($this->const_model::USERS_LOGIN);
-            }
+        public function update_image(){//TODO signature should be modified to take the category_id
+            $this->load->library('access_control');
+            $this->access_control->verify_access_categories();
 
             //Upload Image
             $this->load->library('file_upload');
-            $this->file_upload->upload_image($this::IMAGE_PATH);
+            $category_image =$this->file_upload->upload_image($this::IMAGE_PATH);
             if(!is_null($category_image)){
+                $category = $this->category_model->get_category($this->input->post('id'));
                 $this->category_model->update_category_icon($category_image);
                 $this->clean_images();
+
+                //LOG ACTIVITY
+                $this->load->library('rat');
+                $this->load->library('logs_builder');
+                $this->rat->log($this->logs_builder->categories_update_image_logging($category), CATEGORIES_LEVEL);
+
                 // Set message
                 $message = $this->message_model->get_message('category_updated');
                 $this->session->set_flashdata($message['name'], $message);
             }
             else{
+                vdebug('enter here');
                 // Set message
                 $message = $this->message_model->get_message('image_update_failed');
                 $this->session->set_flashdata($message['name'], $message);

@@ -10,7 +10,8 @@
                 'user_id' => $this->session->userdata('user_id'),
                 'category_icon' => $category_image
             );
-            return $this->db->insert('categories', $data);
+            $this->db->insert('categories', $data);
+            return $this->db->insert_id();
         }
 
         public function get_categories(){
