@@ -29,7 +29,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->register_logging($user_id), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->user_register_logging($user_id), USERS_LEVEL);
                 
                 //SEND VERIFICATION EMAIL
                 $recipient = $this->input->post('email');
@@ -195,7 +195,7 @@
             //LOG ACTIVITY
             $this->load->library('rat');
             $this->load->library('logs_builder');
-            $this->rat->log($this->logs_builder->user_toggle_logging($id,$user['user_state']), SUCCESS_LEVEL);
+            $this->rat->log($this->logs_builder->user_toggle_logging($id,$user['user_state']), USERS_LEVEL);
 
             //set flash_messages
             if($user['user_state'] == 3){
@@ -214,6 +214,8 @@
             $this->access_control->verify_access_users();
 
             $data['user'] = $this->user_model->get_user($id);
+            $this->load->library('rat');
+            $data['logs'] = $this->rat->get_log($id, $code = NULL, $date = NULL, $order_by = NULL, $limit = NULL);
 
             if(empty($data['user'])){
                 show_404();
@@ -266,7 +268,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->user_edit_logging($id,$user['user_state']), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->user_edit_logging($id,$user['user_state']), USERS_LEVEL);
 
                 //set flash_messages
                 $message = $this->message_model->get_message('user_updated');
@@ -285,7 +287,7 @@
                     //LOG ACTIVITY
                     $this->load->library('rat');
                     $this->load->library('logs_builder');
-                    $this->rat->log($this->logs_builder->username_change_logging($user_id,$user['username'],$username), SUCCESS_LEVEL);
+                    $this->rat->log($this->logs_builder->username_change_logging($user_id,$user['username'],$username), USERS_LEVEL);
                     
                     //SHOW MESSAGE
                     $message = $this->message_model->get_message('username_changed');
@@ -312,7 +314,7 @@
                     //LOG ACTIVITY
                     $this->load->library('rat');
                     $this->load->library('logs_builder');
-                    $this->rat->log($this->logs_builder->email_change_logging($user_id, $user['email'], $email), SUCCESS_LEVEL);
+                    $this->rat->log($this->logs_builder->email_change_logging($user_id, $user['email'], $email), USERS_LEVEL);
 
                     //SHOW MESSAGE
                     $message = $this->message_model->get_message('email_changed');
@@ -342,7 +344,7 @@
                     //LOG ACTIVITY
                     $this->load->library('rat');
                     $this->load->library('logs_builder');
-                    $this->rat->log($this->logs_builder->password_change_logging($user_id), SUCCESS_LEVEL);
+                    $this->rat->log($this->logs_builder->password_change_logging($user_id), USERS_LEVEL);
 
                     $message = $this->message_model->get_message('password_changed_success');
                 }
@@ -407,7 +409,7 @@
                     //LOG ACTIVITY
                     $this->load->library('rat');
                     $this->load->library('logs_builder');
-                    $this->rat->log($this->logs_builder->password_recovery_logging($user['id']), SUCCESS_LEVEL,$user['id']);
+                    $this->rat->log($this->logs_builder->password_recovery_logging($user['id']), USERS_LEVEL,$user['id']);
 
 
                     //CREATE MESSAGE
@@ -477,7 +479,7 @@
                      //LOG ACTIVITY
                      $this->load->library('rat');
                      $this->load->library('logs_builder');
-                     $this->rat->log($this->logs_builder->email_confirmed_logging($user['id']), SUCCESS_LEVEL,$user['id']);
+                     $this->rat->log($this->logs_builder->email_confirmed_logging($user['id']), USERS_LEVEL,$user['id']);
 
 
                     $message = $this->message_model->get_message('email_verified');
@@ -517,7 +519,7 @@
             //LOG ACTIVITY
             $this->load->library('rat');
             $this->load->library('logs_builder');
-            $this->rat->log($this->logs_builder->resend_password_recovery_logging($token['user_id']), SUCCESS_LEVEL,$token['user_id']);
+            $this->rat->log($this->logs_builder->resend_password_recovery_logging($token['user_id']), USERS_LEVEL,$token['user_id']);
 
             //SET MESSAGE
             $message = $this->message_model->get_message('password_recovery_resent');
@@ -550,7 +552,7 @@
             //LOG ACTIVITY
             $this->load->library('rat');
             $this->load->library('logs_builder');
-            $this->rat->log($this->logs_builder->resend_email_confirmation_logging($token['user_id']), SUCCESS_LEVEL,$token['user_id']);
+            $this->rat->log($this->logs_builder->resend_email_confirmation_logging($token['user_id']), USERS_LEVEL,$token['user_id']);
 
 
 

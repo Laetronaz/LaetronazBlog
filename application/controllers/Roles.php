@@ -16,7 +16,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->roles_create_logging($role_id), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->roles_create_logging($role_id), ROLES_LEVEL);
 
                 // Set message
                 $message = $this->message_model->get_message('new_role_success');
@@ -45,7 +45,7 @@
                             //LOG ACTIVITY
                             $this->load->library('rat');
                             $this->load->library('logs_builder');
-                            $this->rat->log($this->logs_builder->roles_edit_logging($initial_role,$sent_array['name']), SUCCESS_LEVEL);
+                            $this->rat->log($this->logs_builder->roles_edit_logging($initial_role,$sent_array['name']), ROLES_LEVEL);
                         }
                         unset($sent_array['name']);
                         $new_rights = array_diff($sent_array,array_column($role_rights,'id'));
@@ -57,7 +57,7 @@
                                 //LOG ACTIVITY
                                 $this->load->library('rat');
                                 $this->load->library('logs_builder');
-                                $this->rat->log($this->logs_builder->right_added_logging($initial_role,$right), SUCCESS_LEVEL);
+                                $this->rat->log($this->logs_builder->right_added_logging($initial_role,$right), ROLES_LEVEL);
                             }
                         }
                         $removed_rights = array_diff(array_column($role_rights,'id'),$sent_array);
@@ -68,7 +68,7 @@
                                 //LOG ACTIVITY
                                 $this->load->library('rat');
                                 $this->load->library('logs_builder');
-                                $this->rat->log($this->logs_builder->right_removed_logging($initial_role,$right), SUCCESS_LEVEL);
+                                $this->rat->log($this->logs_builder->right_removed_logging($initial_role,$right), ROLES_LEVEL);
                             }
                         }
                         $message = $this->message_model->get_message('role_change_success');
@@ -118,7 +118,7 @@
                     //LOG ACTIVITY
                     $this->load->library('rat');
                     $this->load->library('logs_builder');
-                    $this->rat->log($this->logs_builder->roles_delete_logging($role), SUCCESS_LEVEL);
+                    $this->rat->log($this->logs_builder->roles_delete_logging($role), ROLES_LEVEL);
 
                     // Set message
                     $message = $this->message_model->get_message('role_delete_success');
@@ -129,7 +129,7 @@
                     //LOG ACTIVITY
                     $this->load->library('rat');
                     $this->load->library('logs_builder');
-                    $this->rat->log($this->logs_builder->roles_delete_attempt_logging($role), SUCCESS_LEVEL);
+                    $this->rat->log($this->logs_builder->roles_delete_attempt_logging($role), ROLES_LEVEL);
 
                     // Set message
                     $message = $this->message_model->get_message('role_delete_failure');

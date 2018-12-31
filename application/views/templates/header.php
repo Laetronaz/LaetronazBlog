@@ -157,8 +157,20 @@
                         <a href="<?php echo base_url().LOGS_INDEX_ROUTE?>" class="list-group-item list-group-item-action border border-white">
                             <span class="menu-collapsed">Application Logs</span>
                         </a>
-                        <a href="<?php echo base_url().LOGS_INDEX_ROUTE?>" class="list-group-item list-group-item-action border border-white">
+                        <a href="<?php echo base_url().LOGS_INDEX_USERS_PATH?>" class="list-group-item list-group-item-action border border-white">
                             <span class="menu-collapsed">Users Logs</span>
+                        </a>
+                        <a href="<?php echo base_url().LOGS_INDEX_ROLES_PATH?>" class="list-group-item list-group-item-action border border-white">
+                            <span class="menu-collapsed">Roles Logs</span>
+                        </a>
+                        <a href="<?php echo base_url().LOGS_INDEX_POSTS_PATH?>" class="list-group-item list-group-item-action border border-white">
+                            <span class="menu-collapsed">Posts Logs</span>
+                        </a>
+                        <a href="<?php echo base_url().LOGS_INDEX_CATEGORIES_PATH?>" class="list-group-item list-group-item-action border border-white">
+                            <span class="menu-collapsed">Categories Logs</span>
+                        </a>
+                        <a href="<?php echo base_url().LOGS_INDEX_TAGS_PATH?>" class="list-group-item list-group-item-action border border-white">
+                            <span class="menu-collapsed">Tags Logs</span>
                         </a>
                       </div>
                     </li>

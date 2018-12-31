@@ -28,7 +28,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->categories_create_logging($category_id), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->categories_create_logging($category_id), CATEGORIES_LEVEL);
 
                 // Set message
                 $message = $this->message_model->get_message('category_created');
@@ -87,7 +87,7 @@
             //LOG ACTIVITY
             $this->load->library('rat');
             $this->load->library('logs_builder');
-            $this->rat->log($this->logs_builder->categories_toggle_logging($category), SUCCESS_LEVEL);
+            $this->rat->log($this->logs_builder->categories_toggle_logging($category), CATEGORIES_LEVEL);
 
             foreach($posts as $post){
                 $this->post_model->toogle_post($post['id'], $category['active']);
@@ -95,7 +95,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->posts_toggle_logging($post), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->posts_toggle_logging($post), CATEGORIES_LEVEL);
             }
             
             // Set flash_message
@@ -133,7 +133,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->categories_edit_logging($category, $new_name), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->categories_edit_logging($category, $new_name), CATEGORIES_LEVEL);
 
                 // Set message
                 $message = $this->message_model->get_message('category_updated');
@@ -157,7 +157,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->categories_update_image_logging($category), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->categories_update_image_logging($category), CATEGORIES_LEVEL);
 
                 // Set message
                 $message = $this->message_model->get_message('category_updated');

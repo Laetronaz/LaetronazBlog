@@ -126,7 +126,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->posts_create_logging($post), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->posts_create_logging($post), POSTS_LEVEL);
 
                 // Set message
                 $message = $this->message_model->get_message('post_created');
@@ -148,7 +148,7 @@
             //LOG ACTIVITY
             $this->load->library('rat');
             $this->load->library('logs_builder');
-            $this->rat->log($this->logs_builder->posts_toggle_logging($post), SUCCESS_LEVEL);
+            $this->rat->log($this->logs_builder->posts_toggle_logging($post), POSTS_LEVEL);
 
             // Set message
             if($post['state'] == TRUE){
@@ -187,7 +187,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->posts_edit_logging($data['post']), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->posts_edit_logging($data['post']), POSTS_LEVEL);
 
                 $this->update_relationships($this->input->post('id'),$post_tags); 
                 
@@ -215,7 +215,7 @@
                 //LOG ACTIVITY
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
-                $this->rat->log($this->logs_builder->posts_update_thumbnail_logging($post), SUCCESS_LEVEL);
+                $this->rat->log($this->logs_builder->posts_update_thumbnail_logging($post), POSTS_LEVEL);
 
                 // Set message
                 $message = $this->message_model->get_message('post_updated');
@@ -269,7 +269,7 @@
                         //LOG ACTIVITY
                         $this->load->library('rat');
                         $this->load->library('logs_builder');
-                        $this->rat->log($this->logs_builder->delink_tag_from_post_logging($db_tags_list[$key],$post), SUCCESS_LEVEL);
+                        $this->rat->log($this->logs_builder->delink_tag_from_post_logging($db_tags_list[$key],$post), TAGS_LEVEL);
                     }
                 }
             }
@@ -284,7 +284,7 @@
                         //LOG ACTIVITY
                         $this->load->library('rat');
                         $this->load->library('logs_builder');
-                        $this->rat->log($this->logs_builder->tags_create_logging($existing_tag), SUCCESS_LEVEL);
+                        $this->rat->log($this->logs_builder->tags_create_logging($existing_tag), TAGS_LEVEL);
                     }
                     $id = $existing_tag['id'];//get the tag_id
                     $this->tag_model->link_post_to_tag($post_id, $id);//then link the tag to the post
@@ -292,7 +292,7 @@
                     //LOG ACTIVITY
                     $this->load->library('rat');
                     $this->load->library('logs_builder');
-                    $this->rat->log($this->logs_builder->link_tag_to_post_logging($existing_tag,$post), SUCCESS_LEVEL);
+                    $this->rat->log($this->logs_builder->link_tag_to_post_logging($existing_tag,$post), TAGS_LEVEL);
                 }
             }
         }

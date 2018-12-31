@@ -129,7 +129,7 @@ class Logs_builder {
         $edited_user = $this->CI->user_model->get_user($user_id);
         //BUILDING THE MESSAGE
         $log_entry = $this::CONFIRM_EMAIL_LOG;
-        $log_entry = str_replace('$1', $active_user['username'],$log_entry);
+        $log_entry = str_replace('$1', $edited_user['username'],$log_entry);
         $log_entry = str_replace('$2', $user_id,$log_entry);
         return $log_entry;
     }
@@ -139,7 +139,7 @@ class Logs_builder {
         $edited_user = $this->CI->user_model->get_user($user_id);
         //BUILDING THE MESSAGE
         $log_entry = $this::RESEND_CONFIRM_EMAIL_LOG;
-        $log_entry = str_replace('$1', $active_user['username'],$log_entry);
+        $log_entry = str_replace('$1', $edited_user['username'],$log_entry);
         $log_entry = str_replace('$2', $user_id,$log_entry);
         return $log_entry;
     }
@@ -149,7 +149,7 @@ class Logs_builder {
         $edited_user = $this->CI->user_model->get_user($user_id);
         //BUILDING THE MESSAGE
         $log_entry = $this::PASSWORD_RECOVERY_LOG;
-        $log_entry = str_replace('$1', $active_user['username'],$log_entry);
+        $log_entry = str_replace('$1', $edited_user['username'],$log_entry);
         $log_entry = str_replace('$2', $user_id,$log_entry);
         return $log_entry;
     }
@@ -159,7 +159,7 @@ class Logs_builder {
         $edited_user = $this->CI->user_model->get_user($user_id);
         //BUILDING THE MESSAGE
         $log_entry = $this::RESEND_PASSWORD_RECOVERY_LOG;
-        $log_entry = str_replace('$1', $active_user['username'],$log_entry);
+        $log_entry = str_replace('$1', $edited_user['username'],$log_entry);
         $log_entry = str_replace('$2', $user_id,$log_entry);
         return $log_entry;
     }
