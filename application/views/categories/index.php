@@ -1,9 +1,8 @@
-
-<h2><?= $title; ?>
+<h1><?= $title; ?>
     <a class="float-right" href="<?php echo base_url().CATEGORIES_CREATE_PATH?>">
         <i class="fas fa-plus-circle fa-2x link-color-new"></i>
     </a>
-</h2>
+</h1>
 <table class="table table-hover">
     <thead>
         <tr>

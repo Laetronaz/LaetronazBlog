@@ -1,4 +1,4 @@
-<h2><?= $title ?></h2>
+<h1><?= $title ?></h1>
 <?php foreach($posts as $post) : ?>
     <h3><?php echo $post['title']; ?></h3>
     <div class="row">

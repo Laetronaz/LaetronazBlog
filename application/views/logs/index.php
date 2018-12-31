@@ -1,5 +1,5 @@
 
-<h2><?= $title; ?></h2>
+<h1><?= $title?></h1>
 <table id="logs" class="table table-striped table-bordered table-sm logs" style="width:100%">
     <thead>
         <tr>
@@ -23,7 +23,7 @@
                         <?php echo $log->code ?>
                     </td>
                     <td>
-                    <?php echo $log->message ?>
+                        <?php echo $log->message ?>
                     </td>
             </tr>
             <?php endforeach; ?>

@@ -1,4 +1,4 @@
-<h2 class="text-center"><?= $title ?></h2>
+<h1 class="text-center"><?= $title ?></h1>
 <h3>This Blog</h3>
 <p>
     This blog is the result of a personal project I started around summer 2018, it started as a simple php code igniter tutorial I followed from Brad Traversy to a fully-fledged

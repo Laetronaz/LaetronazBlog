@@ -108,7 +108,7 @@
                     <a class="nav-link" href="#usersubmenu" data-toggle="collapse" data-target="#usersubmenu">Manage Users</a>
                     <div id="usersubmenu" class="sidebar-submenu collapse" >
                       <a href="<?php echo base_url(); ?>users/register" class="list-group-item list-group-item-action border border-white">
-                          <span class="menu-collapsed">Create New User</span>
+                          <span class="menu-collapsed">Register User</span>
                       </a>
                       <a href="<?php echo base_url();?>users/" class="list-group-item list-group-item-action border border-white">
                           <span class="menu-collapsed">Manage Users</span>
@@ -121,7 +121,7 @@
                       <a class="nav-link" href="#categorysubmenu" data-toggle="collapse" data-target="#categorysubmenu">Manage Categories</a>
                       <div id="categorysubmenu" class="sidebar-submenu collapse">
                         <a href="<?php echo base_url(); ?>categories/create" class="list-group-item list-group-item-action border border-white">
-                            <span class="menu-collapsed">Create New Category</span>
+                            <span class="menu-collapsed">Create Category</span>
                         </a>
                         <a href="<?php echo base_url().CATEGORIES_INDEX_PATH; ?>" class="list-group-item list-group-item-action border border-white">
                             <span class="menu-collapsed">Manage Categories</span>
@@ -135,7 +135,7 @@
                         <a class="nav-link" href="#postssubmenu" data-toggle="collapse" data-target="#postssubmenu">Manage Posts</a>
                         <div id="postssubmenu" class="sidebar-submenu collapse">
                           <a href="<?php echo base_url(); ?>posts/create" class="list-group-item list-group-item-action border-white">
-                              <span class="menu-collapsed">Create New Post</span>
+                              <span class="menu-collapsed">Create Post</span>
                           </a>
                           <a href="<?php echo base_url(); ?>posts/me" class="list-group-item list-group-item-action border-white">
                               <span class="menu-collapsed">Manage My Posts</span>
