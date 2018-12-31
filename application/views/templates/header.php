@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oxygen" >
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
-
+    <link rel="sylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="sylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
     <!-- LOCAL STYLES -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/defaultFont.css" >
@@ -21,6 +22,11 @@
     <script src="https://cdn.ckeditor.com/4.11.1/full/ckeditor.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    
+
     <!-- LOCAL SCRIPTS -->
     <script src="<?php echo base_url(); ?>assets/javascript/tagsinput.js"></script>
     
@@ -142,6 +148,19 @@
                         </a>
                       </div>
                       <?php endif ?>
+                    </li>
+                  <?php endif ?>
+                  <?php if(!(array_search('admin',array_column($this->session->userdata('rights'),'name')) === FALSE && array_search('consult logs',array_column($this->session->userdata('rights'),'name')) === FALSE)): ?>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#logssubmenu" data-toggle="collapse" data-target="#logssubmenu">Consult Logs</a>
+                      <div id="logssubmenu" class="sidebar-submenu collapse" >
+                        <a href="<?php echo base_url().LOGS_INDEX_ROUTE?>" class="list-group-item list-group-item-action border border-white">
+                            <span class="menu-collapsed">Application Logs</span>
+                        </a>
+                        <a href="<?php echo base_url().LOGS_INDEX_ROUTE?>" class="list-group-item list-group-item-action border border-white">
+                            <span class="menu-collapsed">Users Logs</span>
+                        </a>
+                      </div>
                     </li>
                   <?php endif ?>
               </ul>

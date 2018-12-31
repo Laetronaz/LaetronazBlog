@@ -118,10 +118,15 @@
                 //CREATE THE POST
                 $post_image = $this::DEFAULT_IMAGE;
                 $post_id = $this->post_model->create_post($post_image);
-
-                //CREATE THE TAGS
+                $post = $this->post_model->get_post($post_id);
+                //MANAGE THE TAGS
                 $post_tags = $this->create_tags_array();
                 $this->update_relationships($post_id,$post_tags); 
+
+                //LOG ACTIVITY
+                $this->load->library('rat');
+                $this->load->library('logs_builder');
+                $this->rat->log($this->logs_builder->posts_create_logging($post), SUCCESS_LEVEL);
 
                 // Set message
                 $message = $this->message_model->get_message('post_created');
@@ -139,6 +144,11 @@
             $this->access_control->verify_access_posts('post');        
             
             $this->post_model->toogle_post($id, $post['state']);
+            
+            //LOG ACTIVITY
+            $this->load->library('rat');
+            $this->load->library('logs_builder');
+            $this->rat->log($this->logs_builder->posts_toggle_logging($post), SUCCESS_LEVEL);
 
             // Set message
             if($post['state'] == TRUE){
@@ -172,29 +182,41 @@
             }
             else {
                 $post_tags = $this->create_tags_array();
-                $this->post_model->update_post();
+                $new_slug = $this->post_model->update_post();
+
+                //LOG ACTIVITY
+                $this->load->library('rat');
+                $this->load->library('logs_builder');
+                $this->rat->log($this->logs_builder->posts_edit_logging($data['post']), SUCCESS_LEVEL);
+
                 $this->update_relationships($this->input->post('id'),$post_tags); 
                 
                 // Set message
                 $message = $this->message_model->get_message('post_updated');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect($_SERVER['HTTP_REFERER']);
+                redirect(base_url().POSTS_EDIT_PATH.$new_slug);
             }
         }
         
 
         //======================================IMAGES======================================
-        public function update_image(){
+        public function update_image(){//TODO same as in category should fix signature of the func
             //check user access
             $this->load->library('access_control');
             $this->access_control->verify_access_posts('update_image');
 
             //Upload Image
             $this->load->library('file_upload');
-            
+            $post = $this->post_model->get_post($this->input->post('id'));
             $post_image = $this->file_upload->upload_image($this::IMAGE_PATH);
             if(!is_null($post_image)){  
                 $this->post_model->update_post_image($post_image);
+
+                //LOG ACTIVITY
+                $this->load->library('rat');
+                $this->load->library('logs_builder');
+                $this->rat->log($this->logs_builder->posts_update_thumbnail_logging($post), SUCCESS_LEVEL);
+
                 // Set message
                 $message = $this->message_model->get_message('post_updated');
                 $this->session->set_flashdata($message['name'], $message);
@@ -229,6 +251,7 @@
         }
 
         private function update_relationships($post_id, $current_tags_list){
+            $post = $this->post_model->get_post($post_id);
             $db_tags_list = $this->get_post_tags($post_id);
             $relationships = $this->tag_model->get_relationships($post_id);
             $all_tags_list = array_column($this->tag_model->get_tags_list(),'title');
@@ -240,8 +263,14 @@
             
             if(!empty($array_db_diff)){//if there's a tag was removed from the list
                 foreach($array_db_diff as $tag){
-                    $key = array_search($tag, array_column($db_tags_list,'title'));//key of the tag to remove
-                    $this->tag_model->unlink_post_from_tag($post_id,$db_tags_list[$key]['id']);//remove the tag
+                    if(!empty($tag)){
+                        $key = array_search($tag, array_column($db_tags_list,'title'));//key of the tag to remove
+                        $this->tag_model->unlink_post_from_tag($post_id,$db_tags_list[$key]['id']);//remove the tag
+                        //LOG ACTIVITY
+                        $this->load->library('rat');
+                        $this->load->library('logs_builder');
+                        $this->rat->log($this->logs_builder->delink_tag_from_post_logging($db_tags_list[$key],$post), SUCCESS_LEVEL);
+                    }
                 }
             }
             if(!empty($array_current_diff)){//if there's a new tag added to the list
@@ -251,9 +280,19 @@
                         //create the tag
                         $this->tag_model->create_tag($tag);
                         $existing_tag = $this->tag_model->get_tag_by_title($tag);
+
+                        //LOG ACTIVITY
+                        $this->load->library('rat');
+                        $this->load->library('logs_builder');
+                        $this->rat->log($this->logs_builder->tags_create_logging($existing_tag), SUCCESS_LEVEL);
                     }
                     $id = $existing_tag['id'];//get the tag_id
                     $this->tag_model->link_post_to_tag($post_id, $id);//then link the tag to the post
+                
+                    //LOG ACTIVITY
+                    $this->load->library('rat');
+                    $this->load->library('logs_builder');
+                    $this->rat->log($this->logs_builder->link_tag_to_post_logging($existing_tag,$post), SUCCESS_LEVEL);
                 }
             }
         }

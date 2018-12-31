@@ -96,6 +96,8 @@ $route[ROLES_INDEX_ROUTE] = ROLES_INDEX_FUNC;
 //search
 $route[SEARCH_ROUTE] = SEARCH_FUNC;
 
+//logs
+$route[LOGS_INDEX_ROUTE] = LOGS_INDEX_FUNC;
 
 
 

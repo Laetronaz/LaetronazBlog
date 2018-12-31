@@ -17,6 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //INDEX
 defined('ROLES_INDEX_FUNC') OR define('ROLES_INDEX_FUNC','roles/index');
 defined('POSTS_ALLINDEX_FUNC') OR define('POSTS_ALLINDEX_FUNC','posts/all_index');
+defined('LOGS_INDEX_FUNC') OR define('LOGS_INDEX_FUNC','logs/index');
 //VIEW
 defined('TAGS_VIEW_FUNC') OR define('TAGS_VIEW_FUNC', 'tags/view/$1');
 defined('ROLES_VIEW_FUNC') OR define('ROLES_VIEW_FUNC','roles/view/$1');
@@ -42,6 +43,7 @@ defined('SEARCH_FUNC') OR define('SEARCH_FUNC','searchs/search');
 //INDEX
 defined('ROLES_INDEX_ROUTE') OR define('ROLES_INDEX_ROUTE','roles');
 defined('POSTS_ALLINDEX_ROUTE') OR define('POSTS_ALLINDEX_ROUTE','posts/all');
+defined('LOGS_INDEX_ROUTE') OR define('LOGS_INDEX_ROUTE','logs');
 //VIEW
 defined('TAGS_VIEW_ROUTE') OR define('TAGS_VIEW_ROUTE','tags/(:any)');
 defined('ROLES_VIEW_ROUTE') OR define('ROLES_VIEW_ROUTE','roles/view/(:any)');
@@ -69,6 +71,7 @@ defined('CATEGORIES_INDEX_PATH') OR define('CATEGORIES_INDEX_PATH', 'categories'
 defined('ROLES_INDEX_PATH') OR define('ROLES_INDEX_PATH','roles');
 defined('POSTS_INDEX_PATH') OR define('POSTS_INDEX_PATH','');
 defined('POSTS_ALLINDEX_PATH') OR define('POSTS_ALLINDEX_PATH','posts/all');
+defined('LOGS_INDEX_PATH') OR define('LOGS_INDEX_PATH','logs');
 //VIEW
 defined('TAGS_VIEW_PATH') OR define('TAGS_VIEW_PATH', 'tags/view');
 defined('ROLES_VIEW_PATH') OR define('ROLES_VIEW_PATH','roles/view/');
@@ -110,3 +113,7 @@ defined('SUCCESS_LEVEL') OR define('SUCCESS_LEVEL', 0);
 defined('NORMAL_LEVEL') OR define('NORMAL_LEVEL', 1);
 defined('WARNING_LEVEL') OR define('WARNING_LEVEL', 2);
 defined('ERROR_LEVEL') OR define('ERROR_LEVEL', 3);
+
+
+//====================================FUNCTIONS VIEWS===============================
+defined('LOGS_INDEX_VIEW') OR define('LOGS_INDEX_VIEW','logs/index');

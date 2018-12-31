@@ -40,7 +40,7 @@
         }
 
         public function get_right($id){
-            $query = $this->db->get_where('right', array('id'=> $id));
+            $query = $this->db->get_where('rights', array('id'=> $id));
             return $query->row_array();
         }
 

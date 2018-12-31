@@ -12,6 +12,7 @@ class Access_control {
         private const MANAGE_ALL_POSTS = 'manage all posts';
         private const MANAGE_USERS = 'manage users';
         private const MANAGE_ROLES = 'manage roles';
+        private const CONSULT_LOGS = 'consult logs';
         
         protected $CI;
         
@@ -71,6 +72,16 @@ class Access_control {
                 }
                 else if(array_search($this::MANAGE_ROLES,array_column($this->CI->session->userdata('rights'),'name')) !== FALSE){
                         return TRUE;
+                }
+                return FALSE;
+        }
+
+        private function can_consult_logs(){
+                if($this->is_admin()){
+                        return TRUE;
+                }
+                elseif(array_search($this::CONSULT_LOGS,array_column($this->CI->session->userdata('rights'),'name')) !== FALSE){
+
                 }
                 return FALSE;
         }
@@ -167,6 +178,21 @@ class Access_control {
                         $this->CI->session->set_flashdata($message['name'], $message);
                         redirect(USERS_LOGIN_PATH);
                 } 
+        }
+
+        public function verify_access_logs(){
+                if($this->is_logged()){
+                        if(!$this->can_consult_logs()){
+                                $message = $this->CI->message_model->get_message('access_refused');
+                                $this->CI->session->set_flashdata($message['name'], $message);
+                                redirect(POSTS_INDEX_PATH);
+                        }
+                }
+                else{
+                        $message = $this->CI->message_model->get_message('not_logged_in');
+                        $this->CI->session->set_flashdata($message['name'], $message);
+                        redirect(USERS_LOGIN_PATH);
+                }
         }
         
 }

@@ -205,7 +205,8 @@ INSERT INTO rights( `id`, `name`, `description`) VALUES
 (3, 'manage posts','Give the users the right to create, edit and toggle his own posts.'), 
 (4, 'manage users', 'Give the users the right to add, edit and toggle users.'), 
 (5, 'manage roles', 'Give the users the right to add, edit and delete roles for the users.'),
-(6, 'manage all posts', 'Give the users the right to manage the posts of any users.' );
+(6, 'manage all posts', 'Give the users the right to manage the posts of any users.' ),
+(7, 'consult logs', 'Give the users the right to see the application logs.');
 COMMIT;
 
 --
@@ -266,6 +267,7 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('password_reset', 'alert-success', "Your password reset request has been received. You'll receive a email shortly."),
 ('password_changed_success', 'alert-success', 'The password has been changed successfuly'),
 ('password_reset_resent', 'alert-success', 'The reset password link was resent, check your emails.'),
+('password_recovery_resent', 'alert-success', 'The email confirmation link was resent, check your emails.'),
 ('email_verified', 'alert-success', 'Your email have been successfully verified. You can now log in.'),
 ('role_delete_success', 'alert-success', 'The role has been successfully deleted.'),
 ('new_role_success', 'alert-success', 'The role was successfully created.'),
@@ -275,7 +277,7 @@ INSERT INTO `messages` (`name`, `type`, `value`) VALUES
 ('password_expired', 'alert-info', 'The password reset link you used is expired, if you still want to reset your password, use the following link: '),
 ('invalid_password_token', 'alert-info', 'The password reset link you just used is invalid, if this link was sent to you by email, please contact an administrator by answering to the email.'),
 ('resend_password', 'alert-info', 'You already asked for a password reset please check your email.'),
-('user_waiting', 'alert-info', 'You need to confirm your email to login. Click this link to resend the password'),
+('user_waiting', 'alert-info', 'You need to confirm your email to login. Click this link to resend the email'),
 ('confirmation_expired', 'alert-info', 'The confirmation link you just used is expired to have a new confirmation link, click the following link: '),
 ('invalid_verification_token', 'alert-info', 'The email verification link you just used is invalid, if this link was sent to you by email, please contact an administrator by answering to the email.'),
 ('user_inactive', 'alert-info', 'This account have been disabled by the administration, if you want to re-enable this account,if you are the legemit user of this account please contact the administration.'),

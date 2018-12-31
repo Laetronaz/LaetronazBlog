@@ -520,7 +520,7 @@
             $this->rat->log($this->logs_builder->resend_password_recovery_logging($token['user_id']), SUCCESS_LEVEL,$token['user_id']);
 
             //SET MESSAGE
-            $message = $this->message_model->get_message('password_reset_resent');
+            $message = $this->message_model->get_message('password_recovery_resent');
             $this->session->set_flashdata($message['name'], $message);
             redirect('');
         }
