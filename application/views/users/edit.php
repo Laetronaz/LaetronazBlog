@@ -1,7 +1,7 @@
 <?php echo validation_errors(); ?>
-<h2><?= $user['username']; ?> 
+<h1><?= $title.$user['username']; ?> 
     <button id="username-change" type="button" data-toggle="modal" data-target="#username-modal" class="btn btn-secondary">Change Username</button>
-</h2>
+</h1>
 <?php echo form_open_multipart('users/edit/'.$user['id']); ?>
     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
     <div class="form-group">

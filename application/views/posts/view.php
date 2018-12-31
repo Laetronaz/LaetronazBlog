@@ -1,9 +1,8 @@
 <img class="thumbnail" src="<?php echo site_url(); ?>assets/images/posts/<?php echo $post['post_image'];?>" width="100%" height="379">
-<div class="row">
-    
-    <h2>
+<div class="row">   
+    <h1>
         <?php echo $post['title']; ?>
-    </h2>
+    </h1>
     <?php if($this->session->userdata('user_id') == $post['user_id']) : ?>
         <a class="float-left align-middle" href="<?php echo base_url().POSTS_EDIT_PATH.$post['slug']?>">
                 <i class="fas fa-edit fa-2x"></i>
@@ -21,9 +20,11 @@
 </div>
 <div class = "row">
     <?php foreach($tags as $tag) :?>
-        <a href="<?php echo base_url()?>/tag/<?php echo $tag['id']?>" class="badge badge-pill badge-info badge-padding">
-            <?php echo $tag['title']?>
-        </a>
+        <?php if(!empty($tag['title'])) : ?>
+            <a href="<?php echo base_url()?>/tag/<?php echo $tag['id']?>" class="badge badge-pill badge-info badge-padding">
+                <?php echo $tag['title']?>
+            </a>
+        <?php endif ?>
     <?php endforeach; ?> 
 </div>
 <div id="disqus_thread"></div>

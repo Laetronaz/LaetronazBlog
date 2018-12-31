@@ -2,7 +2,7 @@
 <div class="passreset-form">
     <div class="main-div">
         <div class="panel">
-            <h2>Password Recovery</h2>
+            <h1>Password Recovery</h1>
             <p>Please enter your email address</p>
             </div>
                 <?php echo form_open('users/request_password_reset'); ?>

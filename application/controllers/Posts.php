@@ -7,8 +7,9 @@
         //TITLES CONST
         private const INDEX_TITLE = 'Latest Posts';
         private const CREATE_TITLE = 'Create Post';
-        private const EDIT_TITLE = 'Edit Post';
-        private const USER_INDEX_TITLE = 'Manage Posts';
+        private const EDIT_TITLE = 'Edit Post: ';
+        private const USER_INDEX_TITLE = 'Manage All Posts';
+        private const USER_POSTS_INDEX_TITLE = 'Manage My Posts';
 
         //====================================CRUD====================================
         public function index($offset = 0){
@@ -36,7 +37,7 @@
             //Init Pagination
             $this->pagination->initialize($config);
             $data['posts'] = $this->post_model->get_user_posts($this->session->userdata('user_id'));
-            $data['title'] = $this::USER_INDEX_TITLE;
+            $data['title'] = $this::USER_POSTS_INDEX_TITLE;
             $data['categories'] = $this->post_model->get_categories();
 
             foreach($data['posts'] as $key => $post){//set style data
@@ -174,7 +175,7 @@
                 show_404();
             }
             
-            $data['title'] = $data['post']['title'];
+            $data['title'] = $this::EDIT_TITLE.$data['post']['title'];
             if ($this->form_validation->run('post') === FALSE) {
                 $this->load->view($this->const_model::HEADER);
                 $this->load->view($this->const_model::POSTS_EDIT, $data);

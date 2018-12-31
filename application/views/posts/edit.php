@@ -1,6 +1,6 @@
 <img src="<?php echo base_url(); ?>\assets\images\posts\<?php echo $post['post_image']; ?>" height="379" width="100%">
 <br><br>
-<h2><?= $title ?></h2>
+<h1><?= $title ?></h1>
 
 <?php echo validation_errors(); ?>
 

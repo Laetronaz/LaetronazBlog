@@ -3,7 +3,7 @@
 <div class="login-form">
     <div class="main-div">
         <div class="panel">
-            <h2>Admin Login</h2>
+            <h1>Admin Login</h1>
             <p>Please enter your username and password</p>
             </div>
                 <?php echo form_open('users/login'); ?>

@@ -1,12 +1,12 @@
 <?php
     class Users extends CI_Controller{
          //TITLES CONST
-         private const REGISTER_TITLE = 'Sign Up';
+         private const REGISTER_TITLE = 'Register User';
          private const LOGIN_TITLE = 'Sign In';
          private const INDEX_TITLE = 'Search by Authors';
-         private const MANAGE_TITLE = 'Manage Authors';
+         private const MANAGE_TITLE = 'Manage Users';
          private const VIEW_TITLE = 'User Profile';
-         private const EDIT_TITLE = 'User Profile';
+         private const EDIT_TITLE = 'Edit User: ';
 
         //register user
         public function register(){
@@ -45,7 +45,6 @@
                 $html_content = str_replace('$3', base_url().$this->const_model::USERS_VALIDATE_EMAIL.'/'.$token,$html_content);
                 $html_content = str_replace('$4', $validation_token['expiration_time'],$html_content);
                 $this->sendEmail($recipient, $subject, $html_content);
-
                 // Set message
                 $message = $this->message_model->get_message('user_registered');
                 $this->session->set_flashdata($message['name'], $message);
@@ -606,7 +605,7 @@
 
         private function user_start_with($char, $users_list){
             $user_starting_with_char = array();
-            foreach(array_column($users_list,'name') as $key => $name){
+            foreach(array_column($users_list,'username') as $key => $name){
                 if(strtoupper(trim(substr($name,0,1))) == $char){
                     array_push($user_starting_with_char,$users_list[$key]);
                 }
