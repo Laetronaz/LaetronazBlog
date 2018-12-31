@@ -1,4 +1,4 @@
-<h2><?= $title; ?></h2>
+<h1><?= $title; ?></h1>
 <div class="form-group">
     <label>Username</label>
     <p><?php echo $user['username']?></p>

@@ -9,6 +9,7 @@
         private const INDEX_TITLE = 'Search by Categories';
         private const MANAGE_TITLE = 'Manage Categories';
         private const CREATE_TITLE = 'Create Category';
+        private const EDIT_TITLE = 'Edit Category: ';
 
         public function create(){
             $this->load->library('access_control');
@@ -118,7 +119,7 @@
                 show_404();
             }
 
-            $data['title'] = $data['category']['name'];
+            $data['title'] = $this::EDIT_TITLE.$data['category']['name'];
             
             if ($this->form_validation->run('category') === FALSE){
                 $this->load->view($this->const_model::HEADER);

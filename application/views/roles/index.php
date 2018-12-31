@@ -1,4 +1,6 @@
 <?php echo validation_errors(); ?>
+<h1>Manage Roles</h1>
+<br>
 <div class="row">
     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <?php foreach($roles as $role) :?>

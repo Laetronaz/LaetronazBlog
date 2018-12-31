@@ -1,3 +1,3 @@
 
-<h2 class="text-center"><?= $title ?></h2>
+<h1 class="text-center"><?= $title ?></h1>
 <p>Welcome to the Laetronaz Blog Application </p>

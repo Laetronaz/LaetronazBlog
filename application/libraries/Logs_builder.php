@@ -304,7 +304,7 @@ class Logs_builder {
         $log_entry = str_replace('$3', $tag['id'],$log_entry);
         return $log_entry;
     }
-    //http://localhost/Laetronaz/LaetronazBlog/posts/edit/Lorem-Ipsum
+    
     public function link_tag_to_post_logging($tag, $post){
         //DATAS NEEDED
         $user = $this->CI->user_model->get_user($this->CI->session->userdata('user_id'));
