@@ -35,8 +35,6 @@
         public const VALIDATION_TOKEN_EXPIRED = 'users/validation-expired';
 
         public const WEBSITE_NAME = 'Laetronaz Blog';
-        public const EMAIL_ADDRESS='laetronaz@gmail.com';
-        public const EMAIL_PASSWORD ='';
 
         //PAGES PATH CONST
         public const PAGES = 'pages/';
