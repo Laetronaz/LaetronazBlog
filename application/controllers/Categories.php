@@ -165,7 +165,6 @@
                 $this->session->set_flashdata($message['name'], $message);
             }
             else{
-                vdebug('enter here');
                 // Set message
                 $message = $this->message_model->get_message('image_update_failed');
                 $this->session->set_flashdata($message['name'], $message);
