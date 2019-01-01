@@ -1,6 +1,6 @@
 <?php
-    $sender_mail = '';//TODO: enter your email here
-    $sender_password = '';//TODO: enter your password here
+    $sender_mail = 'laetronaz@gmail.com';
+    $sender_password = 'r6oAFioPOLdz';
 
     $config = array(
         'protocol' => 'smtp',
