@@ -370,7 +370,6 @@
                 }
             }
             else{
-                vdebug(validation_errors());
                 $message = $this->message_model->get_message('password_change_failed');
                 $this->session->set_flashdata($message['name'], $message);
                 redirect(USERS_EDIT_PATH.$user_id);
@@ -398,7 +397,7 @@
                     $this->password_model->create_password_request($token, $user['id']);
                     $password_token = $this->password_model->get_current_token($user['id']);
                     //REPLACE CONTENT
-                    $html_content = str_replace('$1',$user['name'],$html_content);
+                    $html_content = str_replace('$1',$user['first_name'],$html_content);
                     $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
                     $html_content = str_replace('$3', base_url().'users/resetpassword/'.$token,$html_content);
                     $html_content = str_replace('$4', $password_token['expiration_time'],$html_content);
@@ -508,7 +507,7 @@
             $subject = $this->const_model::WEBSITE_NAME.' account password reset';
             $html_content = file_get_contents(base_url().'assets/emails/password_recovery.html');
             //REPLACE CONTENT
-            $html_content = str_replace('$1',$user['name'],$html_content);
+            $html_content = str_replace('$1',$user['first_name'],$html_content);
             $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
             $html_content = str_replace('$3', base_url().'users/resetpassword/'.$token['token'],$html_content);
             $html_content = str_replace('$4', $token['expiration_time'],$html_content);
@@ -541,7 +540,7 @@
             $subject = 'Your '.$this->const_model::WEBSITE_NAME.' verify your email';
             $html_content = file_get_contents(base_url().$this->const_model::VERIFICATION_EMAIL);
             //REPLACE CONTENT
-            $html_content = str_replace('$1',$user['name'],$html_content);
+            $html_content = str_replace('$1',$user['first_name'],$html_content);
             $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
             $html_content = str_replace('$3', base_url().$this->const_model::USERS_VALIDATE_EMAIL.'/'.$token['token'],$html_content);
             $html_content = str_replace('$4', $token['expiration_time'],$html_content);
@@ -565,9 +564,10 @@
         private function sendEmail($recipient,$subject ,$html_content){
             //LOAD LIBRARY
             $this->load->library('email');
+            $this->config->load('email');
             //EMAIL CONTENT
             $this->email->to($recipient);
-            $this->email->from('laetronaz@gmail.com','Laetronaz Automatic MailSender');
+            $this->email->from($this->config->item('smtp_user'),'Laetronaz Automatic MailSender');
             $this->email->subject($subject);
             $this->email->message($html_content);
             

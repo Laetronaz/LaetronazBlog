@@ -241,9 +241,9 @@ COMMIT;
 --
 -- Dumping data for table `users`
 --
-
+--TODO: Change the variables for your own datas.
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `username`, `password`, `register_date`, `role`, `user_state`) VALUES
-(1, 'Michel', 'Pelland', 'michel.pelland12@gmail.com', 'Laetronaz', '$2y$10$zeJUWUzGm2Px2hIFJd880ebfiXjXFc9Gyy2ElRRTu.FA/k5Qpxr3O', '2018-08-09 20:09:41', 1, 3);
+(1, 'First-Name', 'Last-Name', 'your-email', 'your-username', '$2y$10$dcwviYBqnM1jkpMKQtn5G.wVl.ap5kJa2iDjw0k1UjmBr.me3Cmyq', '2018-08-09 20:09:41', 1, 3);
 COMMIT;
 
 --
