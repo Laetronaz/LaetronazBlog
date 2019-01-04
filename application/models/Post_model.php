@@ -64,7 +64,8 @@
         public function get_posts_by_user($user_id){
             $this->db->order_by('posts.id', 'DESC');
             $this->db->join('users', 'users.id = posts.user_id');
-            $query = $this->db->get_where('posts', array('user_id'=> $user_id));
+            $this->db->join('categories', 'categories.id = posts.category_id');
+            $query = $this->db->get_where('posts', array('posts.user_id'=> $user_id));
             return $query->result_array();
         }
 
