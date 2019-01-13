@@ -6,9 +6,9 @@
         public function filter(){
             $data['title'] = $this::INDEX_TITLE;
             $data['tags'] = $this->build_alphabetical_tags_list($this->tag_model->get_tags_list());
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view(TAGS_FILTER_PATH, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(TAGS_FILTER_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
         
         public function view($tag_id){
@@ -25,9 +25,9 @@
                 $data['posts'] = $posts;
                 $data['uses'] = count($posts);
     
-                $this->load->view($this->const_model::HEADER);
-                $this->load->view(TAGS_VIEW_PATH, $data);
-                $this->load->view($this->const_model::FOOTER);
+                $this->load->view(TEMPLATE_HEADER_VIEW);
+                $this->load->view(TAGS_VIEW, $data);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);
             } 
         }
 

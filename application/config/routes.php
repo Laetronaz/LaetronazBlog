@@ -50,48 +50,51 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
-$route['default_controller'] = 'posts';
+$route['default_controller'] = POSTS_INDEX_ROUTE;
+
 //posts
-$route['posts/me'] = 'posts/user_index';
-$route['posts/update_image'] = 'posts/update_image';
-$route['posts'] = 'posts/index';
+$route[POSTS_USERINDEX_ROUTE] = POSTS_USERINDEX_FUNC;
 $route[POSTS_ALLINDEX_ROUTE] = POSTS_ALLINDEX_FUNC;
-$route['posts/create'] = 'posts/create';
-$route['posts/(:any)'] = 'posts/view/$1';
+$route[POSTS_CREATE_ROUTE] = POSTS_CREATE_FUNC;
+$route[POSTS_VIEW_ROUTE] = POSTS_VIEW_FUNC;
+$route[POSTS_UPDATE_IMAGE_ROUTE] = POSTS_UPDATE_IMAGE_FUNC;
+$route[POSTS_TOGGLE_ROUTE] = POSTS_TOGGLE_FUNC;
+$route[POSTS_EDIT_ROUTE] = POSTS_EDIT_FUNC;
+$route[POSTS_INDEX_ROUTE] = POSTS_INDEX_FUNC;
+
 //categories
-$route['categories/create'] = 'categories/create';
-$route['categories/posts/(:any)'] = 'categories/posts/$1';
-$route['categories'] = 'categories/index';
+$route[CATEGORIES_CREATE_ROUTE] = CATEGORIES_CREATE_FUNC;
+$route[CATEGORIES_EDIT_ROUTE] = CATEGORIES_EDIT_FUNC;
+$route[CATEGORIES_FILTER_ROUTE] = CATEGORIES_FILTER_FUNC;
+$route[CATEGORIES_POSTS_ROUTE] = CATEGORIES_POSTS_FUNC;
+$route[CATEGORIES_TOGGLE_ROUTE] = CATEGORIES_TOGGLE_FUNC;
+$route[CATEGORIES_UPDATE_IMAGE_ROUTE] = CATEGORIES_UPDATE_IMAGE_FUNC;
+$route[CATEGORIES_INDEX_PATH] = CATEGORIES_INDEX_FUNC;
+
 //tags
 $route[TAGS_FILTER_ROUTE] = TAGS_FILTER_FUNC;
 $route[TAGS_VIEW_ROUTE] = TAGS_VIEW_FUNC;
-//roles
-
-
-
-
-//users
-$route['users/register'] = 'users/register';
-$route['users/logout'] = 'users/logout';
-$route['users/login'] = 'users/login';
-$route['users/change-password'] = 'users/change_password';
-$route['users/change-password/(:any)'] = 'users/change_password/$1';
-$route[USERNAME_EDIT_ROUTE] = USERNAME_EDIT_FUNC;
-$route[EMAIL_EDIT_ROUTE] = EMAIL_EDIT_FUNC;
-$route['users/resetpassword/(:any)'] = 'users/confirm_email/$1';
-$route['users/edit'] = 'users/edit';
-$route['users/password-reset'] = 'users/request_password_reset';
-$route['users/validation-expired'] = 'users/validation_token_expired';
-$route['users/requestpassword'] = 'users/forgotten_password';
-$route[USERS_FILTER_ROUTE] = USERS_FILTER_FUNC;
-$route[USERS_POSTS_ROUTE] = USERS_POSTS_FUNC;
-$route['users'] = 'users/index';
 
 //roles
 $route[ROLES_CREATE_ROUTE] = ROLES_CREATE_FUNC;
 $route[ROLES_EDIT_ROUTE] = ROLES_EDIT_FUNC;  
 $route[ROLES_DELETE_ROUTE] = ROLES_DELETE_FUNC;
 $route[ROLES_INDEX_ROUTE] = ROLES_INDEX_FUNC;
+
+//users
+$route[USERS_REGISTER_ROUTE] = USERS_REGISTER_FUNC;
+$route[USERS_LOGOUT_ROUTE] = USERS_LOGOUT_FUNC;
+$route[USERS_LOGIN_ROUTE] = USERS_LOGIN_FUNC;
+$route[USERS_TOGGLE_ROUTE] = USERS_TOGGLE_FUNC;
+$route[USERS_VIEW_ROUTE] = USERS_VIEW_FUNC;
+$route[USERS_EDIT_ROUTE] = USERS_EDIT_FUNC;
+$route[USERS_UPDATE_USERNAME_ROUTE] = USERS_UPDATE_USERNAME_FUNC;
+$route[USERS_UPDATE_EMAIL_ROUTE] = USERS_UPDATE_EMAIL_FUNC;
+$route[USERS_UPDATE_PASSWORD_ROUTE] = USERS_UPDATE_PASSWORD_FUNC;
+$route[USERS_CHANGE_PASSWORD_ROUTE] = USERS_CHANGE_PASSWORD_FUNC;
+$route[USERS_FILTER_ROUTE] = USERS_FILTER_FUNC;
+$route[USERS_POSTS_ROUTE] = USERS_POSTS_FUNC;
+$route[USERS_INDEX_ROUTE] = USERS_INDEX_FUNC;
 
 //search
 $route[SEARCH_ROUTE] = SEARCH_FUNC;
@@ -104,13 +107,11 @@ $route[LOGS_INDEX_CATEGORIES_ROUTE] = LOGS_INDEX_CATEGORIES_FUNC;
 $route[LOGS_INDEX_POSTS_ROUTE] = LOGS_INDEX_POSTS_FUNC;
 $route[LOGS_INDEX_TAGS_ROUTE] = LOGS_INDEX_TAGS_FUNC;
 
-
-
 //Mail function links
-$route['users/resetpassword/(:any)'] = 'users/change_password_form/$1';
-$route['users/verifyemail/(:any)'] = 'users/confirm_email/$1';
-$route['users/resend_password/(:any)'] = 'users/resend_password_recovery_email/$1';
-$route['users/resendverification/(:any)'] = 'users/resend_verification_email/$1';
+$route[EMAIL_RESET_PASSWORD_ROUTE] = EMAIL_RESET_PASSWORD_FUNC;
+$route[EMAIL_CONFiRM_EMAIL_ROUTE] = EMAIL_CONFiRM_EMAIL_FUNC;
+$route[EMAIL_RESEND_RESET_CONFIRM_EMAIL_ROUTE] = EMAIL_RESEND_RESET_CONFIRM_EMAIL_FUNC;
+$route[EMAIL_RESEND_RESET_PASSWORD_ROUTE] = EMAIL_RESEND_RESET_PASSWORD_FUNC;
 
 $route['404_override'] = '';
 $route['(:any)'] = 'pages/view/$1';

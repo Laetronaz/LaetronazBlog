@@ -14,7 +14,7 @@
         //====================================CRUD====================================
         public function index($offset = 0){
             //Pagination config
-            $config = $this->create_pagination_config(base_url().$this->const_model::POSTS_INDEX);
+            $config = $this->create_pagination_config(base_url().POSTS_INDEX_PATH);
             //Init Pagination
             $this->pagination->initialize($config);
 
@@ -22,9 +22,9 @@
             $data['posts'] = $this->post_model->get_active_posts(FALSE, $config['per_page'], $offset);
             //$data['posts'] = $this->post_model->get_posts(FALSE, $config['per_page'], $offset);
 
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::POSTS_INDEX, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(POSTS_INDEX_VIEW,$data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function user_index(){
@@ -33,7 +33,7 @@
             $this->access_control->verify_access_posts('user_index');
 
             //Pagination config
-            $config = $this->create_pagination_config(base_url().$this->const_model::POSTS_INDEX);
+            $config = $this->create_pagination_config(base_url().POSTS_INDEX_PATH);
             //Init Pagination
             $this->pagination->initialize($config);
             $data['posts'] = $this->post_model->get_user_posts($this->session->userdata('user_id'));
@@ -51,9 +51,9 @@
                 }
             }
 
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::POSTS_USER_INDEX, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(POSTS_USERINDEX_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function all_index(){
@@ -61,7 +61,7 @@
             $this->load->library('access_control');
             $this->access_control->verify_access_posts('all_index');
             //Pagination config
-            $config = $this->create_pagination_config(base_url().$this->const_model::POSTS_INDEX);
+            $config = $this->create_pagination_config(base_url().POSTS_INDEX_PATH);
             //Init Pagination
             $this->pagination->initialize($config);
             $data['posts'] = $this->post_model->get_posts();
@@ -79,9 +79,9 @@
                 }
             }
 
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::POSTS_USER_INDEX, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(POSTS_USERINDEX_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
 
@@ -97,9 +97,9 @@
             $data['title'] = $data['post']['title'];
             $data['tags'] =  $this->tag_model->get_tags_from_list(array_column($this->tag_model->get_post_tags($post_id),'tag_id'));
 
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::POSTS_VIEW, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(POSTS_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function create(){
@@ -111,9 +111,9 @@
             $data['categories'] = $this->post_model->get_categories();
 
             if ($this->form_validation->run('post') === FALSE) {
-                $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::POSTS_CREATE, $data);
-                $this->load->view($this->const_model::FOOTER);  
+                $this->load->view(TEMPLATE_HEADER_VIEW);
+                $this->load->view(POSTS_CREATE_VIEW, $data);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);  
             }
             else{
                 //CREATE THE POST
@@ -133,7 +133,7 @@
                 $message = $this->message_model->get_message('post_created');
                 $this->session->set_flashdata($message['name'], $message);
 
-                redirect($this->const_model::POSTS_EDIT.'/'.url_title($this->input->post('title')));
+                redirect(POSTS_INDEX_PATH.url_title($this->input->post('title')));
             }
         }
 
@@ -177,9 +177,9 @@
             
             $data['title'] = $this::EDIT_TITLE.$data['post']['title'];
             if ($this->form_validation->run('post') === FALSE) {
-                $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::POSTS_EDIT, $data);
-                $this->load->view($this->const_model::FOOTER);
+                $this->load->view(TEMPLATE_HEADER_VIEW);
+                $this->load->view(POSTS_EDIT_VIEW, $data);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);
             }
             else {
                 $post_tags = $this->create_tags_array();
@@ -201,7 +201,7 @@
         
 
         //======================================IMAGES======================================
-        public function update_image(){//TODO same as in category should fix signature of the func
+        public function update_image(){//TODO same as in category should fix signature of the func in a library perhaps
             //check user access
             $this->load->library('access_control');
             $this->access_control->verify_access_posts('update_image');
@@ -230,7 +230,7 @@
                 $this->session->set_flashdata($message['name'], $message);
             }
             $post = $this->post_model->get_post($this->input->post('id'));
-            redirect($this->const_model::POSTS_EDIT.'/'.$post['slug']);  
+            redirect(POSTS_EDIT_PATH.$post['slug']);  
         }
 
         //Remove all images that aren't linked to a post

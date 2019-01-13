@@ -17,9 +17,9 @@
 
             $data['title'] = $this::CREATE_TITLE;
             if ($this->form_validation->run('category') === FALSE){
-                $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::CATEGORIES_CREATE, $data);
-                $this->load->view($this->const_model::FOOTER);
+                $this->load->view(TEMPLATE_HEADER_VIEW);
+                $this->load->view(CATEGORIES_CREATE_VIEW, $data);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);
                 $this->form_validation->reset_validation();
             } 
             else{
@@ -35,7 +35,7 @@
                 $message = $this->message_model->get_message('category_created');
                 $this->session->set_flashdata($message['name'], $message);
                 $category = $this->category_model->get_category_by_name($this->input->post('name'));
-                redirect($this->const_model::CATEGORIES_EDIT.'/'.$category['id']);
+                redirect(CATEGORIES_EDIT_PATH.$category['id']);
             }
         }
 
@@ -54,30 +54,29 @@
                         break;
                 }
             }
-
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::CATEGORIES_INDEX, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(CATEGORIES_INDEX_VIEW,$data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function posts($id){
             $data['title'] = $this->category_model->get_category($id)['name'];
             $data['posts'] = $this->post_model->get_posts_by_category($id);
 
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::POSTS_INDEX, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(POSTS_INDEX_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function filter(){//Open for everyone
             $data['title'] = $this::INDEX_TITLE;
             $data['categories'] = $this->build_alphabetical_categories_list($this->category_model->get_categories());
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view(CATEGORIES_FILTER_PATH, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(CATEGORIES_FILTER_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
-        public function delete($id){
+        public function toggle($id){
             $this->load->library('access_control');
             $this->access_control->verify_access_categories();
 
@@ -107,7 +106,7 @@
                 $message = $this->message_model->get_message('category_enabled');
             }
             $this->session->set_flashdata($message['name'], $message);
-            redirect($this->const_model::CATEGORIES);
+            redirect(CATEGORIES_INDEX_PATH);
         }
 
         public function edit($id){
@@ -122,9 +121,9 @@
             $data['title'] = $this::EDIT_TITLE.$data['category']['name'];
             
             if ($this->form_validation->run('category') === FALSE){
-                $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::CATEGORIES_EDIT, $data);
-                $this->load->view($this->const_model::FOOTER);
+                $this->load->view(TEMPLATE_HEADER_VIEW);
+                $this->load->view(CATEGORIES_EDIT_VIEW, $data);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);
             }
             else{
                 $category = $this->category_model->get_category($id);
@@ -139,7 +138,7 @@
                 // Set message
                 $message = $this->message_model->get_message('category_updated');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::CATEGORIES);
+                redirect(CATEGORIES_INDEX_PATH);
             }
         }
 
@@ -169,7 +168,7 @@
                 $message = $this->message_model->get_message('image_update_failed');
                 $this->session->set_flashdata($message['name'], $message);
             }
-            redirect($this->const_model::CATEGORIES_EDIT.'/'.$this->input->post('id'));
+            redirect(CATEGORIES_EDIT_PATH.$this->input->post('id'));
         }
         //============================================= PRIVATE ========================================
 
