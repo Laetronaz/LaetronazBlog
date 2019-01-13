@@ -151,7 +151,6 @@
         public function get_verification_resquest($token){
             $query = $this->db->get_where('email_verification', array('token'=> $token));
             return $query->row_array();
-            
         }
 
         public function get_current_token($user_id){
