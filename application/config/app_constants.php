@@ -71,9 +71,10 @@ defined('USERS_LOGOUT_FUNC') OR define('USERS_LOGOUT_FUNC','users/logout');
 //REGISTER
 defined('USERS_REGISTER_FUNC') OR define('USERS_REGISTER_FUNC','users/register');
 //MAILS
+defined('EMAIL_PASSWORD_RESET_FUNC') OR define('EMAIL_PASSWORD_RESET_FUNC','users/request_password_reset');
 defined('EMAIL_CONFiRM_EMAIL_FUNC') OR define('EMAIL_CONFiRM_EMAIL_FUNC','users/confirm_email/$1');
-defined('EMAIL_RESET_PASSWORD_FUNC') OR define('EMAIL_RESET_PASSWORD_FUNC','users/request_password_reset/$1');
-defined('EMAIL_RESEND_RESET_PASSWORD_FUNC') OR define('EMAIL_RESEND_RESET_PASSWORD_FUNC','users/resend_password/$1');
+defined('EMAIL_RESET_PASSWORD_FUNC') OR define('EMAIL_RESET_PASSWORD_FUNC','users/change_password_form/$1');
+defined('EMAIL_RESEND_RESET_PASSWORD_FUNC') OR define('EMAIL_RESEND_RESET_PASSWORD_FUNC','users/resend_password_recovery_email/$1');
 defined('EMAIL_RESEND_RESET_CONFIRM_EMAIL_FUNC') OR define('EMAIL_RESEND_RESET_CONFIRM_EMAIL_FUNC','users/resend_verification_email/$1');
 //====================================ROUTES=====================================
 //INDEX
@@ -133,10 +134,11 @@ defined('USERS_LOGOUT_ROUTE') OR define('USERS_LOGOUT_ROUTE','users/logout');
 //REGISTER
 defined('USERS_REGISTER_ROUTE') OR define('USERS_REGISTER_ROUTE','users/register');
 //MAILS
-defined('EMAIL_CONFiRM_EMAIL_ROUTE') OR define('EMAIL_CONFiRM_EMAIL_ROUTE','users/confirm-email/(:any)');
+defined('EMAIL_PASSWORD_RESET_ROUTE') OR define('EMAIL_PASSWORD_RESET_ROUTE','users/password-reset');
+defined('EMAIL_CONFiRM_EMAIL_ROUTE') OR define('EMAIL_CONFiRM_EMAIL_ROUTE','users/verifyemail/(:any)');
 defined('EMAIL_RESET_PASSWORD_ROUTE') OR define('EMAIL_RESET_PASSWORD_ROUTE','users/resetpassword/(:any)');
 defined('EMAIL_RESEND_RESET_PASSWORD_ROUTE') OR define('EMAIL_RESEND_RESET_PASSWORD_ROUTE','users/resend_password/(:any)');
-defined('EMAIL_RESEND_RESET_CONFIRM_EMAIL_ROUTE') OR define('EMAIL_RESEND_RESET_CONFIRM_EMAIL_ROUTE','users/resend_verification_email/(:any)');
+defined('EMAIL_RESEND_RESET_CONFIRM_EMAIL_ROUTE') OR define('EMAIL_RESEND_RESET_CONFIRM_EMAIL_ROUTE','users/resendverification/(:any)');
 //====================================PATHS=====================================
 //INDEX
 defined('CATEGORIES_INDEX_PATH') OR define('CATEGORIES_INDEX_PATH', 'categories');
@@ -197,11 +199,9 @@ defined('USERS_LOGOUT_PATH') OR define('USERS_LOGOUT_PATH','users/logout');
 //REGISTER
 defined('USERS_REGISTER_PATH') OR define('USERS_REGISTER_PATH','users/register');
 //MAILS
-defined('EMAIL_CONFiRM_EMAIL_PATH') OR define('EMAIL_CONFiRM_EMAIL_PATH','users/confirm_email/$1');
-defined('EMAIL_RESET_PASSWORD_PATH') OR define('EMAIL_RESET_PASSWORD_PATH','users/resetpassword/$1');
-defined('EMAIL_RESEND_RESET_PASSWORD_PATH') OR define('EMAIL_RESEND_RESET_PASSWORD_PATH','users/resend_password/');
-defined('EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH') OR define('EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH','users/resend_verification_email/');
-
+defined('EMAIL_CONFiRM_EMAIL_PATH') OR define('EMAIL_CONFiRM_EMAIL_PATH','users/verifyemail/');
+defined('EMAIL_RESET_PASSWORD_PATH') OR define('EMAIL_RESET_PASSWORD_PATH','users/resetpassword/');
+defined('EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH') OR define('EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH','users/resendverification/');
 //====================================LOGS LEVELS=====================================
 
 //used codes for the RAT library

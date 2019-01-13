@@ -80,7 +80,7 @@
                         switch ($user['user_state']) {
                             case 1:
                                 $message = $this->message_model->get_message('user_waiting');
-                                $message['value'] .= " <a href='".base_url()."users/resendverification/".$user_id."'> Resend email</a>";
+                                $message['value'] .= " <a href='".base_url().EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH.$user_id."'> Resend email</a>";
                                 break;
                             case 2:
                                 $message = $this->message_model->get_message('user_lockedout');
@@ -183,9 +183,8 @@
         public function posts($id){
             $data['title'] = $this->user_model->get_user($id)['username'];
             $data['posts'] = $this->post_model->get_posts_by_user($id);
-
             $this->load->view(TEMPLATE_HEADER_VIEW);
-            $this->load->view(USERS_FILTER_VIEW, $data);
+            $this->load->view(POSTS_INDEX_VIEW, $data);
             $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
@@ -404,7 +403,7 @@
                     //REPLACE CONTENT
                     $html_content = str_replace('$1',$user['first_name'],$html_content);
                     $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
-                    $html_content = str_replace('$3', base_url().'users/resetpassword/'.$token,$html_content);
+                    $html_content = str_replace('$3', base_url().EMAIL_RESET_PASSWORD_PATH.$token,$html_content);
                     $html_content = str_replace('$4', $password_token['expiration_time'],$html_content);
 
                     $this->sendEmail($recipient, $subject, $html_content);
@@ -514,7 +513,7 @@
             //REPLACE CONTENT
             $html_content = str_replace('$1',$user['first_name'],$html_content);
             $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
-            $html_content = str_replace('$3', base_url().'users/resetpassword/'.$token['token'],$html_content);
+            $html_content = str_replace('$3', base_url().EMAIL_RESET_PASSWORD_PATH.$token['token'],$html_content);
             $html_content = str_replace('$4', $token['expiration_time'],$html_content);
 
             $this->sendEmail($recipient,$subject,$html_content);

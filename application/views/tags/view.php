@@ -12,7 +12,7 @@
                 <small class="post-date">Posted on: <?php echo $post['created_at']; ?> in <strong><?php echo $post['title']; ?></strong> </small><br>
                 <small><?php echo word_limiter($post['body'], 60); ?></small>
                 <br><br>
-                <p><a class="btn btn-default" href="<?php echo site_url(); ?>posts/<?php echo $post['slug']?>">Read More</a></p>
+                <p><a class="btn btn-default" href="<?php echo site_url().POSTS_VIEW_PATH.$post['slug']?>">Read More</a></p>
             </div>
         </div>
         <?php endif;?>
