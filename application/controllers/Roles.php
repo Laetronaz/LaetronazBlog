@@ -100,9 +100,9 @@
             $data['roles'] = $this->build_role_rights_array($roles);
             $data['rights'] = $this->role_model->get_rights();
 
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view(ROLES_INDEX_FUNC, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(ROLES_INDEX_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function delete($id){

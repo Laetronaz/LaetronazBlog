@@ -16,9 +16,9 @@
              $this->load->library('rat');
              $data['logs'] = $this->rat->get_log($user_id = NULL, $code = NULL, $date = NULL, $order_by = NULL, $limit = NULL);
 
-             $this->load->view($this->const_model::HEADER);
+             $this->load->view(TEMPLATE_HEADER_VIEW);
              $this->load->view(LOGS_INDEX_VIEW, $data);
-             $this->load->view($this->const_model::FOOTER);
+             $this->load->view(TEMPLATE_FOOTER_VIEW);
          }
 
          public function index_users(){
@@ -30,9 +30,9 @@
              $this->load->library('rat');
              $data['logs'] = $this->rat->get_log($user_id = NULL, USERS_LEVEL, $date = NULL, $order_by = NULL, $limit = NULL);
 
-             $this->load->view($this->const_model::HEADER);
+             $this->load->view(TEMPLATE_HEADER_VIEW);
              $this->load->view(LOGS_INDEX_VIEW, $data);
-             $this->load->view($this->const_model::FOOTER);
+             $this->load->view(TEMPLATE_FOOTER_VIEW);
          }
 
          public function index_categories(){
@@ -44,9 +44,9 @@
              $this->load->library('rat');
              $data['logs'] = $this->rat->get_log($user_id = NULL, CATEGORIES_LEVEL, $date = NULL, $order_by = NULL, $limit = NULL);
 
-             $this->load->view($this->const_model::HEADER);
+             $this->load->view(TEMPLATE_HEADER_VIEW);
              $this->load->view(LOGS_INDEX_VIEW, $data);
-             $this->load->view($this->const_model::FOOTER);
+             $this->load->view(TEMPLATE_FOOTER_VIEW);
          }
 
          public function index_roles(){
@@ -58,9 +58,9 @@
              $this->load->library('rat');
              $data['logs'] = $this->rat->get_log($user_id = NULL, ROLES_LEVEL, $date = NULL, $order_by = NULL, $limit = NULL);
 
-             $this->load->view($this->const_model::HEADER);
+             $this->load->view(TEMPLATE_HEADER_VIEW);
              $this->load->view(LOGS_INDEX_VIEW, $data);
-             $this->load->view($this->const_model::FOOTER);
+             $this->load->view(TEMPLATE_FOOTER_VIEW);
          }
 
          public function index_posts(){
@@ -72,9 +72,9 @@
              $this->load->library('rat');
              $data['logs'] = $this->rat->get_log($user_id = NULL, POSTS_LEVEL, $date = NULL, $order_by = NULL, $limit = NULL);
 
-             $this->load->view($this->const_model::HEADER);
+             $this->load->view(TEMPLATE_HEADER_VIEW);
              $this->load->view(LOGS_INDEX_VIEW, $data);
-             $this->load->view($this->const_model::FOOTER);
+             $this->load->view(TEMPLATE_FOOTER_VIEW);
          }
 
          public function index_tags(){
@@ -86,8 +86,8 @@
              $this->load->library('rat');
              $data['logs'] = $this->rat->get_log($user_id = NULL, TAGS_LEVEL, $date = NULL, $order_by = NULL, $limit = NULL);
 
-             $this->load->view($this->const_model::HEADER);
+             $this->load->view(TEMPLATE_HEADER_VIEW);
              $this->load->view(LOGS_INDEX_VIEW, $data);
-             $this->load->view($this->const_model::FOOTER);
+             $this->load->view(TEMPLATE_FOOTER_VIEW);
          }
     }

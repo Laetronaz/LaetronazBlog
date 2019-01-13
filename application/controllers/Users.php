@@ -1,12 +1,17 @@
 <?php
     class Users extends CI_Controller{
-         //TITLES CONST
-         private const REGISTER_TITLE = 'Register User';
-         private const LOGIN_TITLE = 'Sign In';
-         private const INDEX_TITLE = 'Search by Authors';
-         private const MANAGE_TITLE = 'Manage Users';
-         private const VIEW_TITLE = 'User Profile';
-         private const EDIT_TITLE = 'Edit User: ';
+        //TITLES CONST
+        private const REGISTER_TITLE = 'Register User';
+        private const LOGIN_TITLE = 'Sign In';
+        private const INDEX_TITLE = 'Search by Authors';
+        private const MANAGE_TITLE = 'Manage Users';
+        private const VIEW_TITLE = 'User Profile';
+        private const EDIT_TITLE = 'Edit User: ';
+
+        //EMAIL PATH CONST
+        private const EMAIL = 'email/sendEmail';
+        private const VERIFICATION_EMAIL = 'assets/emails/verify_email.html';
+        private const USERS_VALIDATE_EMAIL = 'users/verifyemail/';
 
         //register user
         public function register(){
@@ -18,9 +23,9 @@
             $data['types'] = $this->user_model->get_roles();
 
             if($this->form_validation->run('user_register') === FALSE){
-                $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::USERS_REGISTER, $data);
-                $this->load->view($this->const_model::FOOTER);
+                $this->load->view(TEMPLATE_HEADER_VIEW);
+                $this->load->view(USERS_REGISTER_VIEW, $data);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);
             }
             else{
                 $enc_password = $this->encrypt_password($this->input->post('password'));
@@ -33,22 +38,22 @@
                 
                 //SEND VERIFICATION EMAIL
                 $recipient = $this->input->post('email');
-                $subject = $this->const_model::WEBSITE_NAME.' verify your email';
-                $html_content = file_get_contents(base_url().$this->const_model::VERIFICATION_EMAIL);
+                $subject = WEBSITE_NAME.' verify your email';
+                $html_content = file_get_contents(base_url().$this::VERIFICATION_EMAIL);
                 
                 //CREATE TOKEN
                 $token = bin2hex(random_bytes(78));
                 $validation_token = $this->user_model->create_verification_request($token, $user_id);
                 //REPLACE CONTENT
                 $html_content = str_replace('$1',$this->input->post('name'),$html_content);
-                $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
-                $html_content = str_replace('$3', base_url().$this->const_model::USERS_VALIDATE_EMAIL.'/'.$token,$html_content);
+                $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
+                $html_content = str_replace('$3', base_url().$this::USERS_VALIDATE_EMAIL.$token,$html_content);
                 $html_content = str_replace('$4', $validation_token['expiration_time'],$html_content);
                 $this->sendEmail($recipient, $subject, $html_content);
                 // Set message
                 $message = $this->message_model->get_message('user_registered');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::POSTS_PATH);
+                redirect(POSTS_INDEX_PATH);
             }
         }
 
@@ -57,9 +62,9 @@
             $data['title'] = $this::LOGIN_TITLE;
             
             if($this->form_validation->run('login') === FALSE){
-                $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::USERS_LOGIN, $data);
-                $this->load->view($this->const_model::FOOTER);
+                $this->load->view(TEMPLATE_HEADER_VIEW);
+                $this->load->view(USERS_LOGIN_VIEW, $data);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);
             }
             else{
                 // Get Username
@@ -111,7 +116,7 @@
                         // Set message
                         $message = $this->message_model->get_message('user_loggedin');
                         $this->session->set_flashdata($message['name'], $message);
-                        redirect($this->const_model::POSTS_PATH);
+                        redirect(POSTS_INDEX_PATH);
                     }
                     else{
                         $this->login_failed();
@@ -135,7 +140,7 @@
             // Set message
             $message = $this->message_model->get_message('user_loggedout');
             $this->session->set_flashdata($message['name'], $message);
-            redirect($this->const_model::USERS_LOGIN);
+            redirect(POSTS_INDEX_PATH);
         }
 
         public function index(){
@@ -162,26 +167,26 @@
                 }
             }
             
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::USERS_INDEX, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(USERS_INDEX_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function filter(){//Open for everyone
             $data['title'] = $this::INDEX_TITLE;
             $data['users'] = $this->build_alphabetical_users_list($this->user_model->get_users());
-            $this->load->view($this->const_model::HEADER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
             $this->load->view(USERS_FILTER_PATH, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function posts($id){
             $data['title'] = $this->user_model->get_user($id)['username'];
             $data['posts'] = $this->post_model->get_posts_by_user($id);
 
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::POSTS_INDEX, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(USERS_FILTER_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function toggle($id){
@@ -204,7 +209,7 @@
                 $message = $this->message_model->get_message('user_enabled');
             }
             $this->session->set_flashdata($message['name'], $message);
-            redirect($this->const_model::USERS);
+            redirect(USERS_INDEX_PATH);
         }
 
         public function view($id){
@@ -238,9 +243,9 @@
                 }
             $data['user']['state_name'] = $this->user_model->get_user_state($data['user']['user_state']);
 
-            $this->load->view($this->const_model::HEADER);
-            $this->load->view($this->const_model::USERS_VIEW, $data);
-            $this->load->view($this->const_model::FOOTER);
+            $this->load->view(TEMPLATE_HEADER_VIEW);
+            $this->load->view(USERS_VIEW, $data);
+            $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
         public function edit($id){
@@ -257,9 +262,9 @@
 
             $data['title'] = $this::EDIT_TITLE;
             if($this->form_validation->run('user_edit') === FALSE){
-                $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::USERS_EDIT, $data);
-                $this->load->view($this->const_model::FOOTER);
+                $this->load->view(TEMPLATE_HEADER_VIEW);
+                $this->load->view(USERS_EDIT_VIEW, $data);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);
             }
             else{
                 $this->user_model->update_user();
@@ -272,7 +277,7 @@
                 //set flash_messages
                 $message = $this->message_model->get_message('user_updated');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect($this->const_model::USERS_VIEW.'/'.$this->input->post('id'));
+                redirect(USERS_VIEW_PATH.$this->input->post('id'));
             } 
         }
 
@@ -366,7 +371,7 @@
                     redirect('users/login');
                 }
                 else{
-                    redirect($this->const_model::USERS_EDIT.'/'.$this->input->post('id'));
+                    redirect(USERS_EDIT_PATH.$this->input->post('id'));
                 }
             }
             else{
@@ -379,9 +384,9 @@
         public function request_password_reset(){//For where user enter his email.
             $data['title'] = $this::EDIT_TITLE;
             if($this->form_validation->run('request_password')===FALSE){
-                $this->load->view($this->const_model::HEADER);
-                $this->load->view($this->const_model::USERS_FORGOTTEN_PASSWORD, $data);
-                $this->load->view($this->const_model::FOOTER);
+                $this->load->view(TEMPLATE_HEADER_VIEW);
+                $this->load->view(USERS_FORGOTPASSWORD_VIEW, $data);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);
             }
             else{
                 $user = $this->user_model->get_user_by_email();
@@ -390,7 +395,7 @@
                 //CREATE TOKEN AND SEND EMAIL
                 if(empty($token)){//if not on an active token
                     $recipient = $this->input->post('email');
-                    $subject = 'Your '.$this->const_model::WEBSITE_NAME.' account password reset';
+                    $subject = 'Your '.WEBSITE_NAME.' account password reset';
                     $html_content = file_get_contents(base_url().'assets/emails/password_recovery.html');
 
                     $token = bin2hex(random_bytes(78));//create it
@@ -398,7 +403,7 @@
                     $password_token = $this->password_model->get_current_token($user['id']);
                     //REPLACE CONTENT
                     $html_content = str_replace('$1',$user['first_name'],$html_content);
-                    $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
+                    $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
                     $html_content = str_replace('$3', base_url().'users/resetpassword/'.$token,$html_content);
                     $html_content = str_replace('$4', $password_token['expiration_time'],$html_content);
 
@@ -441,9 +446,9 @@
                     $data['user_id'] = $reset_request['user_id'];
                     $data['token'] = $token;
                     if($this->form_validation->run('password_reset') === FALSE){
-                        $this->load->view($this->const_model::HEADER);
-                        $this->load->view($this->const_model::USERS_CHANGE_PASSWORD,$data);
-                        $this->load->view($this->const_model::FOOTER);
+                        $this->load->view(TEMPLATE_HEADER_VIEW);
+                        $this->load->view(USERS_RESETPASSWORD_VIEW,$data);
+                        $this->load->view(TEMPLATE_FOOTER_VIEW);
                     }
                     else{
                         $user_id = $this->input->post('user_id');
@@ -504,11 +509,11 @@
             $recipient = $user['email'];
             $token =$this->password_model->get_current_token($user_id);
             
-            $subject = $this->const_model::WEBSITE_NAME.' account password reset';
+            $subject = WEBSITE_NAME.' account password reset';
             $html_content = file_get_contents(base_url().'assets/emails/password_recovery.html');
             //REPLACE CONTENT
             $html_content = str_replace('$1',$user['first_name'],$html_content);
-            $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
+            $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
             $html_content = str_replace('$3', base_url().'users/resetpassword/'.$token['token'],$html_content);
             $html_content = str_replace('$4', $token['expiration_time'],$html_content);
 
@@ -537,12 +542,12 @@
                 $token = $this->user_model->get_verification_resquest($token_string);        
             }
             
-            $subject = 'Your '.$this->const_model::WEBSITE_NAME.' verify your email';
-            $html_content = file_get_contents(base_url().$this->const_model::VERIFICATION_EMAIL);
+            $subject = 'Your '.WEBSITE_NAME.' verify your email';
+            $html_content = file_get_contents(base_url().$this::VERIFICATION_EMAIL);
             //REPLACE CONTENT
             $html_content = str_replace('$1',$user['first_name'],$html_content);
-            $html_content = str_replace('$2', $this->const_model::WEBSITE_NAME,$html_content);
-            $html_content = str_replace('$3', base_url().$this->const_model::USERS_VALIDATE_EMAIL.'/'.$token['token'],$html_content);
+            $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
+            $html_content = str_replace('$3', base_url().$this::USERS_VALIDATE_EMAIL.$token['token'],$html_content);
             $html_content = str_replace('$4', $token['expiration_time'],$html_content);
             
             $this->sendEmail($recipient,$subject,$html_content);
@@ -579,7 +584,7 @@
             // Set message
             $message = $this->message_model->get_message('login_failed');
             $this->session->set_flashdata($message['name'], $message);
-            redirect($this->const_model::USERS_LOGIN);
+            redirect(USERS_LOGIN_PATH);
         }
 
         private function encrypt_password($password){

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
 <h1><?= $title?></h1>
 <table id="logs" class="table table-striped table-bordered table-sm logs" style="width:100%">

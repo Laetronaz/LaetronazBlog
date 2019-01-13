@@ -10,9 +10,9 @@
                 $data['tags'] = $this->search_model->search_tags_names($search_string);
                 $data['users'] = $this->search_model->search_users_usernames($search_string);
                 $data['research'] = $search_string;
-                $this->load->view($this->const_model::HEADER);
+                $this->load->view(TEMPLATE_HEADER_VIEW);
                 $this->load->view(SEARCH_PATH, $data);
-                $this->load->view($this->const_model::FOOTER);
+                $this->load->view(TEMPLATE_FOOTER_VIEW);
             }
             else{
                 if(is_null($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'].SEARCH_FUNC){
