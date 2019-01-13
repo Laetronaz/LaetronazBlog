@@ -21,7 +21,7 @@ Once this is done go in the projects folder to *application/config/database* you
 ### SQL
 One the schema is created you need to insert datas in the schama, but before doing that, we need to edit the admin you will use.
 
-In the project folders go to *assets/sql/LaetronazBlog.sql* and find the following lines:
+In the project folders go to *assets/sql/LaetronazBlog.sql* and find the following lines:<br>
 __INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `username`,`password`, `register_date`, `role`, `user_state`) VALUES__
 __(1, 'First-Name', 'Last-Name', 'your-email', 'your-username', '$2y$10$dcwviYBqnM1jkpMKQtn5G.wVl.ap5kJa2iDjw0k1UjmBr.me3Cmyq', '2018-08-09 20:09:41', 1, 3);__
 __COMMIT;__
@@ -39,17 +39,21 @@ Run the following script on your database: *assets/LaetronazBlog.sql*
 ### Email Sender
 Go in the project folder to *application/config/email.php* and add the email address and password of the email address you want to use to send emails.
 
-__$sender_mail = '';//TODO: enter your email here__
+__$sender_mail = '';//TODO: enter your email here__ <br>
 __$sender_password = '';//TODO: enter your password here__
 
-Depending on your mail service provider you may want to change those followings settings:
-__'protocol' => 'smtp',__
-__'smtp_host' => 'ssl://smtp.googlemail.com',__
+Depending on your mail service provider you may want to change those followings settings:<br>
+__'protocol' => 'smtp',__ <br>
+__'smtp_host' => 'ssl://smtp.googlemail.com',__ <br>
 __'smtp_port' => 465,__
 
 ### Base URL
 Go in the project folder in *application/config/config.php* and change the following line to the url you want to use, to access your website.
 __$config['base_url'] = 'http://localhost/Laetronaz/LaetronazBlog';__
+
+### Disqus
+You need to configure using you own disqus account to manage your site, to do that you will need to modify the disqus id in *application/assets/javascript/disqus.js* and change the following line:<br>
+__s.src = 'https://laetronazblog.disqus.com/embed.js';__ to your own disqus site code.
 
 ### Finishing Touchs
 You may want to go in the project folder in *application/views/template/header* and *application/views/template/footer* and modify it as you wish, be warned that if you change the titles of the side menu, the menu won't open at your current location without editing *assets/javascript/footer.js* 
