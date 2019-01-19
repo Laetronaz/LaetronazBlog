@@ -202,6 +202,8 @@ defined('USERS_REGISTER_PATH') OR define('USERS_REGISTER_PATH','users/register')
 defined('EMAIL_CONFiRM_EMAIL_PATH') OR define('EMAIL_CONFiRM_EMAIL_PATH','users/verifyemail/');
 defined('EMAIL_RESET_PASSWORD_PATH') OR define('EMAIL_RESET_PASSWORD_PATH','users/resetpassword/');
 defined('EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH') OR define('EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH','users/resendverification/');
+defined('EMAIL_SENDER_NAME') OR define('EMAIL_SENDER_NAME','Laetronaz Automatic MailSender');
+
 //====================================LOGS LEVELS=====================================
 
 //used codes for the RAT library
