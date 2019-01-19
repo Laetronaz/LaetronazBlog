@@ -7,12 +7,7 @@
         private const MANAGE_TITLE = 'Manage Users';
         private const VIEW_TITLE = 'User Profile';
         private const EDIT_TITLE = 'Edit User: ';
-
-        //EMAIL PATH CONST
-        private const EMAIL = 'email/sendEmail';
-        private const VERIFICATION_EMAIL = 'assets/emails/verify_email.html';
-        private const USERS_VALIDATE_EMAIL = 'users/verifyemail/';
-
+        
         //register user
         public function register(){
             //check user access
@@ -35,21 +30,14 @@
                 $this->load->library('rat');
                 $this->load->library('logs_builder');
                 $this->rat->log($this->logs_builder->user_register_logging($user_id), USERS_LEVEL);
-                
-                //SEND VERIFICATION EMAIL
-                $recipient = $this->input->post('email');
-                $subject = WEBSITE_NAME.' verify your email';
-                $html_content = file_get_contents(base_url().$this::VERIFICATION_EMAIL);
-                
+
                 //CREATE TOKEN
-                $token = bin2hex(random_bytes(78));
-                $validation_token = $this->user_model->create_verification_request($token, $user_id);
-                //REPLACE CONTENT
-                $html_content = str_replace('$1',$this->input->post('name'),$html_content);
-                $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
-                $html_content = str_replace('$3', base_url().$this::USERS_VALIDATE_EMAIL.$token,$html_content);
-                $html_content = str_replace('$4', $validation_token['expiration_time'],$html_content);
-                $this->sendEmail($recipient, $subject, $html_content);
+                $this->user_model->create_verification_request(bin2hex(random_bytes(78)), $user_id);
+                $token = $this->user_model->get_current_token($user_id);
+                //SEND MAIL VERIFICATION EMAIL
+                $this->load->library('email_management');
+                $this->email_management->mail_verification_email($this->input->post('username'),$this->input->post('email'),$token);
+
                 // Set message
                 $message = $this->message_model->get_message('user_registered');
                 $this->session->set_flashdata($message['name'], $message);
@@ -393,26 +381,17 @@
                 $token = $this->password_model->get_current_token($user['id']);
                 //CREATE TOKEN AND SEND EMAIL
                 if(empty($token)){//if not on an active token
-                    $recipient = $this->input->post('email');
-                    $subject = 'Your '.WEBSITE_NAME.' account password reset';
-                    $html_content = file_get_contents(base_url().'assets/emails/password_recovery.html');
+                    $this->password_model->create_password_request(bin2hex(random_bytes(78)), $user['id']);
+                    $token = $this->user_model->get_current_token($user_id);
 
-                    $token = bin2hex(random_bytes(78));//create it
-                    $this->password_model->create_password_request($token, $user['id']);
-                    $password_token = $this->password_model->get_current_token($user['id']);
-                    //REPLACE CONTENT
-                    $html_content = str_replace('$1',$user['first_name'],$html_content);
-                    $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
-                    $html_content = str_replace('$3', base_url().EMAIL_RESET_PASSWORD_PATH.$token,$html_content);
-                    $html_content = str_replace('$4', $password_token['expiration_time'],$html_content);
-
-                    $this->sendEmail($recipient, $subject, $html_content);
+                    //SEND PASSWORD RECOVERY EMAIL
+                    $this->load->library('email_management');
+                    $this->email_management->password_recovery_email($this->input->post('username'),$this->input->post('email'),$token);
 
                     //LOG ACTIVITY
                     $this->load->library('rat');
                     $this->load->library('logs_builder');
                     $this->rat->log($this->logs_builder->password_recovery_logging($user['id']), USERS_LEVEL,$user['id']);
-
 
                     //CREATE MESSAGE
                     $message = $this->message_model->get_message('password_reset');
@@ -502,21 +481,14 @@
             } 
         }
 
-        //===========================================EMAIL===========================================
+        //===========================================RESEND MAILS===========================================
         public function resend_password_recovery_email($user_id){
             $user = $this->user_model->get_user($user_id);
-            $recipient = $user['email'];
             $token =$this->password_model->get_current_token($user_id);
-            
-            $subject = WEBSITE_NAME.' account password reset';
-            $html_content = file_get_contents(base_url().'assets/emails/password_recovery.html');
-            //REPLACE CONTENT
-            $html_content = str_replace('$1',$user['first_name'],$html_content);
-            $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
-            $html_content = str_replace('$3', base_url().EMAIL_RESET_PASSWORD_PATH.$token['token'],$html_content);
-            $html_content = str_replace('$4', $token['expiration_time'],$html_content);
 
-            $this->sendEmail($recipient,$subject,$html_content);
+            //SEND PASSWORD RECOVERY EMAIL
+            $this->load->library('email_management');
+            $this->email_management->password_recovery_email($user['username'],$user['email'],$token);
 
             //LOG ACTIVITY
             $this->load->library('rat');
@@ -531,7 +503,6 @@
 
         public function resend_verification_email($user_id){
             $user = $this->user_model->get_user($user_id);
-            $recipient = $user['email'];
 
             //create new token if no token are currently active.
             $token = $this->user_model->get_current_token($user_id);  
@@ -541,22 +512,14 @@
                 $token = $this->user_model->get_verification_resquest($token_string);        
             }
             
-            $subject = 'Your '.WEBSITE_NAME.' verify your email';
-            $html_content = file_get_contents(base_url().$this::VERIFICATION_EMAIL);
-            //REPLACE CONTENT
-            $html_content = str_replace('$1',$user['first_name'],$html_content);
-            $html_content = str_replace('$2', WEBSITE_NAME,$html_content);
-            $html_content = str_replace('$3', base_url().$this::USERS_VALIDATE_EMAIL.$token['token'],$html_content);
-            $html_content = str_replace('$4', $token['expiration_time'],$html_content);
-            
-            $this->sendEmail($recipient,$subject,$html_content);
+            //SEND MAIL VERIFICATION EMAIL
+            $this->load->library('email_management');
+            $this->email_management->mail_verification_email($user['username'],$user['email'],$token);
             
             //LOG ACTIVITY
             $this->load->library('rat');
             $this->load->library('logs_builder');
             $this->rat->log($this->logs_builder->resend_email_confirmation_logging($token['user_id']), USERS_LEVEL,$token['user_id']);
-
-
 
             //SET MESSAGE
             $message = $this->message_model->get_message('password_reset_resent');
@@ -565,20 +528,6 @@
         }
 
         //========================================PRIVATE FUNCTIONS======================================
-        private function sendEmail($recipient,$subject ,$html_content){
-            //LOAD LIBRARY
-            $this->load->library('email');
-            $this->config->load('email');
-            //EMAIL CONTENT
-            $this->email->to($recipient);
-            $this->email->from($this->config->item('smtp_user'),'Laetronaz Automatic MailSender');
-            $this->email->subject($subject);
-            $this->email->message($html_content);
-            
-            //SEND EMAIL
-            $sent_email =$this->email->send();
-        }
-
         private function login_failed(){
             // Set message
             $message = $this->message_model->get_message('login_failed');
