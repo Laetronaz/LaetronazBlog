@@ -4,8 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Email_management {
 
     //EMAIL PATH CONST
-    private const VERIFICATION_EMAIL = 'assets/emails/verify_email.html';
-    private const PASSWORD_RECOVERY_EMAIL = 'assets/emails/password_recovery.html';
+    private const VERIFICATION_EMAIL = EMAILS_FOLDER.VERIFY_EMAIL_TEMPLATE;
+    private const PASSWORD_RECOVERY_EMAIL = EMAILS_FOLDER.PASSWORD_RECOVERY_TEMPLATE;
     private const PASSWORD_RECOVERY_SUBJECT = WEBSITE_NAME." account password reset";
     private const MAIL_VERIFICATION_SUBJECT = "Your ".WEBSITE_NAME." mail verification";
 
@@ -14,6 +14,8 @@ class Email_management {
     public function __construct(){
         $this->CI =& get_instance();
         $this->CI->load->library('email');
+        $this->CI->load->library('rat');
+        $this->CI->load->library('logs_builder');
     }
 
     public function password_recovery_email($username, $recipient, $token){
@@ -26,9 +28,10 @@ class Email_management {
         $html_content = str_replace('$3', base_url().EMAIL_RESET_PASSWORD_PATH.$token['token'],$html_content);
         $html_content = str_replace('$4', $token['expiration_time'],$html_content);
         
-        $this->sendEmail($recipient,$subject,$html_content);
-        
-        //TODO: add log use sendEmail return values as a verification
+        $success = $this->sendEmail($recipient,$subject,$html_content);
+
+        //LOG ACTIVITY
+        $this->CI->rat->log($this->CI->logs_builder->verification_email_logging($recipient,$success), SYSTEM_LEVEL,-1);
     }
 
     public function mail_verification_email($username, $recipient, $token){
@@ -41,9 +44,10 @@ class Email_management {
         $html_content = str_replace('$3', base_url().EMAIL_CONFiRM_EMAIL_PATH.$token['token'],$html_content);
         $html_content = str_replace('$4', $token['expiration_time'],$html_content);
         
-        $this->sendEmail($recipient,$subject,$html_content);
+        $success = $this->sendEmail($recipient,$subject,$html_content);
 
-        //TODO: add log use sendEmail return values as a verification
+        //LOG ACTIVITY
+        $this->CI->rat->log($this->CI->logs_builder->verification_email_logging($recipient,$success), SYSTEM_LEVEL,-1);
     }
 
     private function sendEmail($recipient,$subject ,$html_content){
