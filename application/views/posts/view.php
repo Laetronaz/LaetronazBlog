@@ -1,4 +1,4 @@
-<img class="thumbnail" src="<?php echo site_url(); ?>assets/images/posts/<?php echo $post['post_image'];?>" width="100%" height="379">
+<img class="thumbnail" src="<?php echo site_url().POSTS_IMAGES_FOLDER.$post['post_image'];?>" width="100%" height="379">
 <div class="row">   
     <h1>
         <?php echo $post['title']; ?>
@@ -28,11 +28,11 @@
     <?php endforeach; ?> 
 </div>
 <div id="disqus_thread"></div>
-<script src="<?php echo base_url(); ?>assets/javascript/disqus.js"></script>
+<script src="<?php echo base_url().JAVASCRIPT_FOLDER.JS_DISQUS?>"></script>
 <script>
     var disqus_config = function () {
-        this.page.url = '<?php echo current_url(); ?>'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = '<?php echo $post['slug']; ?>'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = "<?php echo current_url(); ?>"; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = "<?php echo $post['slug']; ?>"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>

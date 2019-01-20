@@ -41,7 +41,6 @@
                         $role_rights = $this->role_model->get_role_rights($id);
                         if ($initial_role['name'] != $sent_array['name']){
                             $this->role_model->update_role($id,$sent_array['name']);
-
                             //LOG ACTIVITY
                             $this->load->library('rat');
                             $this->load->library('logs_builder');
@@ -53,7 +52,6 @@
                             foreach($new_rights as $right_id){
                                 $right = $this->role_model->get_right($right_id);
                                 $this->role_model->add_role_rights($id, $right_id);
-
                                 //LOG ACTIVITY
                                 $this->load->library('rat');
                                 $this->load->library('logs_builder');

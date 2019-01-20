@@ -14,13 +14,11 @@
         //====================================CRUD====================================
         public function index($offset = 0){
             //Pagination config
-            $config = $this->create_pagination_config(base_url().POSTS_INDEX_PATH);
+            $config = $this->create_pagination_config(base_url());
             //Init Pagination
             $this->pagination->initialize($config);
-
             $data['title'] = $this::INDEX_TITLE;
             $data['posts'] = $this->post_model->get_active_posts(FALSE, $config['per_page'], $offset);
-            //$data['posts'] = $this->post_model->get_posts(FALSE, $config['per_page'], $offset);
 
             $this->load->view(TEMPLATE_HEADER_VIEW);
             $this->load->view(POSTS_INDEX_VIEW,$data);
@@ -31,22 +29,16 @@
             //check user access
             $this->load->library('access_control');
             $this->access_control->verify_access_posts('user_index');
-
-            //Pagination config
-            $config = $this->create_pagination_config(base_url().POSTS_INDEX_PATH);
-            //Init Pagination
-            $this->pagination->initialize($config);
-            $data['posts'] = $this->post_model->get_user_posts($this->session->userdata('user_id'));
             $data['title'] = $this::USER_POSTS_INDEX_TITLE;
             $data['categories'] = $this->post_model->get_categories();
 
             foreach($data['posts'] as $key => $post){//set style data
                 switch($post['state']){
                     case 1:
-                        $data['posts'][$key]['style'] = "state-active";
+                        $data['posts'][$key]['style'] = STATE_ACTIVE;
                         break;
                     case 0:
-                        $data['posts'][$key]['style'] = "state-inactive";
+                        $data['posts'][$key]['style'] = STATE_INACTIVE;
                         break;
                 }
             }
@@ -60,10 +52,6 @@
             //check user access
             $this->load->library('access_control');
             $this->access_control->verify_access_posts('all_index');
-            //Pagination config
-            $config = $this->create_pagination_config(base_url().POSTS_INDEX_PATH);
-            //Init Pagination
-            $this->pagination->initialize($config);
             $data['posts'] = $this->post_model->get_posts();
             $data['title'] = $this::USER_INDEX_TITLE;
             $data['categories'] = $this->post_model->get_categories();
@@ -71,10 +59,10 @@
             foreach($data['posts'] as $key => $post){//set style data
                 switch($post['state']){
                     case 1:
-                        $data['posts'][$key]['style'] = "state-active";
+                        $data['posts'][$key]['style'] = STATE_ACTIVE;
                         break;
                     case 0:
-                        $data['posts'][$key]['style'] = "state-inactive";
+                        $data['posts'][$key]['style'] = STATE_INACTIVE;
                         break;
                 }
             }
@@ -132,7 +120,7 @@
                 $message = $this->message_model->get_message('post_created');
                 $this->session->set_flashdata($message['name'], $message);
 
-                redirect(POSTS_INDEX_PATH.url_title($this->input->post('title')));
+                redirect(POSTS_VIEW_PATH.url_title($this->input->post('title')));
             }
         }
 
@@ -151,12 +139,8 @@
             $this->rat->log($this->logs_builder->posts_toggle_logging($post), POSTS_LEVEL);
 
             // Set message
-            if($post['state'] == TRUE){
-                $message = $this->message_model->get_message('post_disabled');
-            }
-            else{
-                $message = $this->message_model->get_message('post_enabled');
-            }
+            $message = ($post['state'] == TRUE) ? $this->message_model->get_message('post_disabled'): $this->message_model->get_message('post_enabled');
+            
             $this->session->set_flashdata($message['name'], $message);
             redirect($_SERVER['HTTP_REFERER']);
         }
@@ -200,17 +184,17 @@
         
 
         //======================================IMAGES======================================
-        public function update_image(){//TODO same as in category should fix signature of the func in a library perhaps
+        public function update_image($post_id){
             //check user access
             $this->load->library('access_control');
             $this->access_control->verify_access_posts('update_image');
 
             //Upload Image
             $this->load->library('file_upload');
-            $post = $this->post_model->get_post($this->input->post('id'));
+            $post = $this->post_model->get_post($post_id);
             $post_image = $this->file_upload->upload_image($this::IMAGE_PATH);
             if(!is_null($post_image)){  
-                $this->post_model->update_post_image($post_image);
+                $this->post_model->update_post_image($post_id,$post_image);
 
                 //LOG ACTIVITY
                 $this->load->library('rat');
@@ -228,7 +212,7 @@
                 $message = $this->message_model->get_message('image_update_failed');
                 $this->session->set_flashdata($message['name'], $message);
             }
-            $post = $this->post_model->get_post($this->input->post('id'));
+            $post = $this->post_model->get_post($post_id);
             redirect(POSTS_EDIT_PATH.$post['slug']);  
         }
 
@@ -304,14 +288,14 @@
             }
             return $tags;
         }
-
         //======================================CONFIGS====================================== 
         private function create_pagination_config($base_url){   
             //Pagination Config
             $config['base_url'] = $base_url;
             $config['total_rows'] = $this->db->count_all('posts');
+            $config['use_page_numbers'] = TRUE;
             $config['per_page'] = 10;
-            $config['uri_segment'] = 3;
+            $config['uri_segment'] = 1;
 
             //Current Page Style
             $config['cur_tag_open'] = '<li class="page-item active"><a class="page-link" href="#">';

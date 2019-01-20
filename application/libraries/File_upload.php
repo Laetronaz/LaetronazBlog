@@ -52,5 +52,6 @@ class File_upload {
     private function create_file_name(){ 
         $file_name = date('Tmd').'_'.md5( $_FILES['userfile']['name']. microtime());
         return $file_name;
-    }  
+    }
+    
 }

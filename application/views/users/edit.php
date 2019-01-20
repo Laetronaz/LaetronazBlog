@@ -2,7 +2,7 @@
 <h1><?= $title.$user['username']; ?> 
     <button id="username-change" type="button" data-toggle="modal" data-target="#username-modal" class="btn btn-secondary">Change Username</button>
 </h1>
-<?php echo form_open_multipart('users/edit/'.$user['id']); ?>
+<?php echo form_open_multipart(USERS_EDIT_PATH.$user['id']); ?>
     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
     <div class="form-group">
         <label>First Name</label>
@@ -45,7 +45,7 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-              <?php echo form_open_multipart('users/change-username/'.$user['id']); ?>
+              <?php echo form_open_multipart(USERS_UPDATE_USERNAME_PATH.$user['id']); ?>
                     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
                     <div class="form-group">
                         <label>New Username</label><br>
@@ -69,7 +69,7 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-              <?php echo form_open_multipart('users/change-email/'.$user['id']); ?>
+              <?php echo form_open_multipart(USERS_UPDATE_EMAIL_PATH.$user['id']); ?>
                     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
                     <div class="form-group">
                         <label>New Email Address</label><br>
@@ -93,7 +93,7 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-              <?php echo form_open_multipart('users/change-password/'.$user['id']); ?>
+              <?php echo form_open_multipart(USERS_UPDATE_PASSWORD_PATH.$user['id']); ?>
                     <input type="hidden" name="id" value= "<?php echo $user['id']; ?>">
                     <?php if($this->session->userdata('user_id') == $user['id']) : ?>
                         <div class="form-group">

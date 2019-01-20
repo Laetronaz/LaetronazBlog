@@ -19,6 +19,7 @@ defined('CATEGORIES_INDEX_FUNC') OR define('CATEGORIES_INDEX_FUNC', 'categories/
 defined('ROLES_INDEX_FUNC') OR define('ROLES_INDEX_FUNC','roles/index');
 defined('USERS_INDEX_FUNC') OR define('USERS_INDEX_FUNC','users/index');
 defined('POSTS_INDEX_FUNC') OR define('POSTS_INDEX_FUNC','posts/index');
+defined('POSTS_PAGINATION_INDEX_FUNC') OR define('POSTS_PAGINATION_INDEX_FUNC','posts/index/$1');
 defined('POSTS_USERINDEX_FUNC') OR define('POSTS_USERINDEX_FUNC','posts/user_index');
 defined('POSTS_ALLINDEX_FUNC') OR define('POSTS_ALLINDEX_FUNC','posts/all_index');
 defined('LOGS_INDEX_FUNC') OR define('LOGS_INDEX_FUNC','logs/index');
@@ -50,8 +51,8 @@ defined('USERS_EDIT_FUNC') OR define('USERS_EDIT_FUNC','users/edit/$1');
 defined('USERS_CHANGE_PASSWORD_FUNC') OR define('USERS_CHANGE_PASSWORD_FUNC','users/change_password_form/$1');
 defined('POSTS_EDIT_FUNC') OR define('POSTS_EDIT_FUNC','posts/edit/$1');
 //UPDATE IMAGE
-defined('CATEGORIES_UPDATE_IMAGE_FUNC') OR define('CATEGORIES_UPDATE_IMAGE_FUNC','categories/update_image');
-defined('POSTS_UPDATE_IMAGE_FUNC') OR define('POSTS_UPDATE_IMAGE_FUNC','posts/update_image');
+defined('CATEGORIES_UPDATE_IMAGE_FUNC') OR define('CATEGORIES_UPDATE_IMAGE_FUNC','categories/update_image/$1');
+defined('POSTS_UPDATE_IMAGE_FUNC') OR define('POSTS_UPDATE_IMAGE_FUNC','posts/update_image/$1');
 //UPDATE VARIABLE
 defined('USERS_UPDATE_USERNAME_FUNC') OR define('USERS_UPDATE_USERNAME_FUNC','users/change_username/$1');
 defined('USERS_UPDATE_EMAIL_FUNC') OR define('USERS_UPDATE_EMAIL_FUNC','users/change_email/$1');
@@ -76,11 +77,14 @@ defined('EMAIL_CONFiRM_EMAIL_FUNC') OR define('EMAIL_CONFiRM_EMAIL_FUNC','users/
 defined('EMAIL_RESET_PASSWORD_FUNC') OR define('EMAIL_RESET_PASSWORD_FUNC','users/change_password_form/$1');
 defined('EMAIL_RESEND_RESET_PASSWORD_FUNC') OR define('EMAIL_RESEND_RESET_PASSWORD_FUNC','users/resend_password_recovery_email/$1');
 defined('EMAIL_RESEND_RESET_CONFIRM_EMAIL_FUNC') OR define('EMAIL_RESEND_RESET_CONFIRM_EMAIL_FUNC','users/resend_verification_email/$1');
+//OTHERS
+defined('ABOUT_FUNC') OR define('ABOUT_FUNC','/pages/view/about');
 //====================================ROUTES=====================================
 //INDEX
 defined('CATEGORIES_INDEX_ROUTE') OR define('CATEGORIES_INDEX_ROUTE', 'categories');
 defined('ROLES_INDEX_ROUTE') OR define('ROLES_INDEX_ROUTE','roles');
 defined('POSTS_INDEX_ROUTE') OR define('POSTS_INDEX_ROUTE','posts');
+defined('POSTS_PAGINATION_INDEX_ROUTE') OR define('POSTS_PAGINATION_INDEX_ROUTE','posts/index/(:any)');
 defined('USERS_INDEX_ROUTE') OR define('USERS_INDEX_ROUTE','users');
 defined('POSTS_USERINDEX_ROUTE') OR define('POSTS_USERINDEX_ROUTE','posts/me');
 defined('POSTS_ALLINDEX_ROUTE') OR define('POSTS_ALLINDEX_ROUTE','posts/all');
@@ -113,8 +117,8 @@ defined('USERS_EDIT_ROUTE') OR define('USERS_EDIT_ROUTE','users/edit/(:any)');
 defined('POSTS_EDIT_ROUTE') OR define('POSTS_EDIT_ROUTE','posts/edit/(:any)');
 defined('USERS_CHANGE_PASSWORD_ROUTE') OR define('USERS_CHANGE_PASSWORD_ROUTE','users/change_password_form/(:any)');
 //UPDATE IMAGE
-defined('POSTS_UPDATE_IMAGE_ROUTE') OR define('POSTS_UPDATE_IMAGE_ROUTE','posts/update_image');
-defined('CATEGORIES_UPDATE_IMAGE_ROUTE') OR define('CATEGORIES_UPDATE_IMAGE_ROUTE','categories/update_image');
+defined('POSTS_UPDATE_IMAGE_ROUTE') OR define('POSTS_UPDATE_IMAGE_ROUTE','posts/update_image/(:any)');
+defined('CATEGORIES_UPDATE_IMAGE_ROUTE') OR define('CATEGORIES_UPDATE_IMAGE_ROUTE','categories/update_image/(:any)');
 //UPDATE VARIABLE
 defined('USERS_UPDATE_USERNAME_ROUTE') OR define('USERS_UPDATE_USERNAME_ROUTE','users/change-username/(:any)');
 defined('USERS_UPDATE_EMAIL_ROUTE') OR define('USERS_UPDATE_EMAIL_ROUTE','users/change-email/(:any)');
@@ -134,17 +138,21 @@ defined('USERS_LOGOUT_ROUTE') OR define('USERS_LOGOUT_ROUTE','users/logout');
 //REGISTER
 defined('USERS_REGISTER_ROUTE') OR define('USERS_REGISTER_ROUTE','users/register');
 //MAILS
+
 defined('EMAIL_PASSWORD_RESET_ROUTE') OR define('EMAIL_PASSWORD_RESET_ROUTE','users/password-reset');
 defined('EMAIL_CONFiRM_EMAIL_ROUTE') OR define('EMAIL_CONFiRM_EMAIL_ROUTE','users/verifyemail/(:any)');
 defined('EMAIL_RESET_PASSWORD_ROUTE') OR define('EMAIL_RESET_PASSWORD_ROUTE','users/resetpassword/(:any)');
 defined('EMAIL_RESEND_RESET_PASSWORD_ROUTE') OR define('EMAIL_RESEND_RESET_PASSWORD_ROUTE','users/resend_password/(:any)');
 defined('EMAIL_RESEND_RESET_CONFIRM_EMAIL_ROUTE') OR define('EMAIL_RESEND_RESET_CONFIRM_EMAIL_ROUTE','users/resendverification/(:any)');
+//OTHERS
+defined('ABOUT_ROUTE') OR define('ABOUT_ROUTE','about');
 //====================================PATHS=====================================
 //INDEX
 defined('CATEGORIES_INDEX_PATH') OR define('CATEGORIES_INDEX_PATH', 'categories');
 defined('ROLES_INDEX_PATH') OR define('ROLES_INDEX_PATH','roles');
 defined('USERS_INDEX_PATH') OR define('USERS_INDEX_PATH','users');
 defined('POSTS_INDEX_PATH') OR define('POSTS_INDEX_PATH','');
+defined('POSTS_PAGINATION_INDEX_PATH') OR define('POSTS_PAGINATION_INDEX_PATH','/');
 defined('POSTS_USERINDEX_PATH') OR define('POSTS_USERINDEX_PATH','posts/me');
 defined('POSTS_ALLINDEX_PATH') OR define('POSTS_ALLINDEX_PATH','posts/all');
 defined('LOGS_INDEX_PATH') OR define('LOGS_INDEX_PATH','logs');
@@ -178,8 +186,8 @@ defined('CATEGORIES_EDIT_PATH') OR define('CATEGORIES_EDIT_PATH','categories/edi
 defined('USERS_EDIT_PATH') OR define('USERS_EDIT_PATH','users/edit/');
 defined('USERS_CHANGE_PASSWORD_PATH') OR define('USERS_CHANGE_PASSWORD_PATH','users/change_password_form/');
 //UPDATE_IMAGE
-defined('CATEGORIES_UPDATE_IMAGE_PATH') OR define('CATEGORIES_UPDATE_IMAGE_PATH','categories/update_image');
-defined('POSTS_UPDATE_IMAGE_PATH') OR define('POSTS_UPDATE_IMAGE_PATH','posts/update_image');
+defined('CATEGORIES_UPDATE_IMAGE_PATH') OR define('CATEGORIES_UPDATE_IMAGE_PATH','categories/update_image/');
+defined('POSTS_UPDATE_IMAGE_PATH') OR define('POSTS_UPDATE_IMAGE_PATH','posts/update_image/');
 //UPDATE VARIABLE
 defined('USERS_UPDATE_USERNAME_PATH') OR define('USERS_UPDATE_USERNAME_PATH','users/change-username/');
 defined('USERS_UPDATE_EMAIL_PATH') OR define('USERS_UPDATE_EMAIL_PATH','users/change-email/');
@@ -189,7 +197,7 @@ defined('ROLES_DELETE_PATH') OR define('ROLES_DELETE_PATH','roles/delete/');
 //TOGGLE
 defined('POSTS_TOGGLE_PATH') OR define('POSTS_TOGGLE_PATH','posts/toggle/');
 defined('CATEGORIES_TOGGLE_PATH') OR define('CATEGORIES_TOGGLE_PATH','categories/toggle/');
-defined('USERS_TOGGLE_ROUTE') OR define('USERS_TOGGLE_ROUTE','users/toggle/');
+defined('USERS_TOGGLE_PATH') OR define('USERS_TOGGLE_PATH','users/toggle/');
 //SEARCH
 defined('SEARCH_PATH') OR define('SEARCH_PATH','searchs/search');
 //LOGIN
@@ -199,10 +207,15 @@ defined('USERS_LOGOUT_PATH') OR define('USERS_LOGOUT_PATH','users/logout');
 //REGISTER
 defined('USERS_REGISTER_PATH') OR define('USERS_REGISTER_PATH','users/register');
 //MAILS
+defined('EMAIL_PASSWORD_RESET_PATH') OR define('EMAIL_PASSWORD_RESET_PATH','users/password-reset');
 defined('EMAIL_CONFiRM_EMAIL_PATH') OR define('EMAIL_CONFiRM_EMAIL_PATH','users/verifyemail/');
 defined('EMAIL_RESET_PASSWORD_PATH') OR define('EMAIL_RESET_PASSWORD_PATH','users/resetpassword/');
 defined('EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH') OR define('EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH','users/resendverification/');
+defined('EMAIL_RESEND_RESET_PASSWORD_PATH') OR define('EMAIL_RESEND_RESET_PASSWORD_PATH','users/resend_password/');
 defined('EMAIL_SENDER_NAME') OR define('EMAIL_SENDER_NAME','Laetronaz Automatic MailSender');
+//OTHERS 
+defined('ABOUT_PATH') OR define('ABOUT_PATH','about');
+
 
 //====================================LOGS LEVELS=====================================
 
@@ -249,3 +262,26 @@ defined('USERS_VIEW') OR define('USERS_VIEW','users/view');
 //TEMPLATES
 defined('TEMPLATE_HEADER_VIEW') OR define('TEMPLATE_HEADER_VIEW','templates/header');
 defined('TEMPLATE_FOOTER_VIEW') OR define('TEMPLATE_FOOTER_VIEW','templates/footer');
+
+//STATES
+defined('STATE_ACTIVE') OR define('STATE_ACTIVE','state-active');
+defined('STATE_INACTIVE') OR define('STATE_INACTIVE','state-inactive');
+defined('STATE_LOCKOUT') OR define('STATE_LOCKOUT','state-lockedout');
+defined('STATE_WAITING') OR define('STATE_WAITING','state-waiting');
+
+//ASSETS
+defined('JAVASCRIPT_FOLDER') OR define('JAVASCRIPT_FOLDER','assets/javascript/');
+defined('CSS_FOLDER') OR define('CSS_FOLDER','assets/css/');
+
+defined('CATEGORIES_IMAGES_FOLDER') OR define('CATEGORIES_IMAGES_FOLDER','assets/images/categories/');
+defined('POSTS_IMAGES_FOLDER') OR define('POSTS_IMAGES_FOLDER','assets/images/posts/');
+
+defined('JS_IMAGEVIEWER') OR define('JS_IMAGEVIEWER','ImageViewer.js');
+defined('JS_DISQUS') OR define('JS_DISQUS','disqus.js');
+defined('JS_ROLES') OR define('JS_ROLES','roles.js');
+defined('JS_FOOTER') OR define('JS_FOOTER','footer.js');
+defined('CSS_TAGSINPUT') OR define('CSS_TAGSINPUT','tagsinput.css');
+defined('JS_TAGSINPUT') OR define('JS_TAGSINPUT','tagsinput.js');
+defined('CSS_DEFAULT_FONT') OR define('CSS_DEFAULT_FONT','defaultFont.css');
+defined('CSS_LOGIN_FORM') OR define('CSS_LOGIN_FORM','loginForm.css');
+defined('JS_LOGS') OR define('JS_LOGS','logs.js');
