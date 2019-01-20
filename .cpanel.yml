@@ -2,8 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/laetrona/public_html/
-    - /bin/cp index.php $DEPLOYPATH
-    - /bin/cp .htacces $DEPLOYPATH
-    - /bin/cp -r /application/ $DEPLOYPATH
-    - /bin/cp -r /assets/ $DEPLOYPATH
-    - /bin/cp -r /system/ $DEPLOYPATH
+    - /bin/cp -r * $DEPLOYPATH
