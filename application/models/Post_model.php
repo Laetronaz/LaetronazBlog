@@ -123,11 +123,11 @@
             return $slug;
         }
 
-        public function update_post_image($post_image){
+        public function update_post_image($post_id,$post_image){
             $data = array(
                 'post_image' => $post_image
             );
-            $this->db->where('id', $this->input->post('id'));
+            $this->db->where('id', $post_id);
             return $this->db->update('posts', $data);
         }
 

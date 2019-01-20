@@ -2,11 +2,11 @@
 
 <?php echo validation_errors(); ?>
 
-<?php echo form_open_multipart('categories/edit/'.$category['id']); ?>
+<?php echo form_open_multipart(CATEGORIES_EDIT_PATH.$category['id']); ?>
     <input type="hidden" name="id" value= "<?php echo $category['id']; ?>">
     <div class="form-group">
         <label>Icon</label><br>
-        <img src="<?php echo base_url(); ?>\assets\images\categories\<?php echo $category['category_icon']; ?>" height="200" width="200">
+        <img src="<?php echo base_url().CATEGORIES_IMAGES_FOLDER.$category['category_icon']; ?>" height="200" width="200">
     </div>
     <div class="form-group">
         <label>Name</label>
@@ -30,10 +30,9 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Image Preview</label><br>
-                    <img id="preview" src="<?php echo base_url(); ?>\assets\images\categories\<?php echo $category['category_icon']; ?>" height="200" width="200" />
+                    <img id="preview" src="<?php echo base_url().CATEGORIES_IMAGES_FOLDER.$category['category_icon']; ?>" height="200" width="200" />
                 </div>
-                <?php echo form_open_multipart('categories/update_image'); ?>
-                    <input type="hidden" name="id" value= "<?php echo $category['id']; ?>">
+                <?php echo form_open_multipart(CATEGORIES_UPDATE_IMAGE_PATH.$category['id']); ?>
                     <div class="form-group">
                         <label>Change Category Icon</label>
                         <input class="form-control" type="file" name="userfile" accept="image/*" size="20"> 
@@ -47,4 +46,4 @@
         
         </div>
     </div>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/ImageViewer.js"></script>
+<script type="text/javascript" src="<?php echo base_url().JAVASCRIPT_FOLDER.JS_IMAGEVIEWER?>"></script>

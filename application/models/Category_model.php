@@ -39,11 +39,11 @@
             return $this->db->update('categories', $data);
         }
 
-        public function update_category_icon($category_image){
+        public function update_category_icon($category_id,$category_image){
             $data = array(
                 'category_icon' => $category_image
             );
-            $this->db->where('id', $this->input->post('id'));
+            $this->db->where('id', $category_id);
             return $this->db->update('categories', $data);
         }
 

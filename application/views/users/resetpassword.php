@@ -5,7 +5,7 @@
             <h1>Password Recovery</h1>
             <p>Please enter your new password</p>
             </div>
-                <?php echo form_open("users/resetpassword/".$token); ?>
+                <?php echo form_open(EMAIL_RESET_PASSWORD_PATH.$token); ?>
                     <input type="hidden" name="user_id" value = "<?php echo $user_id?>">
                     <div class="form-group">
                         <input type="password" name="password" class="form-control" placeholder="Enter Password" value="<?php echo set_value("password")?>" autofocus>

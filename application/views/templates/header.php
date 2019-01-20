@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Laetronaz Blog</title>
+    <title><?php echo WEBSITE_NAME?></title>
     <!-- STYLES -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">   
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oxygen" >
@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.min.css">
     
     <!-- LOCAL STYLES -->
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/defaultFont.css" >
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/tagsinput.css">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/loginForm.css">
+    <link rel="stylesheet" href="<?php echo base_url().CSS_FOLDER.CSS_DEFAULT_FONT; ?>">
+    <link rel="stylesheet" href="<?php echo base_url().CSS_FOLDER.CSS_TAGSINPUT ?>">
+    <link rel="stylesheet" href="<?php echo base_url().CSS_FOLDER.CSS_LOGIN_FORM ?>">
 
     <!-- SCRIPTS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -25,7 +25,7 @@
     
 
     <!-- LOCAL SCRIPTS -->
-    <script src="<?php echo base_url(); ?>assets/javascript/tagsinput.js"></script>
+    <script src="<?php echo base_url().JAVASCRIPT_FOLDER.JS_TAGSINPUT?>"></script>
     
   </head>
 <body>
@@ -38,10 +38,10 @@
   <div class="collapse navbar-collapse" id="navbar">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="<?php echo base_url(); ?>">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="<?php echo base_url().POSTS_INDEX_PATH ?>">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>about">About</a>
+        <a class="nav-link" href="<?php echo base_url().ABOUT_PATH?>">About</a>
       </li>
     </ul>
     
@@ -70,12 +70,12 @@
     </li>
     <?php if(!$this->session->userdata('logged_in')) : ?>
         <li class="nav-item center">
-            <a class="nav-link" href="<?php echo base_url(); ?>users/login">Login</a>
+            <a class="nav-link" href="<?php echo base_url().USERS_LOGIN_PATH; ?>">Login</a>
         </li>
       <?php endif; ?>
       <?php if($this->session->userdata('logged_in')) : ?>
         <li class="nav-item center">
-            <a class="nav-link" href="<?php echo base_url(); ?>users/logout">Logout</a>
+            <a class="nav-link" href="<?php echo base_url().USERS_LOGOUT_PATH; ?>">Logout</a>
         </li>
       <?php endif; ?>  
     </ul>
@@ -104,10 +104,10 @@
                   <li class="nav-item">
                     <a class="nav-link" href="#usersubmenu" data-toggle="collapse" data-target="#usersubmenu">Manage Users</a>
                     <div id="usersubmenu" class="sidebar-submenu collapse" >
-                      <a href="<?php echo base_url(); ?>users/register" class="list-group-item list-group-item-action border border-white">
+                      <a href="<?php echo base_url().USERS_REGISTER_PATH ?>" class="list-group-item list-group-item-action border border-white">
                           <span class="menu-collapsed">Register User</span>
                       </a>
-                      <a href="<?php echo base_url();?>users/" class="list-group-item list-group-item-action border border-white">
+                      <a href="<?php echo base_url().USERS_INDEX_PATH;?>" class="list-group-item list-group-item-action border border-white">
                           <span class="menu-collapsed">Manage Users</span>
                       </a>
                     </div>
@@ -117,7 +117,7 @@
                     <li class="nav-item">
                       <a class="nav-link" href="#categorysubmenu" data-toggle="collapse" data-target="#categorysubmenu">Manage Categories</a>
                       <div id="categorysubmenu" class="sidebar-submenu collapse">
-                        <a href="<?php echo base_url(); ?>categories/create" class="list-group-item list-group-item-action border border-white">
+                        <a href="<?php echo base_url().CATEGORIES_CREATE_PATH; ?>" class="list-group-item list-group-item-action border border-white">
                             <span class="menu-collapsed">Create Category</span>
                         </a>
                         <a href="<?php echo base_url().CATEGORIES_INDEX_PATH; ?>" class="list-group-item list-group-item-action border border-white">
@@ -131,10 +131,10 @@
                       <?php if(!(array_search('admin',array_column($this->session->userdata('rights'),'name')) === FALSE && array_search('manage own posts',array_column($this->session->userdata('rights'),'name')) === FALSE && array_search('manage all posts',array_column($this->session->userdata('rights'),'name')) === FALSE)): ?>            
                         <a class="nav-link" href="#postssubmenu" data-toggle="collapse" data-target="#postssubmenu">Manage Posts</a>
                         <div id="postssubmenu" class="sidebar-submenu collapse">
-                          <a href="<?php echo base_url(); ?>posts/create" class="list-group-item list-group-item-action border-white">
+                          <a href="<?php echo base_url().POSTS_CREATE_PATH ?>" class="list-group-item list-group-item-action border-white">
                               <span class="menu-collapsed">Create Post</span>
                           </a>
-                          <a href="<?php echo base_url(); ?>posts/me" class="list-group-item list-group-item-action border-white">
+                          <a href="<?php echo base_url().POSTS_USERINDEX_PATH ?>" class="list-group-item list-group-item-action border-white">
                               <span class="menu-collapsed">Manage My Posts</span>
                           </a>          
                         </a>    

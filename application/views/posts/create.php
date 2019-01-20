@@ -2,7 +2,7 @@
 
 <?php echo validation_errors(); ?>
 
-<?php echo form_open_multipart('posts/create'); ?> 
+<?php echo form_open_multipart(POSTS_CREATE_PATH); ?> 
   <div class="form-group">
     <label>Title</label>
     <input type="text" class="form-control" name ="title" placeholder="Add Title" value="<?php echo set_value("title");?>">
@@ -28,4 +28,4 @@
 </form>
 <script>CKEDITOR.replace('editor1');</script>
 <!-- Image Preview File -->
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/ImageViewer.js"></script>
+<script type="text/javascript" src="<?php echo base_url().JAVASCRIPT_FOLDER.JS_IMAGEVIEWER; ?>"></script>

@@ -3,7 +3,7 @@
 
         //IMAGES CONST
         private const IMAGE_PATH = './assets/images/categories';
-        public const DEFAULT_IMAGE = 'noimage.jpg';
+        private const DEFAULT_IMAGE = 'noimage.jpg';
 
         //TITES CONST
         private const INDEX_TITLE = 'Search by Categories';
@@ -47,10 +47,10 @@
             foreach($data['categories'] as $key => $category){//set style data
                 switch($category['active']){
                     case 1:
-                        $data['categories'][$key]['style'] = "state-active";
+                        $data['categories'][$key]['style'] = STATE_ACTIVE;
                         break;
                     case 0:
-                        $data['categories'][$key]['style'] = "state-inactive";
+                        $data['categories'][$key]['style'] = STATE_INACTIVE;
                         break;
                 }
             }
@@ -67,7 +67,7 @@
             $this->load->view(TEMPLATE_FOOTER_VIEW);
         }
 
-        public function filter(){//Open for everyone
+        public function filter(){
             $data['title'] = $this::INDEX_TITLE;
             $data['categories'] = $this->build_alphabetical_categories_list($this->category_model->get_categories());
             $this->load->view(TEMPLATE_HEADER_VIEW);
@@ -141,7 +141,7 @@
             }
         }
 
-        public function update_image(){//TODO signature should be modified to take the category_id
+        public function update_image($category_id){
             $this->load->library('access_control');
             $this->access_control->verify_access_categories();
 
@@ -149,8 +149,8 @@
             $this->load->library('file_upload');
             $category_image =$this->file_upload->upload_image($this::IMAGE_PATH);
             if(!is_null($category_image)){
-                $category = $this->category_model->get_category($this->input->post('id'));
-                $this->category_model->update_category_icon($category_image);
+                $category = $this->category_model->get_category($category_id);
+                $this->category_model->update_category_icon($category_id,$category_image);
                 $this->clean_images();
 
                 //LOG ACTIVITY
@@ -167,7 +167,7 @@
                 $message = $this->message_model->get_message('image_update_failed');
                 $this->session->set_flashdata($message['name'], $message);
             }
-            redirect(CATEGORIES_EDIT_PATH.$this->input->post('id'));
+            redirect(CATEGORIES_EDIT_PATH.$category_id);
         }
         //============================================= PRIVATE ========================================
 
