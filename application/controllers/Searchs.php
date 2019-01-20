@@ -16,7 +16,7 @@
             }
             else{
                 if(is_null($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'].SEARCH_FUNC){
-                    redirect('');
+                    redirect(POSTS_INDEX_PATH);
                 }
                 else{
                     redirect($_SERVER['HTTP_REFERER']);//redirect to the page where the search was sent.

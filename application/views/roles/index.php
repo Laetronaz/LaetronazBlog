@@ -68,4 +68,4 @@
         </div>
     </div>
 </div>
-<script src="<?php echo base_url()?>assets/javascript/roles.js"></script>
+<script src="<?php echo base_url().JAVASCRIPT_FOLDER.JS_ROLES?>"></script>

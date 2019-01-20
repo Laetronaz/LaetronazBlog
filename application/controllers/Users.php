@@ -7,6 +7,9 @@
         private const MANAGE_TITLE = 'Manage Users';
         private const VIEW_TITLE = 'User Profile';
         private const EDIT_TITLE = 'Edit User: ';
+
+        private const FORGOT_PASSWORD_TEXT = 'Forgot my password';
+        private const RESEND_EMAIL_TEXT =  'Resend Email';
         
         //register user
         public function register(){
@@ -68,7 +71,7 @@
                         switch ($user['user_state']) {
                             case 1:
                                 $message = $this->message_model->get_message('user_waiting');
-                                $message['value'] .= " <a href='".base_url().EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH.$user_id."'> Resend email</a>";
+                                $message['value'] .= " <a href='".base_url().EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH.$user_id."'>".$this::RESEND_EMAIL_TEXT."</a>";
                                 break;
                             case 2:
                                 $message = $this->message_model->get_message('user_lockedout');
@@ -122,7 +125,6 @@
             $this->session->unset_userdata('logged_in');
             $this->session->unset_userdata('user_id');
             $this->session->unset_userdata('username');
-            $this->session->unset_userdata('role');
             $this->session->unset_userdata('rights');
 
             // Set message
@@ -141,16 +143,16 @@
             foreach($data['users'] as $key => $user){//set style data
                 switch($user['user_state']){
                     case 1:
-                        $data['users'][$key]['style'] = "state-waiting";
+                        $data['users'][$key]['style'] = STATE_WAITING;
                         break;
                     case 2:
-                        $data['users'][$key]['style'] = "state-lockedout";
+                        $data['users'][$key]['style'] = STATE_LOCKOUT;
                         break;
                     case 3:
-                        $data['users'][$key]['style'] = "state-active";
+                        $data['users'][$key]['style'] = STATE_ACTIVE;
                         break;
                     case 4:
-                        $data['users'][$key]['style'] = "state-inactive";
+                        $data['users'][$key]['style'] = STATE_INACTIVE;
                         break;
                 }
             }
@@ -214,20 +216,20 @@
 
             $data['title'] = $this::VIEW_TITLE;
             $data['types'] = $this->user_model->get_roles();
-                switch($data['user']['user_state']){
-                    case 1:
-                        $data['user']['style'] = "state-waiting";
-                        break;
-                    case 2:
-                        $data['user']['style'] = "state-lockedout";
-                        break;
-                    case 3:
-                        $data['user']['style'] = "state-active";
-                        break;
-                    case 4:
-                        $data['user']['style'] = "state-inactive";
-                        break;
-                }
+            switch($data['user']['user_state']){
+                case 1:
+                    $data['user']['style'] = STATE_WAITING;
+                    break;
+                case 2:
+                    $data['user']['style'] = STATE_LOCKOUT;
+                    break;
+                case 3:
+                    $data['user']['style'] = STATE_ACTIVE;
+                    break;
+                case 4:
+                    $data['user']['style'] = STATE_INACTIVE;
+                    break;
+            }
             $data['user']['state_name'] = $this->user_model->get_user_state($data['user']['user_state']);
 
             $this->load->view(TEMPLATE_HEADER_VIEW);
@@ -401,16 +403,16 @@
                 //SHOW MESSAGE WITH A RESEND LINK
                 else{
                     $message = $this->message_model->get_message('resend_password');
-                    $message['value'] .= "<a href='".base_url()."users/resend_password/".$user['id']."'> Resend email</a>";
+                    $message['value'] .= "<a href='".base_url().EMAIL_RESEND_RESET_PASSWORD_PATH.$user['id']."'>".$this::RESEND_EMAIL_TEXT."</a>";
                     $this->session->set_flashdata($message['name'], $message);
-                    redirect('');
+                    redirect(POSTS_INDEX_PATH);
                 }
             }
             else{
                 //CREATE MESSAGE
                 $message = $this->message_model->get_message('inexisting_user');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect('');
+                redirect(POSTS_INDEX_PATH);
             } 
             }
             
@@ -436,16 +438,16 @@
                 else{
                     //SET MESSAGE
                     $message = $this->message_model->get_message('password_expired');
-                    $message['value'] .= "<a href='".base_url()."users/password-reset'>Forgot my password</a>";
+                    $message['value'] .= "<a href='".base_url().EMAIL_PASSWORD_RESET_PATH."'>".FORGOT_PASSWORD_TEXT."</a>";
                     $this->session->set_flashdata($message['name'], $message);
-                    redirect('');
+                    redirect(POSTS_INDEX_PATH);
                 }
             }
             else{
                //SET MESSAGE
                $message = $this->message_model->get_message('invalid_password_token');
                $this->session->set_flashdata($message['name'], $message);
-               redirect('');
+               redirect(POSTS_INDEX_PATH);
             }
         }
         //===========================================AUTHORIZATION===========================================
@@ -465,19 +467,19 @@
 
                     $message = $this->message_model->get_message('email_verified');
                     $this->session->set_flashdata($message['name'], $message);
-                    redirect('');
+                    redirect(POSTS_INDEX_PATH);
                 }
                 else{//is expired
                     $message = $this->message_model->get_message('confirmation_expired');
-                    $message['value'] .= " <a href='".base_url()."users/resendverification/".$user['id']."'> Resend email</a>";
+                    $message['value'] .= " <a href='".base_url().EMAIL_RESEND_RESET_CONFIRM_EMAIL_PATH.$user['id']."'>".$this::RESEND_EMAIL_TEXT."</a>";
                     $this->session->set_flashdata($message['name'], $message);
-                    redirect('');
+                    redirect(POSTS_INDEX_PATH);
                 }
             }
             else{// is not an existing token
                 $message = $this->message_model->get_message('invalid_verification_token');
                 $this->session->set_flashdata($message['name'], $message);
-                redirect('');
+                redirect(POSTS_INDEX_PATH);
             } 
         }
 
@@ -498,7 +500,7 @@
             //SET MESSAGE
             $message = $this->message_model->get_message('password_recovery_resent');
             $this->session->set_flashdata($message['name'], $message);
-            redirect('');
+            redirect(POSTS_INDEX_PATH);
         }
 
         public function resend_verification_email($user_id){
@@ -524,7 +526,7 @@
             //SET MESSAGE
             $message = $this->message_model->get_message('password_reset_resent');
             $this->session->set_flashdata($message['name'], $message);
-            redirect('');
+            redirect(POSTS_INDEX_PATH);
         }
 
         //========================================PRIVATE FUNCTIONS======================================

@@ -1,10 +1,10 @@
-<img src="<?php echo base_url(); ?>\assets\images\posts\<?php echo $post['post_image']; ?>" height="379" width="100%">
+<img src="<?php echo base_url().POSTS_IMAGES_FOLDER.$post['post_image']; ?>" height="379" width="100%">
 <br><br>
 <h1><?= $title ?></h1>
 
 <?php echo validation_errors(); ?>
 
-<?php echo form_open_multipart('posts/edit/'.$post['slug']); ?> 
+<?php echo form_open_multipart(POSTS_EDIT_PATH.$post['slug']); ?> 
     <input type="hidden" name="id" value= "<?php echo $post['id']; ?>">
   <div class="form-group">
     <label>Title</label>
@@ -51,10 +51,9 @@
             <div class="modal-body">
               <div class="form-group">
                   <label>Thumbnail Preview</label><br>
-                  <img id="preview" src="<?php echo base_url(); ?>\assets\images\posts\<?php echo $post['post_image']; ?>" height="200" width="200" />
+                  <img id="preview" src="<?php echo base_url().POSTS_IMAGES_FOLDER.$post['post_image']; ?>" height="200" width="200" />
               </div>
-              <?php echo form_open_multipart('posts/update_image'); ?>
-                  <input type="hidden" name="id" value= "<?php echo $post['id']; ?>">
+              <?php echo form_open_multipart(POSTS_UPDATE_IMAGE_PATH.$post['id']); ?>
                   <div class="form-group">
                       <label>Change Thumbnail</label>
                       <input class="form-control" type="file" name="userfile" accept="image/*" size="20"> 
@@ -69,4 +68,4 @@
   </div>
 <script>CKEDITOR.replace('editor1');</script>
 <!-- Image Preview File -->
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/ImageViewer.js"></script>
+<script type="text/javascript" src="<?php echo base_url().JAVASCRIPT_FOLDER.JS_IMAGEVIEWER ?>"></script>

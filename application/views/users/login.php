@@ -6,7 +6,7 @@
             <h1>Admin Login</h1>
             <p>Please enter your username and password</p>
             </div>
-                <?php echo form_open('users/login'); ?>
+                <?php echo form_open(USERS_LOGIN_PATH); ?>
                     <div class="form-group">
                         <input type="text" name="username" class="form-control" id="inputEmail" placeholder="Username" value = "<?php echo set_value("username")?>" autofocus >
                     </div>
@@ -14,7 +14,7 @@
                         <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" value= "<?php echo set_value("password") ?>" autofocus>
                     </div>
                     <div class="forgot">
-                        <a href="<?php echo base_url(); ?>users/password-reset">Forgot password?</a>
+                        <a href="<?php echo base_url().EMAIL_PASSWORD_RESET_PATH ?>">Forgot password?</a>
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
                 <?php echo form_close(); ?>
