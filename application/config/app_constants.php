@@ -225,6 +225,7 @@ defined('ROLES_LEVEL') OR define('ROLES_LEVEL', 1);
 defined('POSTS_LEVEL') OR define('POSTS_LEVEL', 2);
 defined('CATEGORIES_LEVEL') OR define('CATEGORIES_LEVEL', 3);
 defined('TAGS_LEVEL') OR define('TAGS_LEVEL', 4);
+defined('SYSTEM_LEVEL') OR define('SYSTEM_LEVEL', 5);
 
 //====================================WEBSITE CONSTANTS=====================================
 defined('WEBSITE_NAME') OR define('WEBSITE_NAME', 'Laetronaz Blog');
@@ -275,6 +276,12 @@ defined('CSS_FOLDER') OR define('CSS_FOLDER','assets/css/');
 
 defined('CATEGORIES_IMAGES_FOLDER') OR define('CATEGORIES_IMAGES_FOLDER','assets/images/categories/');
 defined('POSTS_IMAGES_FOLDER') OR define('POSTS_IMAGES_FOLDER','assets/images/posts/');
+
+defined('EMAILS_FOLDER') OR define('EMAILS_FOLDER','assets/emails/');
+defined('VERIFY_EMAIL_TEMPLATE') OR define('VERIFY_EMAIL_TEMPLATE','verify_email.html');
+defined('PASSWORD_RECOVERY_TEMPLATE') OR define('PASSWORD_RECOVERY_TEMPLATE','password_recovery.html');
+
+
 
 defined('JS_IMAGEVIEWER') OR define('JS_IMAGEVIEWER','ImageViewer.js');
 defined('JS_DISQUS') OR define('JS_DISQUS','disqus.js');

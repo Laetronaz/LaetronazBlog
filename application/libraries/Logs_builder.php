@@ -39,6 +39,14 @@ class Logs_builder {
     private const NEW_RIGHT_LOG = "$1 has added the right '$2' with the right_id '$3'to the role '$4' with the role_id '$5.'";
     private const REMOVED_RIGHT_LOG = "$1 has removed the right '$2' with the right_id '$3' from the role '$4' with the role_id '$5.'";
 
+
+    //EMAILS
+    private const VERIFICATION_EMAIL_SUCCESS_LOG = "The system has successfully sent the email verification to '$1'. ";
+    private const VERIFICATION_EMAIL_FAILURE_LOG = "The system has unsuccessfully tried to send the email verification to '$1'. ";
+    private const PASSWORD_EMAIL_SUCCESS_LOG = "The system has successfully sent the password recovery to '$1'. ";
+    private const PASSWORD_EMAIL_FAILURE_LOG = "The system has unsuccessfully tried to send the password recovery to '$1'. ";
+
+
     public function __construct(){
         $this->CI =& get_instance();
         $this->CI->load->library('session');
@@ -375,6 +383,24 @@ class Logs_builder {
         $log_entry = str_replace('$1', $user['username'],$log_entry);
         $log_entry = str_replace('$2', $post['slug'],$log_entry);
         $log_entry = str_replace('$3', $post['id'],$log_entry);
+        return $log_entry;
+    }
+
+    public function verification_email_logging($email,$success){
+        //DATAS NEEDED
+        $user = $this->CI->user_model->get_user($this->CI->session->userdata('user_id'));
+        //BUILDING THE MESSAGE
+        $log_entry = ($success) ? $this::VERIFICATION_EMAIL_SUCCESS_LOG : $this::VERIFICATION_EMAIL_FAILURE_LOG;
+        $log_entry = str_replace('$1', $email,$log_entry);
+        return $log_entry;
+    }
+
+    public function password_recovery_email_logging($email,$success){
+        //DATAS NEEDED
+        $user = $this->CI->user_model->get_user($this->CI->session->userdata('user_id'));
+        //BUILDING THE MESSAGE
+        $log_entry = ($success) ? $this::PASSWORD_EMAIL_SUCCESS_LOG : $this::PASSWORD_EMAIL_FAILURE_LOG;
+        $log_entry = str_replace('$1', $email, $log_entry);
         return $log_entry;
     }
 }
