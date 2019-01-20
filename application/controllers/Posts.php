@@ -31,7 +31,7 @@
             $this->access_control->verify_access_posts('user_index');
             $data['title'] = $this::USER_POSTS_INDEX_TITLE;
             $data['categories'] = $this->post_model->get_categories();
-
+            $data['posts'] = $this->post_model->get_user_posts($this->session->userdata('user_id'));
             foreach($data['posts'] as $key => $post){//set style data
                 switch($post['state']){
                     case 1:
