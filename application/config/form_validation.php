@@ -13,7 +13,7 @@ $config = array(
             array(
                 'field' => 'title',
                 'label' => 'Post Title',
-                'rules' => 'trim|alpha_numeric_spaces|min_length[3]|max_length[50]|required'
+                'rules' => 'trim|min_length[3]|max_length[50]|required'
             ),
             array(
                 'field' => 'body',
