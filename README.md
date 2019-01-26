@@ -63,5 +63,13 @@ As of 2019-01-01, this project is still on-going but at a much slower pace than 
 ## Credits
 I started this project find Brad Traversy youtube channel "Traversy Media" https://www.youtube.com/channel/UC29ju8bIPH5as8OGnQzwJyA and followed his Code Igniter Blog App Tutorial, https://www.youtube.com/playlist?list=PLillGF-RfqbaP_71rOyChhjeK1swokUIS ,in which he maded the firsts versions of the application. I afterward built over it a lot. Thus, I now have a complete application which awnser to my personal needs. e  
 
+## Ressources Used
+Vaynes Debug Helper: https://github.com/yahyaerturan/codeigniter-developers-debug-helper
+Image Upload Format: https://stackoverflow.com/questions/17865860/should-uploaded-files-be-renamed
+Bootstrap Tag input: https://www.jqueryscript.net/form/Bootstrap-4-Tag-Input-Plugin-jQuery.html
+Login Form: https://bootsnipp.com/snippets/featured/login-in-a-panel 
+CK Editor: https://ckeditor.com/ckeditor-4/
+CodeIgniter RAT: https://github.com/avenirer/CodeIgniter-Rat
+
 ## Licence 
 This is a personal project I made to myself you are however free to do what you want to do with it as it's licenced with a MIT licence. Once you have a copy of this project, you may do what you want with it. Please take note however, that whatever modification you do to it may conflict with future version and I won't maintain non-official versions of this application.
